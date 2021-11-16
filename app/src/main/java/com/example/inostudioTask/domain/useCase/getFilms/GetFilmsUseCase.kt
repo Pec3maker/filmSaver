@@ -1,5 +1,7 @@
 package com.example.inostudioTask.domain.useCase.getFilms
 
+import android.app.Application
+import com.example.inostudioTask.R
 import com.example.inostudioTask.common.Resource
 import com.example.inostudioTask.data.remote.dto.toFilm
 import com.example.inostudioTask.domain.model.Film
@@ -11,17 +13,30 @@ import java.io.IOException
 import javax.inject.Inject
 
 class GetFilmsUseCase @Inject constructor(
-    private val repository: FilmRepository
+    private val repository: FilmRepository,
+    private val app: Application = Application()
 ){
-    operator fun invoke(apiKey: String, page: Int, language: String): Flow<Resource<List<Film>>> = flow {
+    operator fun invoke(
+        apiKey: String,
+        page: Int,
+        language: String
+    ): Flow<Resource<List<Film>>> = flow {
         try{
             emit(Resource.Loading<List<Film>>())
-            val films = repository.getFilms(apiKey = apiKey, page = page, language = language).map { it.toFilm() }
+            val films = repository.getFilms(
+                apiKey = apiKey,
+                page = page,
+                language = language
+            ).map { it.toFilm() }
             emit(Resource.Success<List<Film>>(films))
         } catch (e: HttpException) {
-            emit(Resource.Error<List<Film>>(e.localizedMessage?: "Unexpected error occurred"))
+            emit(Resource.Error<List<Film>>(
+                e.localizedMessage?: app.getString(R.string.unexpected_error))
+            )
         } catch (e: IOException) {
-            emit(Resource.Error<List<Film>>("Couldn't reach server"))
+            emit(Resource.Error<List<Film>>(
+                app.getString(R.string.connection_error))
+            )
         }
     }
 }
