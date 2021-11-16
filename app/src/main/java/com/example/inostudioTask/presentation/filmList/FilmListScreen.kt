@@ -1,6 +1,6 @@
 package com.example.inostudioTask.presentation.filmList
 
-import android.app.Application
+import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -28,7 +28,7 @@ import com.example.inostudioTask.presentation.filmList.components.FilmListItem
 fun FilmListScreen(
     navController: NavController,
     viewModel: FilmListViewModel = hiltViewModel(),
-    app: Application = Application()
+    context: Context
 ) {
     val state = viewModel.state.value
     Box(
@@ -36,7 +36,7 @@ fun FilmListScreen(
     ) {
         Column {
             SearchBar(
-                hint = app.getString(R.string.searchbar_hint),
+                hint = context.getString(R.string.searchbar_hint),
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(16.dp)

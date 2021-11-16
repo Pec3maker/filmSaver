@@ -1,6 +1,6 @@
 package com.example.inostudioTask.presentation.filmReview
 
-import android.app.Application
+import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -22,7 +22,7 @@ import com.example.inostudioTask.common.Constants
 @Composable
 fun FilmReviewScreen(
     viewModel: FilmReviewViewModel = hiltViewModel(),
-    app: Application = Application()
+    context: Context
 ) {
     val state = viewModel.state.value
     Box(
@@ -72,13 +72,13 @@ fun FilmReviewScreen(
                             .align(Alignment.Center)
                     )
                     Text(
-                        text = app.getString(R.string.release_date) + film.releaseDate,
+                        text = context.getString(R.string.release_date) + film.releaseDate,
                         style = MaterialTheme.typography.body2,
                         color = Color.White
                     )
                     Spacer(modifier = Modifier.height(15.dp))
                     Text(
-                        text = app.getString(R.string.avg_rating)
+                        text = context.getString(R.string.avg_rating)
                             + film.voteAverage.toString(),
                         style = MaterialTheme.typography.body2,
                         color = Color.White

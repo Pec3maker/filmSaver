@@ -1,6 +1,6 @@
 package com.example.inostudioTask.presentation.filmList
 
-import android.app.Application
+import android.content.Context
 import androidx.compose.runtime.*
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -9,6 +9,7 @@ import com.example.inostudioTask.common.Constants
 import com.example.inostudioTask.common.Resource
 import com.example.inostudioTask.domain.useCase.getFilms.GetFilmsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
@@ -16,7 +17,7 @@ import javax.inject.Inject
 @HiltViewModel
 class FilmListViewModel @Inject constructor(
     private val getFilmsUseCase: GetFilmsUseCase,
-    private val app: Application = Application()
+    @ApplicationContext private val context: Context
 ) : ViewModel() {
 
     private val _state = mutableStateOf(FilmListState())
@@ -42,7 +43,7 @@ class FilmListViewModel @Inject constructor(
                 }
                 is Resource.Error -> {
                     _state.value = FilmListState(
-                        error = result.message ?:  app.getString(R.string.unexpected_error)
+                        error = result.message ?:  context.getString(R.string.unexpected_error)
                     )
                 }
                 is Resource.Loading -> {
