@@ -5,8 +5,10 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.navArgument
 import androidx.navigation.compose.rememberNavController
 import com.example.inostudioTask.presentation.filmList.FilmListScreen
 import com.example.inostudioTask.presentation.filmReview.FilmReviewScreen
@@ -36,7 +38,10 @@ class MainActivity : ComponentActivity() {
                         }
                     }
                     composable(
-                        route = Screen.FilmReviewScreen.route + "/{movie_id}"
+                        route = Screen.FilmReviewScreen.route + "/{movie_id}",
+                        arguments = listOf(
+                            navArgument("movie_id") { type = NavType.StringType }
+                        )
                     ) {
                         MainTheme {
                             FilmReviewScreen(context = application.applicationContext)
