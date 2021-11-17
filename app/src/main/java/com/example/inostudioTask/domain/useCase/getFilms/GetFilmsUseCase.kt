@@ -18,7 +18,7 @@ class GetFilmsUseCase @Inject constructor(
         apiKey: String,
         page: Int,
         language: String
-    ): Flow<Resource<List<Film>>> = flow {
+    ): Flow<Any> = flow {
         try{
             emit(Resource.Loading<List<Film>>())
             val films = repository.getFilms(
@@ -26,11 +26,11 @@ class GetFilmsUseCase @Inject constructor(
                 page = page,
                 language = language
             ).map { it.toFilm() }
-            emit(Resource.Success<List<Film>>(films))
+            emit(Resource.Success(films))
         } catch (e: HttpException) {
-            emit(Resource.Error<List<Film>>(R.string.unexpected_error))
+            emit(Resource.Error(R.string.unexpected_error))
         } catch (e: IOException) {
-            emit(Resource.Error<List<Film>>(R.string.connection_error))
+            emit(Resource.Error(R.string.connection_error))
         }
     }
 }

@@ -18,7 +18,7 @@ class GetFilmUseCase @Inject constructor(
         apiKey: String,
         id: String,
         language: String
-    ): Flow<Resource<Film>> = flow {
+    ): Flow<Any> = flow {
         try{
             emit(Resource.Loading<Film>())
             val film = repository.getFilmsById(
@@ -26,11 +26,11 @@ class GetFilmUseCase @Inject constructor(
                 id = id,
                 language = language
             ).toFilm()
-            emit(Resource.Success<Film>(film))
+            emit(Resource.Success(film))
         } catch (e: HttpException) {
-            emit(Resource.Error<Film>(R.string.unexpected_error))
+            emit(Resource.Error(R.string.unexpected_error))
         } catch (e: IOException) {
-            emit(Resource.Error<Film>(R.string.connection_error))
+            emit(Resource.Error(R.string.connection_error))
         }
     }
 }

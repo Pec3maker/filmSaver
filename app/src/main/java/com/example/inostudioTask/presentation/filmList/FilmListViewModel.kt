@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.inostudioTask.R
 import com.example.inostudioTask.common.Constants
 import com.example.inostudioTask.common.Resource
+import com.example.inostudioTask.domain.model.Film
 import com.example.inostudioTask.domain.useCase.getFilms.GetFilmsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
@@ -31,17 +32,17 @@ class FilmListViewModel @Inject constructor(
     private fun getFilms(apiKey: String, page: Int, language: String) {
         getFilmsUseCase(apiKey = apiKey, page = page, language = language).onEach { result->
             when(result) {
-                is Resource.Success -> {
+                is Resource.Success<*> -> {
                     _state.value = FilmListState(
-                        films = result.data?.plus(_state.value.films) ?: emptyList()
+                        films = (result.data as List<Film>).plus(_state.value.films)
                     )
                 }
-                is Resource.Error -> {
+                is Resource.Error<*> -> {
                     _state.value = FilmListState(
-                        error = result.message ?:  R.string.unexpected_error
+                        error = R.string.unexpected_error
                     )
                 }
-                is Resource.Loading -> {
+                is Resource.Loading<*> -> {
                     _state.value = FilmListState(isLoading = true)
                 }
             }
