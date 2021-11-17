@@ -18,6 +18,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberImagePainter
 import com.example.inostudioTask.R
 import com.example.inostudioTask.common.Constants
+import com.example.inostudioTask.domain.model.Film
 
 @Composable
 fun FilmReviewScreen(
@@ -28,7 +29,8 @@ fun FilmReviewScreen(
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
-        state.film?.let { film ->
+        state.data?.let { data ->
+            val film = data as Film
             LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
@@ -89,7 +91,7 @@ fun FilmReviewScreen(
 
             if (state.error != null) {
                 Text(
-                    text = context.getString(state.error),
+                    text = context.getString(state.error as Int),
                     color = MaterialTheme.colors.error,
                     textAlign = TextAlign.Center,
                     modifier = Modifier

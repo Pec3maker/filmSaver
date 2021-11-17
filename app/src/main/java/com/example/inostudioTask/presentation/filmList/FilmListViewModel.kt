@@ -8,6 +8,7 @@ import com.example.inostudioTask.common.Constants
 import com.example.inostudioTask.common.Resource
 import com.example.inostudioTask.domain.model.Film
 import com.example.inostudioTask.domain.useCase.getFilms.GetFilmsUseCase
+import com.example.inostudioTask.presentation.screenStates.ScreenStates
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -18,8 +19,8 @@ class FilmListViewModel @Inject constructor(
     private val getFilmsUseCase: GetFilmsUseCase,
 ) : ViewModel() {
 
-    private val _state = mutableStateOf(FilmListState())
-    val state: State<FilmListState> = _state
+    private val _state = mutableStateOf(ScreenStates.FilmListState<Any>())
+    val state: State<ScreenStates.FilmListState<Any>> = _state
 
     init {
         for(i in 1..10) {
@@ -33,17 +34,18 @@ class FilmListViewModel @Inject constructor(
         getFilmsUseCase(apiKey = apiKey, page = page, language = language).onEach { result->
             when(result) {
                 is Resource.Success<*> -> {
-                    _state.value = FilmListState(
-                        films = (result.data as List<Film>).plus(_state.value.films)
+                    @Suppress("UNCHECKED_CAST")
+                    _state.value = ScreenStates.FilmListState(
+                        data = (result.data as List<Film>).plus(_state.value.data)
                     )
                 }
                 is Resource.Error<*> -> {
-                    _state.value = FilmListState(
+                    _state.value = ScreenStates.FilmListState(
                         error = R.string.unexpected_error
                     )
                 }
                 is Resource.Loading<*> -> {
-                    _state.value = FilmListState(isLoading = true)
+                    _state.value = ScreenStates.FilmListState(isLoading = true)
                 }
             }
         }.launchIn(viewModelScope)

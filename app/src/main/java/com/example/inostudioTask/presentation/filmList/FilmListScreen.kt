@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.inostudioTask.R
+import com.example.inostudioTask.domain.model.Film
 import com.example.inostudioTask.presentation.Screen
 import com.example.inostudioTask.presentation.filmList.components.FilmListItem
 
@@ -44,7 +45,8 @@ fun FilmListScreen(
             LazyColumn(
                 modifier = Modifier.fillMaxSize(),
             ) {
-                items(state.films) { film ->
+                @Suppress("UNCHECKED_CAST")
+                items(state.data as List<Film>) { film ->
                     FilmListItem(
                         film = film,
                         onItemClick = {
@@ -57,7 +59,7 @@ fun FilmListScreen(
 
         if(state.error != null) {
             Text(
-                text = context.getString(state.error),
+                text = context.getString(state.error as Int),
                 color = MaterialTheme.colors.error,
                 textAlign = TextAlign.Center,
                 modifier = Modifier
