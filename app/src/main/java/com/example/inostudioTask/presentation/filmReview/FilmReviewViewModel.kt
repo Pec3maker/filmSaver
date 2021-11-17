@@ -1,6 +1,5 @@
 package com.example.inostudioTask.presentation.filmReview
 
-import android.content.Context
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
@@ -11,7 +10,6 @@ import com.example.inostudioTask.common.Constants
 import com.example.inostudioTask.common.Resource
 import com.example.inostudioTask.domain.useCase.getFilm.GetFilmUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
@@ -20,7 +18,6 @@ import javax.inject.Inject
 class FilmReviewViewModel @Inject constructor(
 
     private val getFilmUseCase: GetFilmUseCase,
-    @ApplicationContext private val context: Context,
     savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
 
@@ -41,7 +38,7 @@ class FilmReviewViewModel @Inject constructor(
                 }
                 is Resource.Error -> {
                     _state.value = FilmReviewState(
-                        error = result.message ?: context.getString(R.string.unexpected_error)
+                        error = result.message ?: R.string.unexpected_error
                     )
                 }
                 is Resource.Loading -> {

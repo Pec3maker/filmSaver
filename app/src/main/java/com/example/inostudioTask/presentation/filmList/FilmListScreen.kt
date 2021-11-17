@@ -55,9 +55,9 @@ fun FilmListScreen(
             }
         }
 
-        if(state.error.isNotBlank()) {
+        if(state.error != null) {
             Text(
-                text = state.error,
+                text = context.getString(state.error),
                 color = MaterialTheme.colors.error,
                 textAlign = TextAlign.Center,
                 modifier = Modifier
