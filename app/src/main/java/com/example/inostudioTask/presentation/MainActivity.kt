@@ -17,7 +17,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            // A surface container using the 'background' color from the theme
+
             Surface(color = MaterialTheme.colors.background) {
                 val navController = rememberNavController()
                 NavHost(
@@ -27,16 +27,15 @@ class MainActivity : ComponentActivity() {
                     composable(
                         route = Screen.FilmListScreen.route
                     ) {
-                        FilmListScreen(navController)
+                        FilmListScreen(navController = navController, context = application.applicationContext)
                     }
                     composable(
                         route = Screen.FilmReviewScreen.route + "/{movie_id}"
                     ) {
-                        FilmReviewScreen()
+                        FilmReviewScreen(context = application.applicationContext)
                     }
                 }
             }
-
         }
     }
 }

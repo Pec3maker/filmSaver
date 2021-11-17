@@ -1,5 +1,6 @@
 package com.example.inostudioTask.presentation.filmList
 
+import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -19,13 +20,15 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.example.inostudioTask.R
 import com.example.inostudioTask.presentation.Screen
 import com.example.inostudioTask.presentation.filmList.components.FilmListItem
 
 @Composable
 fun FilmListScreen(
     navController: NavController,
-    viewModel: FilmListViewModel = hiltViewModel()
+    viewModel: FilmListViewModel = hiltViewModel(),
+    context: Context
 ) {
     val state = viewModel.state.value
     Box(
@@ -33,7 +36,7 @@ fun FilmListScreen(
     ) {
         Column {
             SearchBar(
-                hint = "Search...",
+                hint = context.getString(R.string.searchbar_hint),
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(16.dp)
@@ -52,9 +55,9 @@ fun FilmListScreen(
             }
         }
 
-        if(state.error.isNotBlank()) {
+        if(state.error != null) {
             Text(
-                text = state.error,
+                text = context.getString(state.error),
                 color = MaterialTheme.colors.error,
                 textAlign = TextAlign.Center,
                 modifier = Modifier

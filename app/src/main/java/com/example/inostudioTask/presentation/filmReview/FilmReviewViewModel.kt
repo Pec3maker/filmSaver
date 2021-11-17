@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.inostudioTask.R
 import com.example.inostudioTask.common.Constants
 import com.example.inostudioTask.common.Resource
 import com.example.inostudioTask.domain.useCase.getFilm.GetFilmUseCase
@@ -15,8 +16,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class FilmReviewViewModel @Inject constructor(
+
     private val getFilmUseCase: GetFilmUseCase,
-    savedStateHandle: SavedStateHandle
+    savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
 
     private val _state = mutableStateOf(FilmReviewState())
@@ -36,7 +38,7 @@ class FilmReviewViewModel @Inject constructor(
                 }
                 is Resource.Error -> {
                     _state.value = FilmReviewState(
-                        error = result.message ?:  "Unexpected error occurred"
+                        error = result.message ?: R.string.unexpected_error
                     )
                 }
                 is Resource.Loading -> {

@@ -1,3 +1,8 @@
 <resources>
-    <string name="app_name">inostudio_task</string>
+    <string name="app_name">inostudioTask</string>
+    <string name="unexpected_error">Unexpected error occurred</string>
+    <string name="connection_error">Couldn\'t reach server</string>
+    <string name="release_date">Дата релиза: </string>
+    <string name="avg_rating">Средняя оценка: </string>
+    <string name="searchbar_hint">Search…</string>
 </resources>

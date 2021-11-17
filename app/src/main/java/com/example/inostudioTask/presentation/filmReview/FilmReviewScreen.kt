@@ -1,5 +1,6 @@
 package com.example.inostudioTask.presentation.filmReview
 
+import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -15,11 +16,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberImagePainter
+import com.example.inostudioTask.R
 import com.example.inostudioTask.common.Constants
 
 @Composable
 fun FilmReviewScreen(
-    viewModel: FilmReviewViewModel = hiltViewModel()
+    viewModel: FilmReviewViewModel = hiltViewModel(),
+    context: Context
 ) {
     val state = viewModel.state.value
     Box(
@@ -60,20 +63,23 @@ fun FilmReviewScreen(
                     )
 
                     Image(
-                        painter = rememberImagePainter(Constants.IMAGE_PATH + film.backdropPath),
+                        painter = rememberImagePainter(
+                            Constants.IMAGE_PATH + film.backdropPath
+                        ),
                         contentDescription = null,
                         modifier = Modifier.size(400.dp)
                             .height(30.dp)
                             .align(Alignment.Center)
                     )
                     Text(
-                        text = "Дата релиза: " + film.releaseDate ?: "",
+                        text = context.getString(R.string.release_date) + film.releaseDate,
                         style = MaterialTheme.typography.body2,
                         color = Color.White
                     )
                     Spacer(modifier = Modifier.height(15.dp))
                     Text(
-                        text = "Средняя оценка: " + film.voteAverage.toString() ?: "",
+                        text = context.getString(R.string.avg_rating)
+                            + film.voteAverage.toString(),
                         style = MaterialTheme.typography.body2,
                         color = Color.White
                     )
@@ -81,9 +87,9 @@ fun FilmReviewScreen(
             }
 
 
-            if (state.error.isNotBlank()) {
+            if (state.error != null) {
                 Text(
-                    text = state.error,
+                    text = context.getString(state.error),
                     color = MaterialTheme.colors.error,
                     textAlign = TextAlign.Center,
                     modifier = Modifier
