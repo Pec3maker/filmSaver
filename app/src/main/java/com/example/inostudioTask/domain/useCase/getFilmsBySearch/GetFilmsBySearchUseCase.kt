@@ -33,13 +33,9 @@ class GetFilmsBySearchUseCase @Inject constructor(
             ).map { it.toFilm() }
             emit(Resource.Success<List<Film>>(films))
         } catch (e: HttpException) {
-            emit(Resource.Error<List<Film>>(
-                e.localizedMessage?: context.getString(R.string.unexpected_error))
-            )
+            emit(Resource.Error<List<Film>>(R.string.unexpected_error))
         } catch (e: IOException) {
-            emit(Resource.Error<List<Film>>(
-                context.getString(R.string.connection_error))
-            )
+            emit(Resource.Error<List<Film>>(R.string.connection_error))
         }
     }
 }
