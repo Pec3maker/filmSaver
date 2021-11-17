@@ -95,17 +95,17 @@ fun SearchBar(
             },
             maxLines = 1,
             singleLine = true,
-            textStyle = TextStyle(color = Color.Black),
+            textStyle = TextStyle(color = MaterialTheme.colors.secondary),
             modifier = Modifier
                 .fillMaxWidth()
                 .shadow(5.dp, CircleShape)
-                .background(Color.White, CircleShape)
+                .background(MaterialTheme.colors.onSurface, CircleShape)
                 .padding(horizontal = 20.dp, vertical = 12.dp)
         )
         if(isHintDisplayed) {
             Text(
                 text = hint,
-                color = Color.LightGray,
+                color = MaterialTheme.colors.primaryVariant,
                 modifier = Modifier
                     .padding(horizontal = 20.dp, vertical = 12.dp)
             )

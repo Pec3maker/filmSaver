@@ -10,6 +10,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.inostudioTask.presentation.filmList.FilmListScreen
 import com.example.inostudioTask.presentation.filmReview.FilmReviewScreen
+import com.example.inostudioTask.presentation.ui.theme.MainTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -27,12 +28,19 @@ class MainActivity : ComponentActivity() {
                     composable(
                         route = Screen.FilmListScreen.route
                     ) {
-                        FilmListScreen(navController = navController, context = application.applicationContext)
+                        MainTheme {
+                            FilmListScreen(
+                                navController = navController,
+                                context = application.applicationContext
+                            )
+                        }
                     }
                     composable(
                         route = Screen.FilmReviewScreen.route + "/{movie_id}"
                     ) {
-                        FilmReviewScreen(context = application.applicationContext)
+                        MainTheme {
+                            FilmReviewScreen(context = application.applicationContext)
+                        }
                     }
                 }
             }

@@ -32,7 +32,7 @@ fun FilmReviewScreen(
             LazyColumn(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(Color.DarkGray),
+                    .background(MaterialTheme.colors.background),
                 contentPadding = PaddingValues(20.dp)
             ) {
                 item {
@@ -45,21 +45,21 @@ fun FilmReviewScreen(
                     )
                     Text(
                         text = film.title ?: "",
-                        style = MaterialTheme.typography.h4,
-                        color = Color.White
+                        style = MaterialTheme.typography.h1,
+                        color = MaterialTheme.colors.onSurface
                     )
                     Spacer(modifier = Modifier.height(30.dp))
                     Text(
                         text = film.originalTitle ?: "",
-                        style = MaterialTheme.typography.h5,
-                        color = Color.White
+                        style = MaterialTheme.typography.h1,
+                        color = MaterialTheme.colors.onSurface
                     )
                     Spacer(modifier = Modifier.height(15.dp))
 
                     Text(
                         text = film.overview ?: "",
                         style = MaterialTheme.typography.body1,
-                        color = Color.White
+                        color = MaterialTheme.colors.onSurface
                     )
 
                     Image(
@@ -73,15 +73,15 @@ fun FilmReviewScreen(
                     )
                     Text(
                         text = context.getString(R.string.release_date) + film.releaseDate,
-                        style = MaterialTheme.typography.body2,
-                        color = Color.White
+                        style = MaterialTheme.typography.body1,
+                        color = MaterialTheme.colors.onSurface
                     )
                     Spacer(modifier = Modifier.height(15.dp))
                     Text(
                         text = context.getString(R.string.avg_rating)
                             + film.voteAverage.toString(),
-                        style = MaterialTheme.typography.body2,
-                        color = Color.White
+                        style = MaterialTheme.typography.body1,
+                        color = MaterialTheme.colors.onSurface
                     )
                 }
             }
