@@ -40,8 +40,16 @@ fun FilmListScreen(
                 hint = context.getString(R.string.searchbar_hint),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(16.dp)
-            )
+                    .padding(16.dp),
+                textState = viewModel.state.value.searchText
+            ) { query ->
+
+                if(query.isEmpty()) {
+                    viewModel.refresh()
+                } else {
+                    viewModel.searchFilms(query = query)
+                }
+            }
             LazyColumn(
                 modifier = Modifier.fillMaxSize(),
             ) {
@@ -108,15 +116,19 @@ fun FilmListScreen(
 fun SearchBar(
     modifier: Modifier = Modifier,
     hint: String = "",
+    textState: String = "",
     onSearch: (String) -> Unit = {}
 ) {
+
     var text by remember {
-        mutableStateOf("")
+        mutableStateOf(textState)
     }
 
-    val isHintDisplayed by remember {
+    var isHintDisplayed by remember {
         mutableStateOf(hint != "")
     }
+
+    isHintDisplayed = text.isEmpty()
 
     Box(modifier = modifier) {
         BasicTextField(
@@ -134,6 +146,7 @@ fun SearchBar(
                 .background(MaterialTheme.colors.onSurface, CircleShape)
                 .padding(horizontal = 20.dp, vertical = 12.dp)
         )
+
         if(isHintDisplayed) {
             Text(
                 text = hint,

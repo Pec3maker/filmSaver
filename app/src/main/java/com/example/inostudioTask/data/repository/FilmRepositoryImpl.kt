@@ -18,7 +18,17 @@ class FilmRepositoryImpl @Inject constructor(
         return api.getFilmsById(apiKey = apiKey, filmId = id, language = language)
     }
 
-    override suspend fun getFilmsBySearch(apiKey: String, query: String, page: Int, language: String): List<Result> {
-        return api.getFilmsBySearch(apiKey = apiKey, query = query, page = page, language = language).results
+    override suspend fun getFilmsBySearch(
+        apiKey: String,
+        query: String,
+        page: Int,
+        language: String
+    ): List<Result> {
+        return api.getFilmsBySearch(
+            apiKey = apiKey,
+            query = query,
+            page = page,
+            language = language
+        ).results
     }
 }

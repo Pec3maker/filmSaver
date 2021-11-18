@@ -12,7 +12,8 @@ sealed class ScreenStates
     data class FilmListState<T>(
         val isLoading: Boolean = false,
         val data: List<T> = emptyList(),
-        val error: T? = null
+        val error: T? = null,
+        val searchText: String = ""
     )
 }
 
