@@ -23,20 +23,20 @@ class FilmListViewModel @Inject constructor(
     val state: State<ScreenStates.FilmListState<Any>> = _state
 
     init {
-        for(i in 1..10) {
-            getFilms(apiKey = Constants.API_KEY, page = i, language = Constants.LANGUAGE)
-        }
+        refresh()
     }
 
-
-
-    private fun getFilms(apiKey: String, page: Int, language: String) {
-        getFilmsUseCase(apiKey = apiKey, page = page, language = language).onEach { result->
+    private fun getFilms(page: Int) {
+        getFilmsUseCase(
+            apiKey = Constants.API_KEY,
+            page = page,
+            language = Constants.LANGUAGE
+        ).onEach { result->
             when(result) {
                 is Resource.Success<*> -> {
                     @Suppress("UNCHECKED_CAST")
                     _state.value = ScreenStates.FilmListState(
-                        data = (result.data as List<Film>).plus(_state.value.data)
+                        data =  _state.value.data.plus(result.data as List<Film>)
                     )
                 }
                 is Resource.Error<*> -> {
@@ -49,5 +49,11 @@ class FilmListViewModel @Inject constructor(
                 }
             }
         }.launchIn(viewModelScope)
+    }
+
+    fun refresh() {
+        for(i in 1..10) {
+            getFilms(page = i)
+        }
     }
 }

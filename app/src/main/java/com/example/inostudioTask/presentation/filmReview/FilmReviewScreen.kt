@@ -142,9 +142,9 @@ fun FilmReviewScreen(
                         .padding(horizontal = 20.dp)
                         .align(alignment = Alignment.CenterHorizontally)
                 )
-                
+
                 Spacer(modifier = Modifier.padding(10.dp))
-                
+
                 Button(
                     onClick = {
                         movieId?.let { viewModel.refresh(movieId) }

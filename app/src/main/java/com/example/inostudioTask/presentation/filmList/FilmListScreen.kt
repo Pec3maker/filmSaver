@@ -7,9 +7,9 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Error
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -58,15 +58,45 @@ fun FilmListScreen(
         }
 
         if(state.error != null) {
-            Text(
-                text = context.getString(state.error as Int),
-                color = MaterialTheme.colors.error,
-                textAlign = TextAlign.Center,
+            Column(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 20.dp)
-                    .align(Alignment.Center)
-            )
+                    .fillMaxSize(),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Icon(
+                    Icons.Rounded.Error,
+                    contentDescription = null,
+                    Modifier
+                        .padding(5.dp)
+                        .align(alignment = Alignment.CenterHorizontally)
+                )
+
+                Spacer(modifier = Modifier.padding(5.dp))
+
+                Text(
+                    text = context.getString(state.error as Int),
+                    color = MaterialTheme.colors.error,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 20.dp)
+                        .align(alignment = Alignment.CenterHorizontally)
+                )
+
+                Spacer(modifier = Modifier.padding(10.dp))
+
+                Button(
+                    onClick = {
+                        viewModel.refresh()
+                    }
+                ) {
+                    Text(
+                        text = context.getString(R.string.refresh_string),
+                        color = MaterialTheme.colors.onSurface
+                    )
+                }
+            }
         }
         if(state.isLoading) {
             CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
