@@ -99,14 +99,13 @@ fun FilmReviewScreen(
                                 .height(30.dp)
                         )
                         Text(
-                            text = context.getString(R.string.release_date) + film.releaseDate,
+                            text = context.getString(R.string.release_date, film.releaseDate),
                             style = MaterialTheme.typography.body1,
                             color = MaterialTheme.colors.onSurface
                         )
                         Spacer(modifier = Modifier.height(15.dp))
                         Text(
-                            text = context.getString(R.string.avg_rating)
-                                    + film.voteAverage.toString(),
+                            text = context.getString(R.string.avg_rating, film.voteAverage),
                             style = MaterialTheme.typography.body1,
                             color = MaterialTheme.colors.onSurface
                         )
