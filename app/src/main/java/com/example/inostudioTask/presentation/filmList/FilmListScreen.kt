@@ -39,8 +39,7 @@ fun FilmListScreen(
             SearchBar(
                 hint = context.getString(R.string.searchbar_hint),
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp),
+                    .fillMaxWidth(),
                 textState = viewModel.state.value.searchText
             ) { query ->
 
@@ -50,6 +49,15 @@ fun FilmListScreen(
                     viewModel.searchFilms(query = query)
                 }
             }
+
+            if(state.isLoading) {
+                LinearProgressIndicator(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                )
+                Spacer(modifier = Modifier.padding(5.dp))
+            }
+
             LazyColumn(
                 modifier = Modifier.fillMaxSize(),
             ) {
@@ -105,9 +113,6 @@ fun FilmListScreen(
                     )
                 }
             }
-        }
-        if(state.isLoading) {
-            CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
         }
     }
 }
