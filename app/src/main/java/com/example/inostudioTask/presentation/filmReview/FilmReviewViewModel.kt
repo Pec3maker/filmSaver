@@ -8,7 +8,6 @@ import androidx.lifecycle.viewModelScope
 import com.example.inostudioTask.R
 import com.example.inostudioTask.common.Constants
 import com.example.inostudioTask.common.Resource
-import com.example.inostudioTask.domain.model.Film
 import com.example.inostudioTask.domain.useCase.getFilm.GetFilmUseCase
 import com.example.inostudioTask.presentation.screenStates.ScreenStates
 import dagger.hilt.android.lifecycle.HiltViewModel

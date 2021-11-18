@@ -44,7 +44,10 @@ class MainActivity : ComponentActivity() {
                         )
                     ) {
                         MainTheme {
-                            FilmReviewScreen(context = application.applicationContext)
+                            FilmReviewScreen(
+                                navController = navController,
+                                context = application.applicationContext
+                            )
                         }
                     }
                 }

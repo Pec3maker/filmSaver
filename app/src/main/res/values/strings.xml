@@ -5,4 +5,5 @@
     <string name="release_date">Дата релиза: </string>
     <string name="avg_rating">Средняя оценка: </string>
     <string name="searchbar_hint">Search…</string>
+    <string name="top_app_title">Обзор фильма</string>
 </resources>
