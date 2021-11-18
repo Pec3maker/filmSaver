@@ -26,8 +26,8 @@ class FilmReviewViewModel @Inject constructor(
     val state: State<ScreenStates.FilmReviewState<Any>> = _state
 
     init {
-        savedStateHandle.get<String>("movie_id")?.let { filmId ->
-            getFilm(Constants.API_KEY, filmId, Constants.LANGUAGE)
+        savedStateHandle.get<String>("movie_id")?.let { movieId ->
+            refresh(movieId)
         }
     }
 
@@ -47,5 +47,10 @@ class FilmReviewViewModel @Inject constructor(
                 }
             }
         }.launchIn(viewModelScope)
+    }
+
+    fun refresh(movieId: String)
+    {
+        getFilm(apiKey = Constants.API_KEY, id = movieId, Constants.LANGUAGE)
     }
 }

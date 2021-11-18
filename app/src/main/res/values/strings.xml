@@ -6,4 +6,5 @@
     <string name="avg_rating">Средняя оценка: </string>
     <string name="searchbar_hint">Search…</string>
     <string name="top_app_title">Обзор фильма</string>
+    <string name="refresh_string">Перезагрузить</string>
 </resources>

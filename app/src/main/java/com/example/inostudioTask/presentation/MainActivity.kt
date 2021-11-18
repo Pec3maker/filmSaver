@@ -42,10 +42,11 @@ class MainActivity : ComponentActivity() {
                         arguments = listOf(
                             navArgument("movie_id") { type = NavType.StringType }
                         )
-                    ) {
-                        MainTheme {
+                    ) { backStackEntry ->
+                    MainTheme {
                             FilmReviewScreen(
                                 navController = navController,
+                                backStackEntry.arguments?.getString("movie_id"),
                                 context = application.applicationContext
                             )
                         }

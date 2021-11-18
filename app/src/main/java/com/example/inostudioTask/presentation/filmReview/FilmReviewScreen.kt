@@ -9,6 +9,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBackIos
+import androidx.compose.material.icons.rounded.Error
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -24,6 +25,7 @@ import com.example.inostudioTask.domain.model.Film
 @Composable
 fun FilmReviewScreen(
     navController: NavController,
+    movieId: String?,
     viewModel: FilmReviewViewModel = hiltViewModel(),
     context: Context
 ) {
@@ -111,9 +113,26 @@ fun FilmReviewScreen(
                     }
                 }
             }
+        }
 
+        if (state.error != null) {
 
-            if (state.error != null) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize(),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Icon(
+                    Icons.Rounded.Error,
+                    contentDescription = null,
+                    Modifier
+                        .padding(5.dp)
+                        .align(alignment = Alignment.CenterHorizontally)
+                )
+
+                Spacer(modifier = Modifier.padding(5.dp))
+
                 Text(
                     text = context.getString(state.error as Int),
                     color = MaterialTheme.colors.error,
@@ -121,12 +140,26 @@ fun FilmReviewScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 20.dp)
-                        .align(Alignment.Center)
+                        .align(alignment = Alignment.CenterHorizontally)
                 )
+                
+                Spacer(modifier = Modifier.padding(10.dp))
+                
+                Button(
+                    onClick = {
+                        movieId?.let { viewModel.refresh(movieId) }
+                    }
+                ) {
+                    Text(
+                        text = context.getString(R.string.refresh_string),
+                        color = MaterialTheme.colors.onSurface
+                    )
+                }
             }
-            if (state.isLoading) {
-                CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
-            }
+        }
+
+        if (state.isLoading) {
+            CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
         }
     }
 }

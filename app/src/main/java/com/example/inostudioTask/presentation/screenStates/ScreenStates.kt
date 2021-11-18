@@ -6,7 +6,7 @@ sealed class ScreenStates
     data class FilmReviewState<T>(
         val isLoading: Boolean = false,
         val data: T? = null,
-        val error: T? = null
+        val error: T? = null,
     )
 
     data class FilmListState<T>(
