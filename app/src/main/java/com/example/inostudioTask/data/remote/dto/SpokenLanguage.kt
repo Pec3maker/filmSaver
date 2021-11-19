@@ -1,13 +1,13 @@
 package com.example.inostudioTask.data.remote.dto
 
 
-import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
 
 data class SpokenLanguage(
-    @SerializedName("english_name")
+    @Json(name = "english_name")
     val englishName: String,
-    @SerializedName("iso_639_1")
+    @Json(name = "iso_639_1")
     val iso6391: String,
-    @SerializedName("name")
+    @Json(name = "name")
     val name: String
 )

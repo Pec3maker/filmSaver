@@ -1,11 +1,11 @@
 package com.example.inostudioTask.data.remote.dto
 
 
-import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
 
 data class ProductionCountry(
-    @SerializedName("iso_3166_1")
+    @Json(name = "iso_3166_1")
     val iso31661: String,
-    @SerializedName("name")
+    @Json(name = "name")
     val name: String
 )
