@@ -49,8 +49,7 @@ class FilmReviewViewModel @Inject constructor(
         }.launchIn(viewModelScope)
     }
 
-    fun refresh(movieId: String)
-    {
+    fun refresh(movieId: String) {
         getFilm(apiKey = Constants.API_KEY, id = movieId, Constants.LANGUAGE)
     }
 }

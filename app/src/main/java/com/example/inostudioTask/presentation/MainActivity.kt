@@ -8,8 +8,8 @@ import androidx.compose.material.Surface
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.navArgument
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.example.inostudioTask.presentation.filmList.FilmListScreen
 import com.example.inostudioTask.presentation.filmReview.FilmReviewScreen
 import com.example.inostudioTask.presentation.ui.theme.MainTheme

@@ -1,7 +1,7 @@
 package com.example.inostudioTask.data.remote
 
-import com.example.inostudioTask.data.remote.dto.FilmDetailDto
-import com.example.inostudioTask.data.remote.dto.FilmDto
+import com.example.inostudioTask.data.remote.dto.FilmList
+import com.example.inostudioTask.data.remote.dto.FilmResult
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -12,7 +12,7 @@ interface FilmApi {
         @Query("api_key") apiKey: String,
         @Query("language") language: String,
         @Query("page") page: Int
-    ): FilmDto
+    ): FilmList
 
     @GET("/3/search/movie")
     suspend fun getFilmsBySearch(
@@ -20,12 +20,12 @@ interface FilmApi {
         @Query("language") language: String,
         @Query("query") query: String,
         @Query("page") page: Int
-    ): FilmDto
+    ): FilmList
 
     @GET("/3/movie/{movie_id}")
     suspend fun getFilmsById(
         @Path("movie_id") filmId: String,
         @Query("api_key") apiKey: String,
         @Query("language") language: String
-    ): FilmDetailDto
+    ): FilmResult
 }
