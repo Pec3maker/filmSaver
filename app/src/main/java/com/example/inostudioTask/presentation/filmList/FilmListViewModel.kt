@@ -6,12 +6,16 @@ import androidx.lifecycle.viewModelScope
 import com.example.inostudioTask.R
 import com.example.inostudioTask.common.Constants
 import com.example.inostudioTask.common.Resource
+import com.example.inostudioTask.data.remote.dto.toFilm
 import com.example.inostudioTask.domain.model.Film
 import com.example.inostudioTask.domain.repository.FilmRepository
 import com.example.inostudioTask.presentation.screenStates.ScreenStates
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import retrofit2.HttpException
+import java.io.IOException
 import javax.inject.Inject
 
 @HiltViewModel
@@ -29,16 +33,27 @@ class FilmListViewModel @Inject constructor(
 
 
     private fun getFilms(page: Int) {
-        repository.getFilmsUseCase(
-            apiKey = Constants.API_KEY,
-            page = page,
-            language = Constants.LANGUAGE
-        ).onEach { result->
-            when(result) {
+
+        flow {
+            try {
+                emit(Resource.Loading<List<Film>>())
+                val film = repository.getFilms(
+                    apiKey = Constants.API_KEY,
+                    page = page,
+                    language = Constants.LANGUAGE
+                ).map { it.toFilm() }
+                emit(Resource.Success(film))
+            } catch (e: HttpException) {
+                emit(Resource.Error(R.string.unexpected_error))
+            } catch (e: IOException) {
+                emit(Resource.Error(R.string.connection_error))
+            }
+        }.onEach { result ->
+            when (result) {
                 is Resource.Success<*> -> {
                     @Suppress("UNCHECKED_CAST")
                     _state.value = ScreenStates.FilmListState(
-                        data =  _state.value.data.plus(result.data as List<Film>)
+                        data = _state.value.data.plus(result.data as List<Film>)
                     )
                 }
                 is Resource.Error<*> -> {
@@ -53,19 +68,30 @@ class FilmListViewModel @Inject constructor(
         }.launchIn(viewModelScope)
     }
 
+
     private fun getFilmsBySearch(page: Int, query: String) {
-        repository.getFilmsBySearchUseCase(
-            apiKey = Constants.API_KEY,
-            page = page,
-            query = query,
-            language = Constants.LANGUAGE
-        ).onEach { result ->
-            when(result) {
+
+        flow {
+            try {
+                emit(Resource.Loading<List<Film>>())
+                val film = repository.getFilmsBySearch(
+                    apiKey = Constants.API_KEY,
+                    page = page,
+                    query = query,
+                    language = Constants.LANGUAGE
+                ).map { it.toFilm() }
+                emit(Resource.Success(film))
+            } catch (e: HttpException) {
+                emit(Resource.Error(R.string.unexpected_error))
+            } catch (e: IOException) {
+                emit(Resource.Error(R.string.connection_error))
+            }
+        }.onEach { result ->
+            when (result) {
                 is Resource.Success<*> -> {
                     @Suppress("UNCHECKED_CAST")
                     _state.value = ScreenStates.FilmListState(
-                        data =  _state.value.data.plus(result.data as List<Film>),
-                        searchText = query
+                        data = _state.value.data.plus(result.data as List<Film>)
                     )
                 }
                 is Resource.Error<*> -> {
@@ -81,7 +107,7 @@ class FilmListViewModel @Inject constructor(
     }
 
     fun refresh() {
-        for(i in 1..10) {
+        for (i in 1..10) {
             getFilms(page = i)
         }
     }
@@ -89,4 +115,5 @@ class FilmListViewModel @Inject constructor(
     fun searchFilms(query: String) {
         getFilmsBySearch(page = Constants.SEARCH_PAGES, query = query)
     }
+
 }

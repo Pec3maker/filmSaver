@@ -33,7 +33,7 @@ fun FilmListItem(
             modifier = Modifier.size(128.dp)
         )
         Text(
-            text = "${film.title}",
+            text = film.title,
             style = MaterialTheme.typography.body1,
             overflow = TextOverflow.Ellipsis,
             maxLines = 2,

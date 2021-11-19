@@ -7,4 +7,5 @@ object Constants {
     const val LANGUAGE = "ru"
     const val IMAGE_PATH = "https://image.tmdb.org/t/p/w500"
     const val SEARCH_PAGES = 1
+    const val BASE_YOUTUBE_URL = "https://www.youtube.com/watch?v="
 }

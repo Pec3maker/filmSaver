@@ -8,11 +8,16 @@ import androidx.lifecycle.viewModelScope
 import com.example.inostudioTask.R
 import com.example.inostudioTask.common.Constants
 import com.example.inostudioTask.common.Resource
+import com.example.inostudioTask.data.remote.dto.toFilm
+import com.example.inostudioTask.domain.model.Film
 import com.example.inostudioTask.domain.repository.FilmRepository
 import com.example.inostudioTask.presentation.screenStates.ScreenStates
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import retrofit2.HttpException
+import java.io.IOException
 import javax.inject.Inject
 
 @HiltViewModel
@@ -31,12 +36,23 @@ class FilmReviewViewModel @Inject constructor(
         }
     }
 
-    private fun getFilm(apiKey: String, id: String, language: String) {
-        repository.getFilmsByIdUseCase(
-            apiKey = apiKey,
-            id = id,
-            language = language
-        ).onEach { result ->
+    private fun getFilm(id: String) {
+
+        flow {
+            try {
+                emit(Resource.Loading<Film>())
+                val film = repository.getFilmsById(
+                    apiKey = Constants.API_KEY,
+                    id = id,
+                    language = Constants.LANGUAGE
+                ).toFilm()
+                emit(Resource.Success(film))
+            } catch (e: HttpException) {
+                emit(Resource.Error(R.string.unexpected_error))
+            } catch (e: IOException) {
+                emit(Resource.Error(R.string.connection_error))
+            }
+        }.onEach { result ->
             when(result) {
                 is Resource.Success<*> -> {
                     _state.value = ScreenStates.FilmReviewState(data = result.data)
@@ -54,6 +70,6 @@ class FilmReviewViewModel @Inject constructor(
     }
 
     fun refresh(movieId: String) {
-        getFilm(apiKey = Constants.API_KEY, id = movieId, Constants.LANGUAGE)
+        getFilm(id = movieId)
     }
 }
