@@ -6,6 +6,7 @@ import com.example.inostudioTask.data.repository.FilmRepositoryImpl
 import com.example.inostudioTask.domain.repository.FilmRepository
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
+import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -18,8 +19,8 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object AppModule {
 
-    @Singleton
     @Provides
+    @Singleton
     fun provideMoshi(): Moshi = Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
 
     @Provides
@@ -31,10 +32,14 @@ object AppModule {
             .build()
             .create(FilmApi::class.java)
     }
-
-    @Provides
-    @Singleton
-    fun provideFilmRepository(api: FilmApi): FilmRepository {
-        return FilmRepositoryImpl(api)
-    }
 }
+
+@Module
+@InstallIn(SingletonComponent::class)
+abstract class RepositoryModule {
+
+    @Binds
+    abstract fun bindsFilmRepository(filmRepositoryImpl: FilmRepositoryImpl): FilmRepository
+}
+
+
