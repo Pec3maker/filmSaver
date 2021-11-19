@@ -1,10 +1,3 @@
 <resources>
-    <string name="app_name">inostudioTask</string>
-    <string name="unexpected_error">Unexpected error occurred</string>
-    <string name="connection_error">Couldn\'t reach server</string>
-    <string name="release_date">Дата релиза: %1$s</string>
-    <string name="avg_rating">Средняя оценка: %1$d</string>
-    <string name="searchbar_hint">Search…</string>
-    <string name="top_app_title">Обзор фильма</string>
-    <string name="refresh_string">Перезагрузить</string>
+    <string name="app_name">inostudio_task</string>
 </resources>

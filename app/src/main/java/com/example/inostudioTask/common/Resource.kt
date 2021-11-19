@@ -1,7 +1,7 @@
 package com.example.inostudioTask.common
 
-sealed class Resource{
-    data class Success<T>(val data: T? = null)
-    data class Error<T>(val message: T?, val data: T? = null)
-    data class Loading<T>(val data: T? = null)
+sealed class Resource<T>(val data: T? = null, val message: String? = null) {
+    class Success<T>(data: T) : Resource<T>(data)
+    class Error<T>(message: String, data: T? = null) : Resource<T>(data, message)
+    class Loading<T>(data: T? = null) : Resource<T>(data)
 }
