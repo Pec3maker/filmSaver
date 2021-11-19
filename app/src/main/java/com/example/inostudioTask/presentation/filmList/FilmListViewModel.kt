@@ -7,8 +7,7 @@ import com.example.inostudioTask.R
 import com.example.inostudioTask.common.Constants
 import com.example.inostudioTask.common.Resource
 import com.example.inostudioTask.domain.model.Film
-import com.example.inostudioTask.domain.useCase.getFilms.GetFilmsUseCase
-import com.example.inostudioTask.domain.useCase.getFilmsBySearch.GetFilmsBySearchUseCase
+import com.example.inostudioTask.domain.repository.FilmRepository
 import com.example.inostudioTask.presentation.screenStates.ScreenStates
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
@@ -17,8 +16,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class FilmListViewModel @Inject constructor(
-    private val getFilmsUseCase: GetFilmsUseCase,
-    private val getFilmsBySearchUseCase: GetFilmsBySearchUseCase,
+    private val repository: FilmRepository,
 ) : ViewModel() {
 
     private val _state = mutableStateOf(ScreenStates.FilmListState<Any>())
@@ -31,7 +29,7 @@ class FilmListViewModel @Inject constructor(
 
 
     private fun getFilms(page: Int) {
-        getFilmsUseCase(
+        repository.getFilmsUseCase(
             apiKey = Constants.API_KEY,
             page = page,
             language = Constants.LANGUAGE
@@ -56,12 +54,12 @@ class FilmListViewModel @Inject constructor(
     }
 
     private fun getFilmsBySearch(page: Int, query: String) {
-        getFilmsBySearchUseCase(
+        repository.getFilmsBySearchUseCase(
             apiKey = Constants.API_KEY,
             page = page,
             query = query,
             language = Constants.LANGUAGE
-        ).onEach { result->
+        ).onEach { result ->
             when(result) {
                 is Resource.Success<*> -> {
                     @Suppress("UNCHECKED_CAST")

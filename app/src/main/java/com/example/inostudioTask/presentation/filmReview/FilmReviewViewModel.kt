@@ -8,7 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.inostudioTask.R
 import com.example.inostudioTask.common.Constants
 import com.example.inostudioTask.common.Resource
-import com.example.inostudioTask.domain.useCase.getFilm.GetFilmUseCase
+import com.example.inostudioTask.domain.repository.FilmRepository
 import com.example.inostudioTask.presentation.screenStates.ScreenStates
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
@@ -18,7 +18,7 @@ import javax.inject.Inject
 @HiltViewModel
 class FilmReviewViewModel @Inject constructor(
 
-    private val getFilmUseCase: GetFilmUseCase,
+    private val repository: FilmRepository,
     savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
 
@@ -32,7 +32,11 @@ class FilmReviewViewModel @Inject constructor(
     }
 
     private fun getFilm(apiKey: String, id: String, language: String) {
-        getFilmUseCase(apiKey = apiKey, id = id, language = language).onEach { result->
+        repository.getFilmsByIdUseCase(
+            apiKey = apiKey,
+            id = id,
+            language = language
+        ).onEach { result ->
             when(result) {
                 is Resource.Success<*> -> {
                     _state.value = ScreenStates.FilmReviewState(data = result.data)
