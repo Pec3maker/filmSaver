@@ -8,4 +8,5 @@ object Constants {
     const val IMAGE_PATH = "https://image.tmdb.org/t/p/w500"
     const val SEARCH_PAGES = 1
     const val BASE_YOUTUBE_URL = "https://www.youtube.com/watch?v="
+    const val ADDITIONAL_INFO = "videos,images,reviews,credits"
 }

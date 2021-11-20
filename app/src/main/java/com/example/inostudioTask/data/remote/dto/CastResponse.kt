@@ -3,7 +3,7 @@ package com.example.inostudioTask.data.remote.dto
 
 import com.squareup.moshi.Json
 
-data class Cast(
+data class CastResponse(
     val character: String,
     val gender: Int,
     val id: Int,

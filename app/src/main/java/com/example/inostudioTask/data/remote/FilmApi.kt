@@ -28,28 +28,11 @@ interface FilmApi {
         @Query("language") language: String
     ): FilmResponse
 
-    @GET("/3/movie/{movie_id}/credits")
-    suspend fun getCast(
+    @GET("/3/movie/{movie_id}")
+    suspend fun getAdditionalInfo(
         @Path("movie_id") filmId: String,
         @Query("api_key") apiKey: String,
-        @Query("language") language: String
-    ): Credits
-
-    @GET("/3/movie/{movie_id}/images")
-    suspend fun getImages(
-        @Path("movie_id") filmId: String,
-        @Query("api_key") apiKey: String,
-    ): ImageList
-
-    @GET("/3/movie/{movie_id}/reviews")
-    suspend fun getReviews(
-        @Path("movie_id") filmId: String,
-        @Query("api_key") apiKey: String,
-    ): ReviewList
-
-    @GET("/3/movie/{movie_id}/videos")
-    suspend fun getVideos(
-        @Path("movie_id") filmId: String,
-        @Query("api_key") apiKey: String,
-    ): VideoList
+        @Query("language") language: String,
+        @Query("append_to_response") additionalInfo: String
+    ): AdditionalInfoResponse
 }

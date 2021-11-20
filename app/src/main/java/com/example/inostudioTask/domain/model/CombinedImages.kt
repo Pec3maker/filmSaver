@@ -1,7 +1,7 @@
 package com.example.inostudioTask.domain.model
 
-import com.example.inostudioTask.data.remote.dto.Image
+import com.example.inostudioTask.data.remote.dto.ImageResponse
 
 data class CombinedImages(
-    val images: List<Image>
+    val images: List<ImageResponse>
 )
