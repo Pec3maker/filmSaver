@@ -44,7 +44,8 @@ class FilmReviewViewModel @Inject constructor(
                 val film = repository.getFilmsById(
                     apiKey = Constants.API_KEY,
                     id = id,
-                    language = Constants.LANGUAGE
+                    language = Constants.LANGUAGE,
+                    additionalInfo = Constants.ADDITIONAL_INFO
                 ).toFilm()
                 emit(Resource.Success(film))
             } catch (e: HttpException) {
@@ -63,11 +64,14 @@ class FilmReviewViewModel @Inject constructor(
                     )
                 }
                 is Resource.Loading<*> -> {
-                    _state.value = ScreenStates.FilmReviewState(isLoading = true)
+                    _state.value = ScreenStates.FilmReviewState(
+                        isLoading = true
+                    )
                 }
             }
         }.launchIn(viewModelScope)
     }
+
 
     fun refresh(movieId: String) {
         getFilm(id = movieId)

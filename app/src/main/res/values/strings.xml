@@ -7,4 +7,5 @@
     <string name="searchbar_hint">Search…</string>
     <string name="top_app_title">Обзор фильма</string>
     <string name="refresh_string">Перезагрузить</string>
+    <string name="not_found">Не найдены</string>
 </resources>

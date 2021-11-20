@@ -2,7 +2,6 @@ package com.example.inostudioTask.data.repository
 
 import com.example.inostudioTask.data.remote.FilmApi
 import com.example.inostudioTask.data.remote.dto.*
-import com.example.inostudioTask.domain.model.AdditionalInfo
 import com.example.inostudioTask.domain.repository.FilmRepository
 import javax.inject.Inject
 
@@ -25,12 +24,14 @@ class FilmRepositoryImpl @Inject constructor(
     override suspend fun getFilmsById(
         apiKey: String,
         id: String,
-        language: String
-    ): FilmResponse {
-        return api.getFilmsById(
+        language: String,
+        additionalInfo: String
+    ): AdditionalInfoResponse {
+        return api.getAdditionalInfo(
             apiKey = apiKey,
             filmId = id,
-            language = language
+            language = language,
+            additionalInfo = additionalInfo
         )
     }
 
@@ -46,19 +47,5 @@ class FilmRepositoryImpl @Inject constructor(
             page = page,
             language = language
         ).results
-    }
-
-    override suspend fun getCast(
-        apiKey: String,
-        id: String,
-        language: String,
-        additionalInfo: String
-    ): AdditionalInfo {
-        return api.getAdditionalInfo(
-            apiKey = apiKey,
-            filmId = id,
-            language = language,
-            additionalInfo = additionalInfo
-        ).toAdditionalInfo()
     }
 }

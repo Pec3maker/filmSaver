@@ -57,19 +57,32 @@ fun FilmListScreen(
                 Spacer(modifier = Modifier.padding(5.dp))
             }
 
-            LazyColumn(
-                modifier = Modifier.fillMaxSize(),
-            ) {
-                @Suppress("UNCHECKED_CAST")
-                items(state.data as List<Film>) { film ->
-                    FilmListItem(
-                        film = film,
-                        onItemClick = {
-                            navController.navigate(Screen.FilmReviewScreen.route + "/${film.id}")
-                        }
-                    )
+            @Suppress("UNCHECKED_CAST")
+            val data = state.data as List<Film>
+            if(data.isEmpty())
+            {
+                Text(
+                    text = context.getString(R.string.not_found),
+                    color = MaterialTheme.colors.error,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier
+                        .align(alignment = Alignment.CenterHorizontally)
+                )
+            } else {
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize(),
+                ) {
+                    items(data) { film ->
+                        FilmListItem(
+                            film = film,
+                            onItemClick = {
+                                navController.navigate(Screen.FilmReviewScreen.route + "/${film.id}")
+                            }
+                        )
+                    }
                 }
             }
+            
         }
 
         if(state.error != null) {

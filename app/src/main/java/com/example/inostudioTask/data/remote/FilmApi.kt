@@ -22,13 +22,6 @@ interface FilmApi {
     ): FilmList
 
     @GET("/3/movie/{movie_id}")
-    suspend fun getFilmsById(
-        @Path("movie_id") filmId: String,
-        @Query("api_key") apiKey: String,
-        @Query("language") language: String
-    ): FilmResponse
-
-    @GET("/3/movie/{movie_id}")
     suspend fun getAdditionalInfo(
         @Path("movie_id") filmId: String,
         @Query("api_key") apiKey: String,
