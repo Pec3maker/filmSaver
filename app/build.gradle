@@ -90,7 +90,7 @@ dependencies {
     implementation "com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.2"
 
 
-
+    //Coil
     implementation "io.coil-kt:coil-compose:1.4.0"
 
     //Icons
@@ -108,4 +108,7 @@ dependencies {
     implementation "androidx.room:room-ktx:2.3.0"
 
 
+    //Pages
+    implementation "com.google.accompanist:accompanist-pager:0.19.0"
+    implementation "com.google.accompanist:accompanist-pager-indicators:0.19.0"
 }

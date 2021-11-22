@@ -1,6 +1,5 @@
 package com.example.inostudioTask.presentation.filmList
 
-import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -14,6 +13,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -28,9 +28,9 @@ import com.example.inostudioTask.presentation.filmList.components.FilmListItem
 fun FilmListScreen(
     navController: NavController,
     viewModel: FilmListViewModel = hiltViewModel(),
-    context: Context
 ) {
     val state = viewModel.state.value
+    val context = LocalContext.current
     Box(
         modifier = Modifier.fillMaxSize()
     ) {

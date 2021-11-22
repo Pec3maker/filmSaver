@@ -68,7 +68,6 @@ class FilmListViewModel @Inject constructor(
         }.launchIn(viewModelScope)
     }
 
-
     private fun getFilmsBySearch(page: Int, query: String) {
 
         flow {
@@ -115,5 +114,4 @@ class FilmListViewModel @Inject constructor(
     fun searchFilms(query: String) {
         getFilmsBySearch(page = Constants.SEARCH_PAGES, query = query)
     }
-
 }
