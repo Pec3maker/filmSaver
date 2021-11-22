@@ -2,6 +2,8 @@ package com.example.inostudioTask.domain.repository
 
 
 import com.example.inostudioTask.data.remote.dto.*
+import com.example.inostudioTask.domain.model.dataBase.FilmEntity
+import kotlinx.coroutines.flow.Flow
 
 interface FilmRepository {
 
@@ -24,4 +26,12 @@ interface FilmRepository {
         page: Int,
         language: String
     ): List<FilmResponse>
+
+    fun getFilmsDatabase(): Flow<List<FilmEntity>>
+
+    suspend fun insertFilmDatabase(film: FilmEntity)
+
+    suspend fun deleteFilmDatabase(film: FilmEntity)
+
+    suspend fun getFilmsByIdDatabase(id: Int): FilmEntity?
 }

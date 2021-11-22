@@ -1,6 +1,5 @@
 package com.example.inostudioTask.presentation.filmReview
 
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import androidx.compose.animation.AnimatedVisibility
@@ -88,7 +87,7 @@ fun FilmReviewScreen(
                         )
 
                         Text(
-                            text = film.title ?: "",
+                            text = film.title,
                             style = MaterialTheme.typography.h1,
                             color = MaterialTheme.colors.onSurface
                         )
@@ -96,7 +95,7 @@ fun FilmReviewScreen(
                         Spacer(modifier = Modifier.height(30.dp))
 
                         Text(
-                            text = film.originalTitle ?: "",
+                            text = film.originalTitle,
                             style = MaterialTheme.typography.h1,
                             color = MaterialTheme.colors.onSurface
                         )
@@ -104,7 +103,7 @@ fun FilmReviewScreen(
                         Spacer(modifier = Modifier.height(15.dp))
 
                         Text(
-                            text = film.overview ?: "",
+                            text = film.overview,
                             style = MaterialTheme.typography.body1,
                             color = MaterialTheme.colors.onSurface
                         )

@@ -12,4 +12,6 @@
     <string name="actors">Актеры:</string>
     <string name="posters">Постеры:</string>
     <string name="watchVideo">Смотреть видео</string>
+    <string name="deleteFavorite">Удалить избранное</string>
+    <string name="addFavorite">Добавить в избранное</string>
 </resources>

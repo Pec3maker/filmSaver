@@ -1,5 +1,7 @@
 package com.example.inostudioTask.presentation.screenStates
 
+import com.example.inostudioTask.domain.model.dataBase.FilmEntity
+
 sealed class ScreenStates
 {
 
@@ -13,7 +15,8 @@ sealed class ScreenStates
         val isLoading: Boolean = false,
         val data: List<T> = emptyList(),
         val error: T? = null,
-        val searchText: String = ""
+        val searchText: String = "",
+        var loadedFilm: FilmEntity? = null
     )
 }
 

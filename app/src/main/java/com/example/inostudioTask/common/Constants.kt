@@ -9,4 +9,5 @@ object Constants {
     const val SEARCH_PAGES = 1
     const val BASE_YOUTUBE_URL = "https://www.youtube.com/watch?v="
     const val ADDITIONAL_INFO = "videos,images,reviews,credits"
+    const val DATABASE_NAME = "filmsDatabase"
 }

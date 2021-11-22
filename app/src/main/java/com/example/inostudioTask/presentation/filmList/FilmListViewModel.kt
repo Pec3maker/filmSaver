@@ -8,12 +8,14 @@ import com.example.inostudioTask.common.Constants
 import com.example.inostudioTask.common.Resource
 import com.example.inostudioTask.data.remote.dto.toFilm
 import com.example.inostudioTask.domain.model.Film
+import com.example.inostudioTask.domain.model.dataBase.FilmEntity
 import com.example.inostudioTask.domain.repository.FilmRepository
 import com.example.inostudioTask.presentation.screenStates.ScreenStates
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import java.io.IOException
 import javax.inject.Inject
@@ -103,6 +105,44 @@ class FilmListViewModel @Inject constructor(
                 }
             }
         }.launchIn(viewModelScope)
+    }
+
+    fun saveFilm(film: Film) {
+        val filmToSave: FilmEntity = FilmEntity(
+            id = film.id,
+            title = film.title,
+            originalTitle = film.originalTitle,
+            posterPath = film.posterPath?: "",
+            overview = film.overview,
+            releaseDate = film.releaseDate,
+            voteAverage = film.voteAverage
+        )
+
+        viewModelScope.launch {
+            repository.insertFilmDatabase(filmToSave)
+        }
+    }
+
+    fun getFilmById(id: Int) {
+        viewModelScope.launch {
+            _state.value.loadedFilm = repository.getFilmsByIdDatabase(id)
+        }
+    }
+
+    fun deleteFilm(film: Film) {
+        val filmToDelete: FilmEntity = FilmEntity(
+            id = film.id,
+            title = film.title,
+            originalTitle = film.originalTitle,
+            posterPath = film.posterPath?: "",
+            overview = film.overview,
+            releaseDate = film.releaseDate,
+            voteAverage = film.voteAverage
+        )
+
+        viewModelScope.launch {
+            repository.deleteFilmDatabase(filmToDelete)
+        }
     }
 
     fun refresh() {

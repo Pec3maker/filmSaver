@@ -1,6 +1,9 @@
 package com.example.inostudioTask.di
 
+import android.app.Application
+import androidx.room.Room
 import com.example.inostudioTask.common.Constants
+import com.example.inostudioTask.data.dataSource.FilmDatabase
 import com.example.inostudioTask.data.remote.FilmApi
 import com.example.inostudioTask.data.repository.FilmRepositoryImpl
 import com.example.inostudioTask.domain.repository.FilmRepository
@@ -32,6 +35,23 @@ object AppModule {
             .build()
             .create(FilmApi::class.java)
     }
+
+    @Provides
+    @Singleton
+    fun provideFilmDatabase(app: Application): FilmDatabase {
+        return Room
+            .databaseBuilder(
+                app,
+                FilmDatabase::class.java,
+                Constants.DATABASE_NAME
+            )
+            .fallbackToDestructiveMigration()
+            .build()
+    }
+
+    @Provides
+    @Singleton
+    fun provideYourDao(db: FilmDatabase) = db.filmDao
 }
 
 @Module
@@ -39,7 +59,9 @@ object AppModule {
 abstract class RepositoryModule {
 
     @Binds
-    abstract fun bindsFilmRepository(filmRepositoryImpl: FilmRepositoryImpl): FilmRepository
+    abstract fun bindsFilmRepository(
+        filmRepositoryImpl: FilmRepositoryImpl,
+    ): FilmRepository
 }
 
 
