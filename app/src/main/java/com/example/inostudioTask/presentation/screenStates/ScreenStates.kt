@@ -16,7 +16,7 @@ sealed class ScreenStates
         val data: List<T> = emptyList(),
         val error: T? = null,
         val searchText: String = "",
-        var loadedFilm: FilmEntity? = null
+        var loadedFilms: List<FilmEntity> = emptyList()
     )
 }
 

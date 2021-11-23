@@ -5,6 +5,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.*
@@ -25,6 +26,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.inostudioTask.R
 import com.example.inostudioTask.domain.model.Film
+import com.example.inostudioTask.domain.model.toFilmEntity
 import com.example.inostudioTask.presentation.Screen
 import com.example.inostudioTask.presentation.filmList.components.FilmListItem
 
@@ -33,7 +35,7 @@ fun FilmListScreen(
     navController: NavController,
     viewModel: FilmListViewModel = hiltViewModel(),
 ) {
-    val state = viewModel.state.value
+    val uiState = viewModel.state.value
     val context = LocalContext.current
     Scaffold(
         modifier = Modifier.fillMaxSize()
@@ -53,7 +55,7 @@ fun FilmListScreen(
                 }
             }
 
-            if(state.isLoading) {
+            if(uiState.isLoading) {
                 LinearProgressIndicator(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -62,7 +64,7 @@ fun FilmListScreen(
             }
 
             @Suppress("UNCHECKED_CAST")
-            val data = state.data as List<Film>
+            val data = uiState.data as List<Film>
             if(data.isEmpty())
             {
                 Text(
@@ -73,10 +75,21 @@ fun FilmListScreen(
                         .align(alignment = Alignment.CenterHorizontally)
                 )
             } else {
+                val lazyColumnState = rememberLazyListState()
                 LazyColumn(
                     modifier = Modifier.fillMaxSize(),
+                    state = lazyColumnState
                 ) {
                     items(data) { film ->
+                        var text by remember { mutableStateOf("") }
+                        text = if (
+                            viewModel.state.value.loadedFilms.indexOf(film.toFilmEntity())
+                            != -1
+                        ) {
+                            context.getString(R.string.deleteFavorite)
+                        } else {
+                            context.getString(R.string.addFavorite)
+                        }
 
                         FilmListItem(
                             film = film,
@@ -84,32 +97,27 @@ fun FilmListScreen(
                                 navController.navigate(Screen.FilmReviewScreen.route +
                                         "/${it.id}")
                             },
-//                            onFavoriteClick = {
-//                                if (viewModel.state.value.loadedFilm?.id == film.id) {
-//                                    viewModel.deleteFilm(it)
-//                                } else {
-//                                    viewModel.saveFilm(it)
-//                                }
-//                            },
-//                            isItemInDatabase = {
-//                                viewModel.state.value.loadedFilm != null
-//                            },
-//                            context = context,
-//                            textButton =
-//                            if (viewModel.state.value.loadedFilm != null) {
-//                                context.getString(R.string.deleteFavorite)
-//                            } else {
-//                                context.getString(R.string.addFavorite)
-//                            }
+                            onFavoriteClick = {
+                                text = if (
+                                    viewModel.state.value.loadedFilms.indexOf(it.toFilmEntity())
+                                    != -1
+                                ) {
+                                    viewModel.deleteFilm(it)
+                                    context.getString(R.string.addFavorite)
+                                } else {
+                                    viewModel.saveFilm(it)
+                                    context.getString(R.string.deleteFavorite)
+                                }
+                            },
+                            textButton = text
                         )
-
                     }
                 }
             }
             
         }
 
-        if(state.error != null) {
+        if(uiState.error != null) {
             Column(
                 modifier = Modifier
                     .fillMaxSize(),
@@ -127,7 +135,7 @@ fun FilmListScreen(
                 Spacer(modifier = Modifier.padding(5.dp))
 
                 Text(
-                    text = context.getString(state.error as Int),
+                    text = context.getString(uiState.error as Int),
                     color = MaterialTheme.colors.error,
                     textAlign = TextAlign.Center,
                     modifier = Modifier

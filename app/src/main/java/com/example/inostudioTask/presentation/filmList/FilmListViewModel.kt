@@ -9,6 +9,7 @@ import com.example.inostudioTask.common.Resource
 import com.example.inostudioTask.data.remote.dto.toFilm
 import com.example.inostudioTask.domain.model.Film
 import com.example.inostudioTask.domain.model.dataBase.FilmEntity
+import com.example.inostudioTask.domain.model.toFilmEntity
 import com.example.inostudioTask.domain.repository.FilmRepository
 import com.example.inostudioTask.presentation.screenStates.ScreenStates
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -30,6 +31,7 @@ class FilmListViewModel @Inject constructor(
 
 
     init {
+        getFilmsDatabase()
         refresh()
     }
 
@@ -108,41 +110,23 @@ class FilmListViewModel @Inject constructor(
     }
 
     fun saveFilm(film: Film) {
-        val filmToSave: FilmEntity = FilmEntity(
-            id = film.id,
-            title = film.title,
-            originalTitle = film.originalTitle,
-            posterPath = film.posterPath?: "",
-            overview = film.overview,
-            releaseDate = film.releaseDate,
-            voteAverage = film.voteAverage
-        )
-
         viewModelScope.launch {
-            repository.insertFilmDatabase(filmToSave)
+            repository.insertFilmDatabase(film.toFilmEntity())
         }
+        getFilmsDatabase()
     }
 
-    fun getFilmById(id: Int) {
-        viewModelScope.launch {
-            _state.value.loadedFilm = repository.getFilmsByIdDatabase(id)
-        }
+    private fun getFilmsDatabase() {
+        repository.getFilmsDatabase().onEach {
+            _state.value.loadedFilms = it
+        }.launchIn(viewModelScope)
     }
 
     fun deleteFilm(film: Film) {
-        val filmToDelete: FilmEntity = FilmEntity(
-            id = film.id,
-            title = film.title,
-            originalTitle = film.originalTitle,
-            posterPath = film.posterPath?: "",
-            overview = film.overview,
-            releaseDate = film.releaseDate,
-            voteAverage = film.voteAverage
-        )
-
         viewModelScope.launch {
-            repository.deleteFilmDatabase(filmToDelete)
+            repository.deleteFilmDatabase(film.toFilmEntity())
         }
+        getFilmsDatabase()
     }
 
     fun refresh() {

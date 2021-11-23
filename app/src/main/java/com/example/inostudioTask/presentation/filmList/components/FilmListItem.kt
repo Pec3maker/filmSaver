@@ -1,6 +1,5 @@
 package com.example.inostudioTask.presentation.filmList.components
 
-import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -13,7 +12,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
-import com.example.inostudioTask.R
 import com.example.inostudioTask.common.Constants
 import com.example.inostudioTask.domain.model.Film
 
@@ -22,13 +20,9 @@ import com.example.inostudioTask.domain.model.Film
 fun FilmListItem(
     film: Film,
     onItemClick: (Film) -> Unit,
-//    onFavoriteClick: (Film) -> Unit,
-//    isItemInDatabase: (Int) -> Boolean,
-//    context: Context,
-//    modifier: Modifier = Modifier,
-//    textButton: String
+    onFavoriteClick: (Film) -> Unit,
+    textButton: String
 ) {
-//    var text by remember { mutableStateOf(textButton) }
 
     Row(
         modifier = Modifier
@@ -52,23 +46,18 @@ fun FilmListItem(
             )
             Spacer(modifier = Modifier.padding(3.dp))
 
-//            Button(
-//                onClick = {
-//                    onFavoriteClick(film)
-//                    text =
-//                        if (isItemInDatabase(film.id))
-//                            context.getString(R.string.deleteFavorite)
-//                        else
-//                            context.getString(R.string.addFavorite)
-//                }
-//            ) {
-//                Text(
-//                    text = text,
-//                    style = MaterialTheme.typography.body1,
-//                    overflow = TextOverflow.Ellipsis,
-//                    textAlign = TextAlign.Center
-//                )
-//            }
+            Button(
+                onClick = {
+                    onFavoriteClick(film)
+                }
+            ) {
+                Text(
+                    text = textButton,
+                    style = MaterialTheme.typography.body1,
+                    overflow = TextOverflow.Ellipsis,
+                    textAlign = TextAlign.Center
+                )
+            }
         }
     }
 }
