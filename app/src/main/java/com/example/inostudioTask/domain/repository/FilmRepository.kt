@@ -1,6 +1,5 @@
 package com.example.inostudioTask.domain.repository
 
-
 import com.example.inostudioTask.data.remote.dto.*
 import com.example.inostudioTask.domain.model.dataBase.FilmEntity
 import kotlinx.coroutines.flow.Flow
@@ -11,7 +10,7 @@ interface FilmRepository {
         apiKey: String,
         page: Int,
         language: String
-    ): List<FilmResponse>
+    ): List<AdditionalInfoResponse>
 
     suspend fun getFilmsById(
         apiKey: String,
@@ -25,7 +24,7 @@ interface FilmRepository {
         query: String,
         page: Int,
         language: String
-    ): List<FilmResponse>
+    ): List<AdditionalInfoResponse>
 
     fun getFilmsDatabase(): Flow<List<FilmEntity>>
 

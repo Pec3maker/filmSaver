@@ -17,10 +17,10 @@ data class AdditionalInfoResponse(
     val title: String,
     @Json(name = "vote_average")
     val voteAverage: Double,
-    val credits: CreditList,
-    val images: ImageList,
-    val reviews: ReviewList,
-    val videos: VideoList,
+    val credits: CreditList? = null,
+    val images: ImageList? = null,
+    val reviews: ReviewList? = null,
+    val videos: VideoList? = null,
 )
 
 fun AdditionalInfoResponse.toFilm(): Film {
@@ -34,7 +34,7 @@ fun AdditionalInfoResponse.toFilm(): Film {
         title = title,
         voteAverage = voteAverage,
         credits = credits,
-        images = images.toCombinedImages(),
+        images = images?.toCombinedImages(),
         reviews = reviews,
         videos = videos
     )

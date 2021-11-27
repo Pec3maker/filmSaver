@@ -1,6 +1,7 @@
 package com.example.inostudioTask.domain.model
 
 import com.example.inostudioTask.data.remote.dto.CreditList
+import com.example.inostudioTask.data.remote.dto.ImageResponse
 import com.example.inostudioTask.data.remote.dto.ReviewList
 import com.example.inostudioTask.data.remote.dto.VideoList
 import com.example.inostudioTask.domain.model.dataBase.FilmEntity
@@ -15,7 +16,7 @@ data class Film(
     val title: String,
     val voteAverage: Double,
     val credits: CreditList? = null,
-    val images: CombinedImages? = null,
+    val images: List<ImageResponse>? = null,
     val reviews: ReviewList? = null,
     val videos: VideoList? = null,
 )

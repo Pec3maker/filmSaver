@@ -1,6 +1,5 @@
 package com.example.inostudioTask.data.remote.dto
 
-
 data class FilmList(
-    val results: List<FilmResponse>
+    val results: List<AdditionalInfoResponse>
 )

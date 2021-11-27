@@ -6,12 +6,13 @@
     <string name="review">Рецензия:</string>
     <string name="avg_rating">Средняя оценка: %1$f</string>
     <string name="searchbar_hint">Search…</string>
-    <string name="top_app_title">Обзор фильма</string>
+    <string name="top_app_title">Фильмы</string>
     <string name="refresh_string">Перезагрузить</string>
     <string name="not_found">Не найдены</string>
     <string name="actors">Актеры:</string>
     <string name="posters">Постеры:</string>
-    <string name="watchVideo">Смотреть видео</string>
-    <string name="deleteFavorite">Удалить избранное</string>
-    <string name="addFavorite">Добавить в избранное</string>
+    <string name="watch_video">Смотреть видео</string>
+    <string name="delete_favorite">Удалить избранное</string>
+    <string name="add_favorite">Добавить в избранное</string>
+    <string name="path">%1$s%2$s</string>
 </resources>

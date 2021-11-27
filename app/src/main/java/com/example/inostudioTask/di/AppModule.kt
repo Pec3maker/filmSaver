@@ -1,18 +1,16 @@
 package com.example.inostudioTask.di
 
-import android.app.Application
+import android.content.Context
 import androidx.room.Room
 import com.example.inostudioTask.common.Constants
 import com.example.inostudioTask.data.dataSource.FilmDatabase
 import com.example.inostudioTask.data.remote.FilmApi
-import com.example.inostudioTask.data.repository.FilmRepositoryImpl
-import com.example.inostudioTask.domain.repository.FilmRepository
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
-import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
@@ -28,40 +26,26 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideFilmApi(): FilmApi {
+    fun provideFilmApi(moshi: Moshi): FilmApi {
         return Retrofit.Builder()
-            .baseUrl(Constants.BASE_URL)
-            .addConverterFactory(MoshiConverterFactory.create(provideMoshi()))
+            .baseUrl(Constants.base_url)
+            .addConverterFactory(MoshiConverterFactory.create(moshi))
             .build()
             .create(FilmApi::class.java)
     }
 
     @Provides
     @Singleton
-    fun provideFilmDatabase(app: Application): FilmDatabase {
-        return Room
-            .databaseBuilder(
-                app,
-                FilmDatabase::class.java,
-                Constants.DATABASE_NAME
-            )
-            .fallbackToDestructiveMigration()
-            .build()
-    }
+    fun provideFilmDatabase(
+        @ApplicationContext app: Context
+    ) = Room
+        .databaseBuilder(app, FilmDatabase::class.java, Constants.database_name)
+        .fallbackToDestructiveMigration()
+        .build()
 
     @Provides
     @Singleton
-    fun provideYourDao(db: FilmDatabase) = db.filmDao
-}
-
-@Module
-@InstallIn(SingletonComponent::class)
-abstract class RepositoryModule {
-
-    @Binds
-    abstract fun bindsFilmRepository(
-        filmRepositoryImpl: FilmRepositoryImpl,
-    ): FilmRepository
+    fun provideDao(db: FilmDatabase) = db.filmDao
 }
 
 

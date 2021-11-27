@@ -8,10 +8,12 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
+import com.example.inostudioTask.R
 import com.example.inostudioTask.common.Constants
 import com.example.inostudioTask.domain.model.Film
 
@@ -23,7 +25,7 @@ fun FilmListItem(
     onFavoriteClick: (Film) -> Unit,
     textButton: String
 ) {
-
+    val context = LocalContext.current
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -32,7 +34,9 @@ fun FilmListItem(
         horizontalArrangement = Arrangement.Start
     ) {
         Image(
-            painter = rememberImagePainter(Constants.IMAGE_PATH + film.posterPath),
+            painter = rememberImagePainter(
+                context.getString(R.string.path, Constants.image_path, film.posterPath)
+            ),
             contentDescription = null,
             modifier = Modifier.size(128.dp)
         )
@@ -45,7 +49,6 @@ fun FilmListItem(
                 textAlign = TextAlign.Left
             )
             Spacer(modifier = Modifier.padding(3.dp))
-
             Button(
                 onClick = {
                     onFavoriteClick(film)

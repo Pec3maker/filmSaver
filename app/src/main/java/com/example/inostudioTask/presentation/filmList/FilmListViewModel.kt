@@ -5,15 +5,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.inostudioTask.R
 import com.example.inostudioTask.common.Constants
-import com.example.inostudioTask.common.Resource
 import com.example.inostudioTask.data.remote.dto.toFilm
 import com.example.inostudioTask.domain.model.Film
 import com.example.inostudioTask.domain.model.dataBase.FilmEntity
 import com.example.inostudioTask.domain.model.toFilmEntity
 import com.example.inostudioTask.domain.repository.FilmRepository
-import com.example.inostudioTask.presentation.screenStates.ScreenStates
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -25,88 +22,65 @@ import javax.inject.Inject
 class FilmListViewModel @Inject constructor(
     private val repository: FilmRepository,
 ) : ViewModel() {
-
-    private val _state = mutableStateOf(ScreenStates.FilmListState<Any>())
-    val state: State<ScreenStates.FilmListState<Any>> = _state
-
+    private val _state = mutableStateOf<FilmListState<*>>(FilmListState.Loading)
+    val state: State<FilmListState<*>> = _state
+    val filmListDatabase = mutableStateOf(emptyList<FilmEntity>())
+    val searchText = mutableStateOf("")
 
     init {
         getFilmsDatabase()
         refresh()
     }
 
-
     private fun getFilms(page: Int) {
-
-        flow {
+        viewModelScope.launch {
             try {
-                emit(Resource.Loading<List<Film>>())
-                val film = repository.getFilms(
-                    apiKey = Constants.API_KEY,
-                    page = page,
-                    language = Constants.LANGUAGE
-                ).map { it.toFilm() }
-                emit(Resource.Success(film))
+                _state.value = FilmListState.Loading
+                _state.value = FilmListState.Success(
+                    data = repository.getFilms(
+                        apiKey = Constants.api_key,
+                        page = page,
+                        language = Constants.language
+                    ).map { it.toFilm() }
+                )
             } catch (e: HttpException) {
-                emit(Resource.Error(R.string.unexpected_error))
+                _state.value = FilmListState.Error(
+                    data = R.string.unexpected_error,
+                    exception = e
+                )
             } catch (e: IOException) {
-                emit(Resource.Error(R.string.connection_error))
+                _state.value = FilmListState.Error(
+                    data = R.string.connection_error,
+                    exception = e
+                )
             }
-        }.onEach { result ->
-            when (result) {
-                is Resource.Success<*> -> {
-                    @Suppress("UNCHECKED_CAST")
-                    _state.value = ScreenStates.FilmListState(
-                        data = _state.value.data.plus(result.data as List<Film>)
-                    )
-                }
-                is Resource.Error<*> -> {
-                    _state.value = ScreenStates.FilmListState(
-                        error = R.string.unexpected_error
-                    )
-                }
-                is Resource.Loading<*> -> {
-                    _state.value = ScreenStates.FilmListState(isLoading = true)
-                }
-            }
-        }.launchIn(viewModelScope)
+        }
     }
 
     private fun getFilmsBySearch(page: Int, query: String) {
-
-        flow {
+        viewModelScope.launch {
             try {
-                emit(Resource.Loading<List<Film>>())
-                val film = repository.getFilmsBySearch(
-                    apiKey = Constants.API_KEY,
-                    page = page,
-                    query = query,
-                    language = Constants.LANGUAGE
-                ).map { it.toFilm() }
-                emit(Resource.Success(film))
+                _state.value = FilmListState.Loading
+                _state.value = FilmListState.Success(
+                    data = repository.getFilmsBySearch(
+                        apiKey = Constants.api_key,
+                        page = page,
+                        query = query,
+                        language = Constants.language
+                    ).map { it.toFilm() }
+                )
             } catch (e: HttpException) {
-                emit(Resource.Error(R.string.unexpected_error))
+                _state.value = FilmListState.Error(
+                    data = R.string.unexpected_error,
+                    exception = e
+                )
             } catch (e: IOException) {
-                emit(Resource.Error(R.string.connection_error))
+                _state.value = FilmListState.Error(
+                    data = R.string.connection_error,
+                    exception = e
+                )
             }
-        }.onEach { result ->
-            when (result) {
-                is Resource.Success<*> -> {
-                    @Suppress("UNCHECKED_CAST")
-                    _state.value = ScreenStates.FilmListState(
-                        data = _state.value.data.plus(result.data as List<Film>)
-                    )
-                }
-                is Resource.Error<*> -> {
-                    _state.value = ScreenStates.FilmListState(
-                        error = R.string.unexpected_error
-                    )
-                }
-                is Resource.Loading<*> -> {
-                    _state.value = ScreenStates.FilmListState(isLoading = true)
-                }
-            }
-        }.launchIn(viewModelScope)
+        }
     }
 
     fun saveFilm(film: Film) {
@@ -118,7 +92,7 @@ class FilmListViewModel @Inject constructor(
 
     private fun getFilmsDatabase() {
         repository.getFilmsDatabase().onEach {
-            _state.value.loadedFilms = it
+            filmListDatabase.value = it
         }.launchIn(viewModelScope)
     }
 
@@ -130,12 +104,18 @@ class FilmListViewModel @Inject constructor(
     }
 
     fun refresh() {
-        for (i in 1..10) {
-            getFilms(page = i)
+        getFilms(page = Constants.search_pages)
+    }
+
+    fun searchFilms() {
+        if (searchText.value.isEmpty()) {
+            refresh()
+        } else {
+            getFilmsBySearch(page = Constants.search_pages, query = searchText.value)
         }
     }
 
-    fun searchFilms(query: String) {
-        getFilmsBySearch(page = Constants.SEARCH_PAGES, query = query)
+    fun isContainFilm(film: Film): Boolean {
+        return filmListDatabase.value.indexOf(film.toFilmEntity())!= -1
     }
 }

@@ -1,15 +1,14 @@
 package com.example.inostudioTask.data.remote.dto
 
-
 import com.squareup.moshi.Json
 
 data class CastResponse(
-    val character: String,
+    val character: String?,
     val gender: Int,
     val id: Int,
-    val name: String,
+    val name: String?,
     @Json(name = "original_name")
-    val originalName: String,
+    val originalName: String?,
     @Json(name = "profile_path")
     val profilePath: String?
 )
