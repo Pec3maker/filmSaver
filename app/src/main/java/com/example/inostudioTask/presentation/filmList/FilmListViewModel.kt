@@ -58,16 +58,16 @@ class FilmListViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 _state.value = FilmListState.Loading
-                _state.value = FilmListState.Success(
-                    data = repository.getFilmsBySearch(
-                        apiKey = Constants.api_key,
-                        page = page,
-                        query = query,
-                        language = Constants.language
-                    ).map { it.toFilm() }
-                )
-                if ((_state.value as FilmListState.Success<Film>).data.isEmpty()) {
+                val data = repository.getFilmsBySearch(
+                    apiKey = Constants.api_key,
+                    page = page,
+                    query = query,
+                    language = Constants.language
+                ).map { it.toFilm() }
+                if (data.isEmpty()) {
                     _state.value = FilmListState.Empty
+                } else {
+                    _state.value = FilmListState.Success(data = data)
                 }
             } catch (e: HttpException) {
                 _state.value = FilmListState.Error(

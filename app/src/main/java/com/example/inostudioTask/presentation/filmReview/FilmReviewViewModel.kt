@@ -17,7 +17,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class FilmReviewViewModel @Inject constructor(
-
     private val repository: FilmRepository,
     savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
