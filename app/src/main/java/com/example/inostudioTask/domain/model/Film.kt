@@ -19,6 +19,7 @@ data class Film(
     val images: List<ImageResponse>? = null,
     val reviews: ReviewList? = null,
     val videos: VideoList? = null,
+    var isInDatabase: Boolean? = null
 )
 
 fun Film.toFilmEntity(): FilmEntity {

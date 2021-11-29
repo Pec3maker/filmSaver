@@ -5,7 +5,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.inostudioTask.R
 import com.example.inostudioTask.common.Constants
 import com.example.inostudioTask.data.remote.dto.toFilm
 import com.example.inostudioTask.domain.model.Film
@@ -23,8 +22,8 @@ class FilmReviewViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
 
-    private val _state = mutableStateOf<FilmReviewState<*>>(FilmReviewState.Loading)
-    val state: State<FilmReviewState<*>> = _state
+    private val _state = mutableStateOf<FilmReviewState<Film>>(FilmReviewState.Loading)
+    val state: State<FilmReviewState<Film>> = _state
     lateinit var movieId: String
 
     init {
@@ -48,12 +47,10 @@ class FilmReviewViewModel @Inject constructor(
                 )
             } catch (e: HttpException) {
                 _state.value = FilmReviewState.Error(
-                    data = R.string.unexpected_error,
                     exception = e
                 )
             } catch (e: IOException) {
                 _state.value = FilmReviewState.Error(
-                    data = R.string.connection_error,
                     exception = e
                 )
             }

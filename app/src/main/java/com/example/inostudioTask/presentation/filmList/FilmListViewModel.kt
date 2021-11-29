@@ -3,7 +3,6 @@ package com.example.inostudioTask.presentation.filmList
 import androidx.compose.runtime.*
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.inostudioTask.R
 import com.example.inostudioTask.common.Constants
 import com.example.inostudioTask.data.remote.dto.toFilm
 import com.example.inostudioTask.domain.model.Film
@@ -22,9 +21,9 @@ import javax.inject.Inject
 class FilmListViewModel @Inject constructor(
     private val repository: FilmRepository,
 ) : ViewModel() {
-    private val _state = mutableStateOf<FilmListState<*>>(FilmListState.Loading)
-    val state: State<FilmListState<*>> = _state
-    val filmListDatabase = mutableStateOf(emptyList<FilmEntity>())
+    private val _state = mutableStateOf<FilmListState<Film>>(FilmListState.Empty)
+    val state: State<FilmListState<Film>> = _state
+    private val filmListDatabase = mutableStateOf(emptyList<FilmEntity>())
     val searchText = mutableStateOf("")
 
     init {
@@ -45,12 +44,10 @@ class FilmListViewModel @Inject constructor(
                 )
             } catch (e: HttpException) {
                 _state.value = FilmListState.Error(
-                    data = R.string.unexpected_error,
                     exception = e
                 )
             } catch (e: IOException) {
                 _state.value = FilmListState.Error(
-                    data = R.string.connection_error,
                     exception = e
                 )
             }
@@ -69,14 +66,15 @@ class FilmListViewModel @Inject constructor(
                         language = Constants.language
                     ).map { it.toFilm() }
                 )
+                if ((_state.value as FilmListState.Success<Film>).data.isEmpty()) {
+                    _state.value = FilmListState.Empty
+                }
             } catch (e: HttpException) {
                 _state.value = FilmListState.Error(
-                    data = R.string.unexpected_error,
                     exception = e
                 )
             } catch (e: IOException) {
                 _state.value = FilmListState.Error(
-                    data = R.string.connection_error,
                     exception = e
                 )
             }
@@ -116,6 +114,6 @@ class FilmListViewModel @Inject constructor(
     }
 
     fun isContainFilm(film: Film): Boolean {
-        return filmListDatabase.value.indexOf(film.toFilmEntity())!= -1
+        return filmListDatabase.value.indexOf(film.toFilmEntity()) != -1
     }
 }

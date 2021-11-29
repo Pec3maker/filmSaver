@@ -7,21 +7,15 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.inostudioTask.R
-import com.example.inostudioTask.domain.model.Film
 import com.example.inostudioTask.presentation.Screen
-import com.example.inostudioTask.presentation.filmList.components.FilmListErrorScreen
-import com.example.inostudioTask.presentation.filmList.components.FilmListLoadingScreen
-import com.example.inostudioTask.presentation.filmList.components.FilmListSuccessScreen
-import com.example.inostudioTask.presentation.filmList.components.SearchBar
+import com.example.inostudioTask.presentation.filmList.components.*
 
 @Composable
-@Suppress("UNCHECKED_CAST")
 fun FilmListScreen(
     navController: NavController,
     viewModel: FilmListViewModel = hiltViewModel()
 ) {
     val uiState = viewModel.state.value
-    val databaseFilms = remember { viewModel.filmListDatabase }
     val context = LocalContext.current
     val searchText = remember { viewModel.searchText }
 
@@ -40,8 +34,7 @@ fun FilmListScreen(
         when (uiState) {
             is FilmListState.Success -> {
                 FilmListSuccessScreen(
-                    filmList = uiState.data as List<Film>,
-                    databaseFilms = databaseFilms.value,
+                    filmList = uiState.data,
                     navigate = {
                         navController.navigate("${Screen.FilmReviewScreen.route}/${it}")
                     },
@@ -56,8 +49,11 @@ fun FilmListScreen(
             is FilmListState.Error -> {
                 FilmListErrorScreen(
                     onClickButton = { viewModel.refresh() },
-                    errorText = context.getString(uiState.data as Int)
+                    errorText = uiState.exception?.message ?: ""
                 )
+            }
+            is FilmListState.Empty -> {
+                FilmListEmptyScreen()
             }
         }
     }

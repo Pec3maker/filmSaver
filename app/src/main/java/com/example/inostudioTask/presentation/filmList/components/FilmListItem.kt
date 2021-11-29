@@ -17,7 +17,6 @@ import com.example.inostudioTask.R
 import com.example.inostudioTask.common.Constants
 import com.example.inostudioTask.domain.model.Film
 
-
 @Composable
 fun FilmListItem(
     film: Film,
