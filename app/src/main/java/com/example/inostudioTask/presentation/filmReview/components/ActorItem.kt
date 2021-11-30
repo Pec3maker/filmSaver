@@ -36,14 +36,18 @@ fun ActorItem(actor: CastResponse) {
                 .height(30.dp),
             alignment = Alignment.Center
         )
+
         Spacer(modifier = Modifier.padding(2.dp))
+
         Text(
             text = actor.name?: "",
             style = MaterialTheme.typography.body1,
             color = MaterialTheme.colors.onSurface,
             textAlign = TextAlign.Center
         )
+
         Spacer(modifier = Modifier.padding(2.dp))
+
         Text(
             text = actor.character?: "",
             style = MaterialTheme.typography.body1,
