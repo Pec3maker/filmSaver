@@ -20,7 +20,8 @@ import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
 import com.example.inostudioTask.R
 import com.example.inostudioTask.common.Constants
-import com.example.inostudioTask.domain.model.Film
+import com.example.inostudioTask.data.remote.dto.Film
+import com.example.inostudioTask.data.remote.dto.toCombinedImages
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 
@@ -28,10 +29,12 @@ import com.google.accompanist.pager.HorizontalPager
 @ExperimentalPagerApi
 @Composable
 fun FilmReviewSuccessScreen(
-    film: Film
+    film: Film,
+    onFavoriteClick: (Film) -> Unit
 ) {
     var editable by remember { mutableStateOf(false) }
     val context = LocalContext.current
+    val scrollState = rememberScrollState()
     Column(
         modifier = Modifier.fillMaxWidth()
     ) {
@@ -39,13 +42,13 @@ fun FilmReviewSuccessScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .background(MaterialTheme.colors.background)
-                .verticalScroll(rememberScrollState())
+                .verticalScroll(scrollState)
         ) {
             Image(
                 painter = rememberImagePainter(
                     context.getString(
                         R.string.path,
-                        Constants.image_path,
+                        Constants.IMAGE_PATH,
                         film.posterPath
                     )
                 ),
@@ -55,11 +58,26 @@ fun FilmReviewSuccessScreen(
                     .height(300.dp)
             )
 
-            Text(
-                text = film.title,
-                style = MaterialTheme.typography.h1,
-                color = MaterialTheme.colors.onSurface
-            )
+            Row(Modifier.fillMaxWidth()) {
+                Text(
+                    text = film.title,
+                    style = MaterialTheme.typography.h1,
+                    color = MaterialTheme.colors.onSurface
+                )
+
+                Spacer(Modifier.padding(10.dp))
+
+                Button(onClick = { onFavoriteClick(film) }) {
+                    Text(
+                        text =
+                        if (film.isInDatabase!!) {
+                            context.getString(R.string.delete_favorite)
+                        } else {
+                            context.getString(R.string.add_favorite)
+                        }
+                    )
+                }
+            }
 
             Spacer(modifier = Modifier.height(30.dp))
 
@@ -85,15 +103,11 @@ fun FilmReviewSuccessScreen(
                 color = MaterialTheme.colors.onSurface
             )
 
-            film.images?.count()?.let {
-                HorizontalPager(it) { page ->
+            film.images?.toCombinedImages()?.let {
+                HorizontalPager(it.count()) { page ->
                     Image(
                         painter = rememberImagePainter(
-                            context.getString(
-                                R.string.path,
-                                Constants.image_path,
-                                film.images[page].filePath
-                            )
+                            "${Constants.IMAGE_PATH}${it[page].filePath}"
                         ),
                         contentDescription = null,
                         modifier = Modifier
@@ -110,6 +124,7 @@ fun FilmReviewSuccessScreen(
                 style = MaterialTheme.typography.h1,
                 color = MaterialTheme.colors.onSurface
             )
+
             LazyRow(
                 modifier = Modifier
                     .fillMaxSize()
@@ -134,6 +149,7 @@ fun FilmReviewSuccessScreen(
                         style = MaterialTheme.typography.body1,
                         color = MaterialTheme.colors.onSurface
                     )
+
                     Icon(
                         Icons.Rounded.ArrowCircleDown,
                         contentDescription = null,
@@ -153,6 +169,7 @@ fun FilmReviewSuccessScreen(
                         color = MaterialTheme.colors.onSurface
                     )
                 }
+
                 Spacer(modifier = Modifier.padding(15.dp))
             }
 
@@ -164,7 +181,7 @@ fun FilmReviewSuccessScreen(
                             Uri.parse(
                                 context.getString(
                                     R.string.path,
-                                    Constants.base_youtube_url,
+                                    Constants.BASE_YOUTUBE_URL,
                                     film.videos.results[0].key
                                 )
                             ),

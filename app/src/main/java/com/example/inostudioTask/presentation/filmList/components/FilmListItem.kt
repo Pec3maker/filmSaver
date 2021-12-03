@@ -15,14 +15,13 @@ import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
 import com.example.inostudioTask.R
 import com.example.inostudioTask.common.Constants
-import com.example.inostudioTask.domain.model.Film
+import com.example.inostudioTask.data.remote.dto.Film
 
 @Composable
 fun FilmListItem(
     film: Film,
     onItemClick: (Film) -> Unit,
-    onFavoriteClick: (Film) -> Unit,
-    textButton: String
+    onFavoriteClick: (Film) -> Unit
 ) {
     val context = LocalContext.current
     Row(
@@ -34,7 +33,7 @@ fun FilmListItem(
     ) {
         Image(
             painter = rememberImagePainter(
-                context.getString(R.string.path, Constants.image_path, film.posterPath)
+                context.getString(R.string.path, Constants.IMAGE_PATH, film.posterPath)
             ),
             contentDescription = null,
             modifier = Modifier.size(128.dp)
@@ -47,14 +46,21 @@ fun FilmListItem(
                 maxLines = 2,
                 textAlign = TextAlign.Left
             )
+
             Spacer(modifier = Modifier.padding(3.dp))
+
             Button(
                 onClick = {
                     onFavoriteClick(film)
                 }
             ) {
                 Text(
-                    text = textButton,
+                    text =
+                    if (film.isInDatabase!!) {
+                        context.getString(R.string.delete_favorite)
+                    } else {
+                        context.getString(R.string.add_favorite)
+                    },
                     style = MaterialTheme.typography.body1,
                     overflow = TextOverflow.Ellipsis,
                     textAlign = TextAlign.Center

@@ -26,7 +26,7 @@ fun ActorItem(actor: CastResponse) {
             painter = rememberImagePainter(
                 context.getString(
                     R.string.path,
-                    Constants.image_path,
+                    Constants.IMAGE_PATH,
                     actor.profilePath
                 )
             ),

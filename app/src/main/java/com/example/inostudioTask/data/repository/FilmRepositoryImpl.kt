@@ -17,7 +17,7 @@ class FilmRepositoryImpl @Inject constructor(
         apiKey: String,
         page: Int,
         language: String
-    ): List<AdditionalInfoResponse> {
+    ): List<Film> {
         return api.getFilms(
             apiKey = apiKey,
             page = page,
@@ -30,7 +30,7 @@ class FilmRepositoryImpl @Inject constructor(
         id: String,
         language: String,
         additionalInfo: String
-    ): AdditionalInfoResponse {
+    ): Film {
         return api.getAdditionalInfo(
             apiKey = apiKey,
             filmId = id,
@@ -44,7 +44,7 @@ class FilmRepositoryImpl @Inject constructor(
         query: String,
         page: Int,
         language: String
-    ): List<AdditionalInfoResponse> {
+    ): List<Film> {
         return api.getFilmsBySearch(
             apiKey = apiKey,
             query = query,

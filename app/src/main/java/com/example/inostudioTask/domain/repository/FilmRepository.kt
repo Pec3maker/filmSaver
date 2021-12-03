@@ -10,21 +10,21 @@ interface FilmRepository {
         apiKey: String,
         page: Int,
         language: String
-    ): List<AdditionalInfoResponse>
+    ): List<Film>
 
     suspend fun getFilmsById(
         apiKey: String,
         id: String,
         language: String,
         additionalInfo: String
-    ): AdditionalInfoResponse
+    ): Film
 
     suspend fun getFilmsBySearch(
         apiKey: String,
         query: String,
         page: Int,
         language: String
-    ): List<AdditionalInfoResponse>
+    ): List<Film>
 
     fun getFilmsDatabase(): Flow<List<FilmEntity>>
 

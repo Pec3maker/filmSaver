@@ -30,10 +30,12 @@ import com.example.inostudioTask.presentation.filmReview.FilmReviewScreen
 import com.example.inostudioTask.presentation.ui.theme.MainTheme
 import com.google.accompanist.pager.ExperimentalPagerApi
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.InternalCoroutinesApi
 
 @AndroidEntryPoint
 @ExperimentalPagerApi
 @ExperimentalAnimationApi
+@InternalCoroutinesApi
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -118,9 +120,9 @@ class MainActivity : ComponentActivity() {
                                 )
                             }
                             composable(
-                                route = "${Screen.FilmReviewScreen.route.format()}/{movie_id}",
+                                route = "${Screen.FilmReviewScreen.route}/{movie_id}",
                                 arguments = listOf(
-                                    navArgument("movie_id") { type = NavType.StringType }
+                                    navArgument("movie_id") { type = NavType.StringType },
                                 )
                             ) {
                                 FilmReviewScreen()

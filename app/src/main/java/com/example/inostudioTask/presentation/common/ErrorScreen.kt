@@ -1,4 +1,4 @@
-package com.example.inostudioTask.presentation.filmList.components
+package com.example.inostudioTask.presentation.common
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
@@ -16,9 +16,9 @@ import androidx.compose.ui.unit.dp
 import com.example.inostudioTask.R
 
 @Composable
-fun FilmListErrorScreen(
-    onClickButton: () -> Unit,
-    errorText: String
+fun ErrorScreen(
+    onButtonClick: () -> Unit,
+    text: String
 ) {
     val context = LocalContext.current
 
@@ -39,7 +39,7 @@ fun FilmListErrorScreen(
         Spacer(modifier = Modifier.padding(5.dp))
 
         Text(
-            text = errorText,
+            text = text,
             color = MaterialTheme.colors.error,
             textAlign = TextAlign.Center,
             modifier = Modifier
@@ -51,7 +51,7 @@ fun FilmListErrorScreen(
         Spacer(modifier = Modifier.padding(10.dp))
 
         Button(
-            onClick = { onClickButton() }
+            onClick = { onButtonClick() }
         ) {
             Text(
                 text = context.getString(R.string.refresh_string),

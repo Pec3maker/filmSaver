@@ -1,9 +1,9 @@
 package com.example.inostudioTask.data.remote.dto
 
-import com.example.inostudioTask.domain.model.Film
+import com.example.inostudioTask.domain.model.dataBase.FilmEntity
 import com.squareup.moshi.Json
 
-data class AdditionalInfoResponse(
+data class Film(
     @Json(name = "backdrop_path")
     val backdropPath: String?,
     val id: Int,
@@ -21,21 +21,17 @@ data class AdditionalInfoResponse(
     val images: ImageList? = null,
     val reviews: ReviewList? = null,
     val videos: VideoList? = null,
+    var isInDatabase: Boolean? = null
 )
 
-fun AdditionalInfoResponse.toFilm(): Film {
-    return Film(
-        backdropPath = backdropPath,
+fun Film.toFilmEntity(): FilmEntity {
+    return FilmEntity(
         id = id,
-        originalTitle = originalTitle,
-        overview = overview,
-        posterPath = posterPath,
-        releaseDate = releaseDate,
         title = title,
-        voteAverage = voteAverage,
-        credits = credits,
-        images = images?.toCombinedImages(),
-        reviews = reviews,
-        videos = videos
+        originalTitle = originalTitle,
+        posterPath = posterPath ?: "",
+        overview = overview,
+        releaseDate = releaseDate,
+        voteAverage = voteAverage
     )
 }

@@ -6,6 +6,7 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface FilmApi {
+
     @GET("/3/discover/movie")
     suspend fun getFilms(
         @Query("api_key") apiKey: String,
@@ -27,5 +28,5 @@ interface FilmApi {
         @Query("api_key") apiKey: String,
         @Query("language") language: String,
         @Query("append_to_response") additionalInfo: String
-    ): AdditionalInfoResponse
+    ): Film
 }

@@ -28,7 +28,7 @@ object AppModule {
     @Singleton
     fun provideFilmApi(moshi: Moshi): FilmApi {
         return Retrofit.Builder()
-            .baseUrl(Constants.base_url)
+            .baseUrl(Constants.BASE_URL)
             .addConverterFactory(MoshiConverterFactory.create(moshi))
             .build()
             .create(FilmApi::class.java)
@@ -37,9 +37,9 @@ object AppModule {
     @Provides
     @Singleton
     fun provideFilmDatabase(
-        @ApplicationContext app: Context
+        @ApplicationContext context: Context
     ) = Room
-        .databaseBuilder(app, FilmDatabase::class.java, Constants.database_name)
+        .databaseBuilder(context, FilmDatabase::class.java, Constants.DATABASE_NAME)
         .fallbackToDestructiveMigration()
         .build()
 
@@ -47,5 +47,3 @@ object AppModule {
     @Singleton
     fun provideDao(db: FilmDatabase) = db.filmDao
 }
-
-

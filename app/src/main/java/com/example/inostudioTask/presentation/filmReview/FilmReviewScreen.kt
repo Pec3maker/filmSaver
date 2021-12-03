@@ -8,7 +8,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.inostudioTask.presentation.filmReview.components.FilmReviewErrorScreen
+import com.example.inostudioTask.presentation.common.ErrorScreen
 import com.example.inostudioTask.presentation.filmReview.components.FilmReviewSuccessScreen
 import com.google.accompanist.pager.ExperimentalPagerApi
 
@@ -27,14 +27,17 @@ fun FilmReviewScreen(
     ) {
         when(uiState) {
             is FilmReviewState.Success -> {
-                FilmReviewSuccessScreen(film = uiState.data)
+                FilmReviewSuccessScreen(
+                    film = uiState.data,
+                    onFavoriteClick = { viewModel.addFavorite(uiState.data) },
+                )
             }
             is FilmReviewState.Loading -> {
                 CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
             }
             is FilmReviewState.Error -> {
-                FilmReviewErrorScreen(
-                    text = uiState.exception?.message?: "",
+                ErrorScreen(
+                    text = uiState.exception?: "",
                     onButtonClick = { viewModel.refresh() }
                 )
             }

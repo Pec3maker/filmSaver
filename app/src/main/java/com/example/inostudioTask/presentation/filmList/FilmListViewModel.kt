@@ -4,10 +4,9 @@ import androidx.compose.runtime.*
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.inostudioTask.common.Constants
-import com.example.inostudioTask.data.remote.dto.toFilm
-import com.example.inostudioTask.domain.model.Film
+import com.example.inostudioTask.data.remote.dto.Film
+import com.example.inostudioTask.data.remote.dto.toFilmEntity
 import com.example.inostudioTask.domain.model.dataBase.FilmEntity
-import com.example.inostudioTask.domain.model.toFilmEntity
 import com.example.inostudioTask.domain.repository.FilmRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
@@ -23,7 +22,7 @@ class FilmListViewModel @Inject constructor(
 ) : ViewModel() {
     private val _state = mutableStateOf<FilmListState<Film>>(FilmListState.Empty)
     val state: State<FilmListState<Film>> = _state
-    private val filmListDatabase = mutableStateOf(emptyList<FilmEntity>())
+    private var filmListDatabase = emptyList<FilmEntity>()
     val searchText = mutableStateOf("")
 
     init {
@@ -31,24 +30,44 @@ class FilmListViewModel @Inject constructor(
         refresh()
     }
 
+    fun refresh() {
+        getFilms(page = Constants.SEARCH_PAGE)
+    }
+
+    fun searchFilms(text: String) {
+        searchText.value = text
+        if (searchText.value.isEmpty()) {
+            refresh()
+        } else {
+            getFilmsBySearch(page = Constants.SEARCH_PAGE, query = searchText.value)
+        }
+    }
+
+    fun addFavorite(film: Film) {
+        if (film.isInDatabase!!) {
+            deleteFilm(film = film)
+        } else {
+            saveFilm(film = film)
+        }
+    }
+
     private fun getFilms(page: Int) {
         viewModelScope.launch {
             try {
                 _state.value = FilmListState.Loading
-                _state.value = FilmListState.Success(
-                    data = repository.getFilms(
-                        apiKey = Constants.api_key,
-                        page = page,
-                        language = Constants.language
-                    ).map { it.toFilm() }
+                val data = repository.getFilms(
+                    apiKey = Constants.API_KEY,
+                    page = page,
+                    language = Constants.LANGUAGE
                 )
+                _state.value = fillFilmAccessory(data)
             } catch (e: HttpException) {
                 _state.value = FilmListState.Error(
-                    exception = e
+                    exception = e.message
                 )
             } catch (e: IOException) {
                 _state.value = FilmListState.Error(
-                    exception = e
+                    exception = e.message
                 )
             }
         }
@@ -59,61 +78,56 @@ class FilmListViewModel @Inject constructor(
             try {
                 _state.value = FilmListState.Loading
                 val data = repository.getFilmsBySearch(
-                    apiKey = Constants.api_key,
+                    apiKey = Constants.API_KEY,
                     page = page,
                     query = query,
-                    language = Constants.language
-                ).map { it.toFilm() }
+                    language = Constants.LANGUAGE
+                )
                 if (data.isEmpty()) {
                     _state.value = FilmListState.Empty
                 } else {
-                    _state.value = FilmListState.Success(data = data)
+                    _state.value = fillFilmAccessory(data)
                 }
             } catch (e: HttpException) {
                 _state.value = FilmListState.Error(
-                    exception = e
+                    exception = e.message
                 )
             } catch (e: IOException) {
                 _state.value = FilmListState.Error(
-                    exception = e
+                    exception = e.message
                 )
             }
         }
     }
 
-    fun saveFilm(film: Film) {
-        viewModelScope.launch {
-            repository.insertFilmDatabase(film.toFilmEntity())
-        }
-        getFilmsDatabase()
-    }
-
     private fun getFilmsDatabase() {
-        repository.getFilmsDatabase().onEach {
-            filmListDatabase.value = it
+        repository.getFilmsDatabase().onEach { films ->
+            filmListDatabase = films
+            val currentState = _state.value
+            if (currentState is FilmListState.Success) {
+                _state.value = fillFilmAccessory(currentState.data)
+            }
         }.launchIn(viewModelScope)
     }
 
-    fun deleteFilm(film: Film) {
+    private fun saveFilm(film: Film) {
+        viewModelScope.launch {
+            repository.insertFilmDatabase(film.toFilmEntity())
+        }
+    }
+
+    private fun deleteFilm(film: Film) {
         viewModelScope.launch {
             repository.deleteFilmDatabase(film.toFilmEntity())
         }
-        getFilmsDatabase()
     }
 
-    fun refresh() {
-        getFilms(page = Constants.search_pages)
-    }
-
-    fun searchFilms() {
-        if (searchText.value.isEmpty()) {
-            refresh()
-        } else {
-            getFilmsBySearch(page = Constants.search_pages, query = searchText.value)
+    private fun fillFilmAccessory(filmList: List<Film>): FilmListState.Success<Film>{
+        val changedFilmList = filmList.toMutableList().apply {
+            replaceAll { film ->
+                film.copy(isInDatabase = filmListDatabase.any { it.id == film.id })
+            }
         }
-    }
-
-    fun isContainFilm(film: Film): Boolean {
-        return filmListDatabase.value.indexOf(film.toFilmEntity()) != -1
+        return FilmListState.Success(changedFilmList)
     }
 }
