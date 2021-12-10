@@ -5,13 +5,39 @@ import com.example.inostudioTask.data.remote.FilmApi
 import com.example.inostudioTask.data.remote.dto.*
 import com.example.inostudioTask.domain.model.dataBase.FilmEntity
 import com.example.inostudioTask.domain.repository.FilmRepository
-import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.*
+import kotlinx.coroutines.channels.BufferOverflow
+import kotlinx.coroutines.flow.*
 import javax.inject.Inject
+import kotlin.coroutines.CoroutineContext
 
 class FilmRepositoryImpl @Inject constructor(
     private val api: FilmApi,
     private val dao: FilmDao
 ) : FilmRepository {
+
+    private val coroutineContext: CoroutineContext = Dispatchers.IO + SupervisorJob()
+    private val scope: CoroutineScope = CoroutineScope(coroutineContext)
+
+    override val updateDatabaseFlow = MutableSharedFlow<Unit>(
+        replay = 1,
+        onBufferOverflow = BufferOverflow.DROP_OLDEST
+    )
+
+    init {
+        scope.launch {
+            getFilmsDatabase().collect { films ->
+                filmListDatabase = films
+                updateDatabaseFlow.emit(Unit)
+            }
+        }
+    }
+
+    override var filmListDatabase = emptyList<FilmEntity>()
+
+    private fun getFilmsDatabase(): Flow<List<FilmEntity>> {
+        return dao.getFilms()
+    }
 
     override suspend fun getFilms(
         apiKey: String,
@@ -51,10 +77,6 @@ class FilmRepositoryImpl @Inject constructor(
             page = page,
             language = language
         ).results
-    }
-
-    override fun getFilmsDatabase(): Flow<List<FilmEntity>> {
-        return dao.getFilms()
     }
 
     override suspend fun insertFilmDatabase(film: FilmEntity) {

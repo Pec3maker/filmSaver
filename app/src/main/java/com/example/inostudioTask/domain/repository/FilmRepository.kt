@@ -2,9 +2,12 @@ package com.example.inostudioTask.domain.repository
 
 import com.example.inostudioTask.data.remote.dto.*
 import com.example.inostudioTask.domain.model.dataBase.FilmEntity
-import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 
 interface FilmRepository {
+
+    var filmListDatabase: List<FilmEntity>
+    val updateDatabaseFlow: MutableSharedFlow<Unit>
 
     suspend fun getFilms(
         apiKey: String,
@@ -25,8 +28,6 @@ interface FilmRepository {
         page: Int,
         language: String
     ): List<Film>
-
-    fun getFilmsDatabase(): Flow<List<FilmEntity>>
 
     suspend fun insertFilmDatabase(film: FilmEntity)
 

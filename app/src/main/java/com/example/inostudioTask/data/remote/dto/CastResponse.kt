@@ -1,5 +1,6 @@
 package com.example.inostudioTask.data.remote.dto
 
+import com.example.inostudioTask.common.Constants
 import com.squareup.moshi.Json
 
 data class CastResponse(
@@ -12,3 +13,7 @@ data class CastResponse(
     @Json(name = "profile_path")
     val profilePath: String?
 )
+
+fun CastResponse.profileUrl(): String {
+    return Constants.IMAGE_PATH.plus(profilePath)
+}

@@ -11,9 +11,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
-import com.example.inostudioTask.R
-import com.example.inostudioTask.common.Constants
 import com.example.inostudioTask.data.remote.dto.CastResponse
+import com.example.inostudioTask.data.remote.dto.profileUrl
 
 @Composable
 fun ActorItem(actor: CastResponse) {
@@ -23,13 +22,7 @@ fun ActorItem(actor: CastResponse) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Image(
-            painter = rememberImagePainter(
-                context.getString(
-                    R.string.path,
-                    Constants.IMAGE_PATH,
-                    actor.profilePath
-                )
-            ),
+            painter = rememberImagePainter(actor.profileUrl()),
             contentDescription = null,
             modifier = Modifier
                 .size(400.dp)

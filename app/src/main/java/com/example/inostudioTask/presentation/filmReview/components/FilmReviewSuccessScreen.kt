@@ -19,9 +19,10 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
 import com.example.inostudioTask.R
-import com.example.inostudioTask.common.Constants
 import com.example.inostudioTask.data.remote.dto.Film
+import com.example.inostudioTask.data.remote.dto.imageUrl
 import com.example.inostudioTask.data.remote.dto.toCombinedImages
+import com.example.inostudioTask.data.remote.dto.videoUrl
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 
@@ -45,13 +46,7 @@ fun FilmReviewSuccessScreen(
                 .verticalScroll(scrollState)
         ) {
             Image(
-                painter = rememberImagePainter(
-                    context.getString(
-                        R.string.path,
-                        Constants.IMAGE_PATH,
-                        film.posterPath
-                    )
-                ),
+                painter = rememberImagePainter(film.imageUrl(film.posterPath?: "")),
                 contentDescription = null,
                 modifier = Modifier
                     .fillMaxSize()
@@ -62,7 +57,8 @@ fun FilmReviewSuccessScreen(
                 Text(
                     text = film.title,
                     style = MaterialTheme.typography.h1,
-                    color = MaterialTheme.colors.onSurface
+                    color = MaterialTheme.colors.onSurface,
+                    modifier = Modifier.fillMaxWidth(0.5f)
                 )
 
                 Spacer(Modifier.padding(10.dp))
@@ -106,9 +102,7 @@ fun FilmReviewSuccessScreen(
             film.images?.toCombinedImages()?.let {
                 HorizontalPager(it.count()) { page ->
                     Image(
-                        painter = rememberImagePainter(
-                            "${Constants.IMAGE_PATH}${it[page].filePath}"
-                        ),
+                        painter = rememberImagePainter(film.imageUrl(it[page].filePath)),
                         contentDescription = null,
                         modifier = Modifier
                             .size(400.dp)
@@ -178,13 +172,7 @@ fun FilmReviewSuccessScreen(
                     onClick = {
                         val webIntent = Intent(
                             Intent.ACTION_VIEW,
-                            Uri.parse(
-                                context.getString(
-                                    R.string.path,
-                                    Constants.BASE_YOUTUBE_URL,
-                                    film.videos.results[0].key
-                                )
-                            ),
+                            Uri.parse(film.videoUrl())
                         )
                         context.startActivity(webIntent)
                     }

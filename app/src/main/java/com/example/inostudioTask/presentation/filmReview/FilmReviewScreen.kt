@@ -29,7 +29,7 @@ fun FilmReviewScreen(
             is FilmReviewState.Success -> {
                 FilmReviewSuccessScreen(
                     film = uiState.data,
-                    onFavoriteClick = { viewModel.addFavorite(uiState.data) },
+                    onFavoriteClick = { viewModel.addFavorite(it) },
                 )
             }
             is FilmReviewState.Loading -> {
@@ -37,7 +37,7 @@ fun FilmReviewScreen(
             }
             is FilmReviewState.Error -> {
                 ErrorScreen(
-                    text = uiState.exception?: "",
+                    text = uiState.message?: "",
                     onButtonClick = { viewModel.refresh() }
                 )
             }

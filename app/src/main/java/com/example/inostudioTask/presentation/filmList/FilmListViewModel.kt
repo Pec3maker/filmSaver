@@ -6,11 +6,9 @@ import androidx.lifecycle.viewModelScope
 import com.example.inostudioTask.common.Constants
 import com.example.inostudioTask.data.remote.dto.Film
 import com.example.inostudioTask.data.remote.dto.toFilmEntity
-import com.example.inostudioTask.domain.model.dataBase.FilmEntity
 import com.example.inostudioTask.domain.repository.FilmRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import java.io.IOException
@@ -20,24 +18,24 @@ import javax.inject.Inject
 class FilmListViewModel @Inject constructor(
     private val repository: FilmRepository,
 ) : ViewModel() {
+
     private val _state = mutableStateOf<FilmListState<Film>>(FilmListState.Empty)
     val state: State<FilmListState<Film>> = _state
-    private var filmListDatabase = emptyList<FilmEntity>()
     val searchText = mutableStateOf("")
 
     init {
-        getFilmsDatabase()
+        onDatabaseUpdate()
         refresh()
     }
 
     fun refresh() {
-        getFilms(page = Constants.SEARCH_PAGE)
+        searchFilms(searchText.value)
     }
 
     fun searchFilms(text: String) {
         searchText.value = text
         if (searchText.value.isEmpty()) {
-            refresh()
+            getFilms(Constants.SEARCH_PAGE)
         } else {
             getFilmsBySearch(page = Constants.SEARCH_PAGE, query = searchText.value)
         }
@@ -51,6 +49,17 @@ class FilmListViewModel @Inject constructor(
         }
     }
 
+    private fun onDatabaseUpdate() {
+        viewModelScope.launch {
+            repository.updateDatabaseFlow.collect {
+                val filmListState = _state.value
+                if (filmListState is FilmListState.Success) {
+                    _state.value = fillFilmsAccessory(filmListState.data)
+                }
+            }
+        }
+    }
+
     private fun getFilms(page: Int) {
         viewModelScope.launch {
             try {
@@ -60,14 +69,14 @@ class FilmListViewModel @Inject constructor(
                     page = page,
                     language = Constants.LANGUAGE
                 )
-                _state.value = fillFilmAccessory(data)
+                _state.value = fillFilmsAccessory(data)
             } catch (e: HttpException) {
                 _state.value = FilmListState.Error(
-                    exception = e.message
+                    message = e.message
                 )
             } catch (e: IOException) {
                 _state.value = FilmListState.Error(
-                    exception = e.message
+                    message = e.message
                 )
             }
         }
@@ -86,28 +95,18 @@ class FilmListViewModel @Inject constructor(
                 if (data.isEmpty()) {
                     _state.value = FilmListState.Empty
                 } else {
-                    _state.value = fillFilmAccessory(data)
+                    _state.value = fillFilmsAccessory(data)
                 }
             } catch (e: HttpException) {
                 _state.value = FilmListState.Error(
-                    exception = e.message
+                    message = e.message
                 )
             } catch (e: IOException) {
                 _state.value = FilmListState.Error(
-                    exception = e.message
+                    message = e.message
                 )
             }
         }
-    }
-
-    private fun getFilmsDatabase() {
-        repository.getFilmsDatabase().onEach { films ->
-            filmListDatabase = films
-            val currentState = _state.value
-            if (currentState is FilmListState.Success) {
-                _state.value = fillFilmAccessory(currentState.data)
-            }
-        }.launchIn(viewModelScope)
     }
 
     private fun saveFilm(film: Film) {
@@ -122,10 +121,10 @@ class FilmListViewModel @Inject constructor(
         }
     }
 
-    private fun fillFilmAccessory(filmList: List<Film>): FilmListState.Success<Film>{
+    private fun fillFilmsAccessory(filmList: List<Film>): FilmListState.Success<Film>{
         val changedFilmList = filmList.toMutableList().apply {
             replaceAll { film ->
-                film.copy(isInDatabase = filmListDatabase.any { it.id == film.id })
+                film.copy(isInDatabase = repository.filmListDatabase.any { it.id == film.id })
             }
         }
         return FilmListState.Success(changedFilmList)

@@ -52,18 +52,20 @@ fun FilmListScreen(
             is FilmListState.Error -> {
                 ErrorScreen(
                     onButtonClick = { viewModel.refresh() },
-                    text = uiState.exception?: ""
+                    text = uiState.message?: ""
                 )
             }
             is FilmListState.Empty -> {
-                FilmListEmptyScreen()
+                FilmListEmptyScreen(viewModel.searchText.value)
             }
         }
     }
 }
 
 @Composable
-fun FilmListEmptyScreen() {
+fun FilmListEmptyScreen(
+    searchText: String
+) {
     val context = LocalContext.current
     Row(
         modifier = Modifier.fillMaxSize(),
@@ -71,7 +73,7 @@ fun FilmListEmptyScreen() {
         verticalAlignment = Alignment.Top
     ) {
         Text(
-            text = context.getString(R.string.not_found),
+            text = context.getString(R.string.not_found, searchText),
             color = MaterialTheme.colors.error
         )
     }

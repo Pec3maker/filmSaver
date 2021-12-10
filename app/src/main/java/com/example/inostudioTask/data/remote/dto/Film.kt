@@ -1,5 +1,6 @@
 package com.example.inostudioTask.data.remote.dto
 
+import com.example.inostudioTask.common.Constants
 import com.example.inostudioTask.domain.model.dataBase.FilmEntity
 import com.squareup.moshi.Json
 
@@ -34,4 +35,14 @@ fun Film.toFilmEntity(): FilmEntity {
         releaseDate = releaseDate,
         voteAverage = voteAverage
     )
+}
+
+fun Film.videoUrl(): String {
+    return if (videos != null)
+        Constants.BASE_YOUTUBE_URL.plus(videos.results[0].key)
+    else  ""
+}
+
+fun Film.imageUrl(image: String): String {
+    return Constants.IMAGE_PATH.plus(image)
 }

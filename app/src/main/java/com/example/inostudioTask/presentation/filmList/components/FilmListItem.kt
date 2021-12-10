@@ -33,7 +33,7 @@ fun FilmListItem(
     ) {
         Image(
             painter = rememberImagePainter(
-                context.getString(R.string.path, Constants.IMAGE_PATH, film.posterPath)
+                "${Constants.IMAGE_PATH}${film.posterPath}"
             ),
             contentDescription = null,
             modifier = Modifier.size(128.dp)
@@ -69,4 +69,3 @@ fun FilmListItem(
         }
     }
 }
-
