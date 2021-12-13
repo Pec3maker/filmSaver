@@ -53,16 +53,8 @@ fun FilmReviewSuccessScreen(
                     .height(300.dp)
             )
 
+            Spacer(modifier = Modifier.padding(10.dp))
             Row(Modifier.fillMaxWidth()) {
-                Text(
-                    text = film.title,
-                    style = MaterialTheme.typography.h1,
-                    color = MaterialTheme.colors.onSurface,
-                    modifier = Modifier.fillMaxWidth(0.5f)
-                )
-
-                Spacer(Modifier.padding(10.dp))
-
                 Button(onClick = { onFavoriteClick(film) }) {
                     Text(
                         text =

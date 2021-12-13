@@ -1,15 +1,15 @@
 <resources>
     <string name="app_name">inostudioTask</string>
-    <string name="release_date">Дата релиза: %1$s</string>
-    <string name="review">Рецензия:</string>
-    <string name="avg_rating">Средняя оценка: %1$f</string>
+    <string name="release_date">Release date: %1$s</string>
+    <string name="review">Review:</string>
+    <string name="avg_rating">Rating: %1$f</string>
     <string name="searchbar_hint">Search…</string>
-    <string name="top_app_title">Фильмы</string>
-    <string name="refresh_string">Перезагрузить</string>
+    <string name="top_app_title">Films</string>
+    <string name="refresh_string">Refresh</string>
     <string name="not_found">По запросу %1$s фильмы не найдены</string>
-    <string name="actors">Актеры:</string>
-    <string name="posters">Постеры:</string>
-    <string name="watch_video">Смотреть видео</string>
-    <string name="delete_favorite">Удалить избранное</string>
-    <string name="add_favorite">Добавить в избранное</string>
+    <string name="actors">Cast:</string>
+    <string name="posters">Posters:</string>
+    <string name="watch_video">Watch video</string>
+    <string name="delete_favorite">dislike</string>
+    <string name="add_favorite">like</string>
 </resources>
