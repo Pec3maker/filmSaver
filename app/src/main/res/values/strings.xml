@@ -6,7 +6,7 @@
     <string name="searchbar_hint">Search…</string>
     <string name="top_app_title">Films</string>
     <string name="refresh_string">Refresh</string>
-    <string name="not_found">По запросу %1$s фильмы не найдены</string>
+    <string name="not_found">No movies found for %1$s</string>
     <string name="actors">Cast:</string>
     <string name="posters">Posters:</string>
     <string name="watch_video">Watch video</string>
