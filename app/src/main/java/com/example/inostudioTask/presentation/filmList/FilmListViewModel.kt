@@ -1,5 +1,6 @@
 package com.example.inostudioTask.presentation.filmList
 
+import androidx.compose.material.SnackbarHostState
 import androidx.compose.runtime.*
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -8,6 +9,7 @@ import com.example.inostudioTask.data.remote.dto.Film
 import com.example.inostudioTask.data.remote.dto.toFilmEntity
 import com.example.inostudioTask.domain.repository.FilmRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
@@ -20,8 +22,11 @@ class FilmListViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val _state = mutableStateOf<FilmListState<Film>>(FilmListState.Empty)
-    val state: State<FilmListState<Film>> = _state
-    val searchText = mutableStateOf("")
+    private var coroutineJob: Job = Job()
+    val uiState: State<FilmListState<Film>> = _state
+    val searchTextState = mutableStateOf("")
+    val progressBarState = mutableStateOf(false)
+    val snackBarHostState = SnackbarHostState()
 
     init {
         onDatabaseUpdate()
@@ -29,15 +34,15 @@ class FilmListViewModel @Inject constructor(
     }
 
     fun refresh() {
-        searchFilms(searchText.value)
+        searchFilms(searchTextState.value)
     }
 
     fun searchFilms(text: String) {
-        searchText.value = text
-        if (searchText.value.isEmpty()) {
+        searchTextState.value = text
+        if (searchTextState.value.isEmpty()) {
             getFilms(Constants.SEARCH_PAGE)
         } else {
-            getFilmsBySearch(page = Constants.SEARCH_PAGE, query = searchText.value)
+            getFilmsBySearch(page = Constants.SEARCH_PAGE, query = searchTextState.value)
         }
     }
 
@@ -61,9 +66,10 @@ class FilmListViewModel @Inject constructor(
     }
 
     private fun getFilms(page: Int) {
-        viewModelScope.launch {
+        coroutineJob.cancel()
+        coroutineJob = viewModelScope.launch {
+            progressBarState.value = true
             try {
-                _state.value = FilmListState.Loading
                 val data = repository.getFilms(
                     apiKey = Constants.API_KEY,
                     page = page,
@@ -79,13 +85,15 @@ class FilmListViewModel @Inject constructor(
                     message = e.message
                 )
             }
+            progressBarState.value = false
         }
     }
 
     private fun getFilmsBySearch(page: Int, query: String) {
-        viewModelScope.launch {
+        coroutineJob.cancel()
+        coroutineJob = viewModelScope.launch {
+            progressBarState.value = true
             try {
-                _state.value = FilmListState.Loading
                 val data = repository.getFilmsBySearch(
                     apiKey = Constants.API_KEY,
                     page = page,
@@ -98,15 +106,13 @@ class FilmListViewModel @Inject constructor(
                     _state.value = fillFilmsAccessory(data)
                 }
             } catch (e: HttpException) {
-                _state.value = FilmListState.Error(
-                    message = e.message
-                )
+                snackBarHostState.showSnackbar(e.message?: "")
             } catch (e: IOException) {
-                _state.value = FilmListState.Error(
-                    message = e.message
-                )
+                snackBarHostState.showSnackbar(e.message?: "")
             }
+            progressBarState.value = false
         }
+
     }
 
     private fun saveFilm(film: Film) {

@@ -2,16 +2,12 @@ package com.example.inostudioTask.presentation.filmReview.components
 
 import android.content.Intent
 import android.net.Uri
-import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.material.Button
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowCircleDown
 import androidx.compose.runtime.*
@@ -35,20 +31,25 @@ fun FilmReviewSuccessScreen(
     film: Film,
     onFavoriteClick: (Film) -> Unit
 ) {
-    var expanded by remember { mutableStateOf(false)}
+    var expanded by remember { mutableStateOf(false) }
     val context = LocalContext.current
     val scrollState = rememberScrollState()
-    Column(
-        modifier = Modifier.fillMaxWidth()
+
+    Card(
+        modifier = Modifier
+            .fillMaxHeight(0.9f)
+            .padding(5.dp),
+        backgroundColor = MaterialTheme.colors.background,
+        elevation = 5.dp,
+        shape = MaterialTheme.shapes.small
     ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(MaterialTheme.colors.background)
                 .verticalScroll(scrollState)
         ) {
             Image(
-                painter = rememberImagePainter(film.imageUrl(film.posterPath?: "")),
+                painter = rememberImagePainter(film.imageUrl(film.posterPath ?: "")),
                 contentDescription = null,
                 modifier = Modifier
                     .fillMaxSize()
@@ -179,7 +180,7 @@ fun FilmReviewSuccessScreen(
             }
 
             Text(
-                text = stringResource(R.string.release_date, film.releaseDate?: ""),
+                text = stringResource(R.string.release_date, film.releaseDate ?: ""),
                 style = MaterialTheme.typography.body1,
                 color = MaterialTheme.colors.onSurface
             )

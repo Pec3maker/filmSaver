@@ -3,9 +3,7 @@ package com.example.inostudioTask.presentation.filmList
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.LinearProgressIndicator
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -24,8 +22,8 @@ fun FilmListScreen(
     navController: NavController,
     viewModel: FilmListViewModel = hiltViewModel()
 ) {
-    val uiState = viewModel.state.value
-    val searchText = viewModel.searchText.value
+    val uiState = viewModel.uiState.value
+    val searchText = viewModel.searchTextState.value
 
     Column {
         SearchBar(
@@ -44,10 +42,8 @@ fun FilmListScreen(
                         navController.navigate("${Screen.FilmReviewScreen.route}/${it}")
                     },
                     addFavorite = { viewModel.addFavorite(it) },
+                    progressBarState = viewModel.progressBarState.value
                 )
-            }
-            is FilmListState.Loading -> {
-                FilmListLoadingScreen()
             }
             is FilmListState.Error -> {
                 ErrorScreen(
@@ -59,6 +55,14 @@ fun FilmListScreen(
                 FilmListEmptyScreen(searchText)
             }
         }
+    }
+    Box(
+        modifier = Modifier
+            .fillMaxHeight()
+            .padding(bottom = 50.dp),
+        contentAlignment = Alignment.BottomCenter
+    ) {
+        SnackbarHost(hostState = viewModel.snackBarHostState)
     }
 }
 
@@ -93,16 +97,30 @@ fun FilmListSuccessScreen(
     filmList: List<Film>,
     navigate: (Int) -> Unit,
     addFavorite: (Film) -> Unit,
+    progressBarState: Boolean
 ) {
-    LazyColumn(
-        modifier = Modifier.fillMaxSize(),
+    if (progressBarState) {
+        FilmListLoadingScreen()
+    }
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .fillMaxHeight(0.9f)
+            .padding(top = 5.dp)
+            .padding(horizontal = 11.dp),
+        shape = MaterialTheme.shapes.small,
+        elevation = 5.dp
     ) {
-        items(filmList) { film ->
-            FilmListItem(
-                film = film,
-                onItemClick = { navigate(it.id) },
-                onFavoriteClick = { addFavorite(it) }
-            )
+        LazyColumn(
+            modifier = Modifier.fillMaxSize(),
+        ) {
+            items(filmList) { film ->
+                FilmListItem(
+                    film = film,
+                    onItemClick = { navigate(it.id) },
+                    onFavoriteClick = { addFavorite(it) }
+                )
+            }
         }
     }
 }
