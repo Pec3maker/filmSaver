@@ -22,7 +22,8 @@ data class Film(
     val images: ImageList? = null,
     val reviews: ReviewList? = null,
     val videos: VideoList? = null,
-    var isInDatabase: Boolean? = null
+    var isInDatabase: Boolean? = null,
+    val linesToShow: Int = 5
 )
 
 fun Film.toFilmEntity(): FilmEntity {

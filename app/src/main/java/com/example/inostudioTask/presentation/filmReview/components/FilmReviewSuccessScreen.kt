@@ -2,8 +2,9 @@ package com.example.inostudioTask.presentation.filmReview.components
 
 import android.content.Intent
 import android.net.Uri
-import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
@@ -34,7 +35,7 @@ fun FilmReviewSuccessScreen(
     film: Film,
     onFavoriteClick: (Film) -> Unit
 ) {
-    var editable by remember { mutableStateOf(false) }
+    var expanded by remember { mutableStateOf(false)}
     val context = LocalContext.current
     val scrollState = rememberScrollState()
     Column(
@@ -144,28 +145,18 @@ fun FilmReviewSuccessScreen(
                             .padding(7.dp)
                             .fillMaxSize()
                             .clickable {
-                                editable = !editable
+                                expanded = !expanded
                             },
                     )
                 }
 
-                val reviewText = film.reviews.results[0].content
-                AnimatedVisibility(visible = editable) {
-                    Text(
-                        text = reviewText,
-                        style = MaterialTheme.typography.body1,
-                        color = MaterialTheme.colors.onSurface
-                    )
-                }
-
-                AnimatedVisibility(visible = !editable) {
-                    Text(
-                        text = reviewText,
-                        style = MaterialTheme.typography.body1,
-                        color = MaterialTheme.colors.onSurface,
-                        maxLines = 5
-                    )
-                }
+                Text(
+                    text = film.reviews.results[0].content,
+                    style = MaterialTheme.typography.body1,
+                    color = MaterialTheme.colors.onSurface,
+                    modifier = Modifier.animateContentSize(),
+                    maxLines = if (expanded) Int.MAX_VALUE else film.linesToShow
+                )
 
                 Spacer(modifier = Modifier.padding(15.dp))
             }
