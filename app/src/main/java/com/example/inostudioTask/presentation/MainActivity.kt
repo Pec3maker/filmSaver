@@ -14,7 +14,7 @@ import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.rounded.ArrowBackIos
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -38,7 +38,6 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            val context = LocalContext.current
             MainTheme {
                 val items = listOf(
                     Screen.FilmsListScreen,
@@ -84,24 +83,27 @@ class MainActivity : ComponentActivity() {
                         topBar = {
                             TopAppBar(
                                 modifier = Modifier.fillMaxWidth(),
-                                title = { Text(text = context.getString(R.string.top_app_title)) },
+                                title = { Text(text = stringResource(R.string.top_app_title)) },
                                 navigationIcon = {
-                                    Icon(
-                                        Icons.Rounded.ArrowBackIos,
-                                        contentDescription = null,
-                                        Modifier
-                                            .padding(5.dp)
-                                            .fillMaxSize()
-                                            .clickable {
-                                                navController.popBackStack(
-                                                    destinationId = navController
-                                                        .graph
-                                                        .findStartDestination()
-                                                        .id,
-                                                    inclusive = false
-                                                )
-                                            }
-                                    )
+                                    val navBackStackEntry by navController.currentBackStackEntryAsState()
+                                    if ( navBackStackEntry?.destination?.route != Screen.FilmsListScreen.route) {
+                                        Icon(
+                                            Icons.Rounded.ArrowBackIos,
+                                            contentDescription = null,
+                                            Modifier
+                                                .padding(5.dp)
+                                                .fillMaxSize()
+                                                .clickable {
+                                                    navController.popBackStack(
+                                                        destinationId = navController
+                                                            .graph
+                                                            .findStartDestination()
+                                                            .id,
+                                                        inclusive = false
+                                                    )
+                                                }
+                                        )
+                                    }
                                 }
                             )
                         }

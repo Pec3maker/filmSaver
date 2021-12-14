@@ -8,7 +8,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -23,7 +23,6 @@ fun FilmListItem(
     onItemClick: (Film) -> Unit,
     onFavoriteClick: (Film) -> Unit
 ) {
-    val context = LocalContext.current
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -57,9 +56,9 @@ fun FilmListItem(
                 Text(
                     text =
                     if (film.isInDatabase!!) {
-                        context.getString(R.string.delete_favorite)
+                        stringResource(R.string.delete_favorite)
                     } else {
-                        context.getString(R.string.add_favorite)
+                        stringResource(R.string.add_favorite)
                     },
                     style = MaterialTheme.typography.body1,
                     overflow = TextOverflow.Ellipsis,

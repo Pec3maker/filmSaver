@@ -9,7 +9,6 @@ import com.example.inostudioTask.common.Constants
 import com.example.inostudioTask.data.remote.dto.Film
 import com.example.inostudioTask.data.remote.dto.toFilmEntity
 import com.example.inostudioTask.domain.repository.FilmRepository
-import com.example.inostudioTask.presentation.filmList.FilmListState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -31,11 +30,11 @@ class FilmReviewViewModel @Inject constructor(
         savedStateHandle.get<String>("movie_id")?.let {
             movieId = it
         }
+        onDatabaseUpdate()
         refresh()
     }
 
     fun refresh() {
-        onDatabaseUpdate()
         getFilm()
     }
 

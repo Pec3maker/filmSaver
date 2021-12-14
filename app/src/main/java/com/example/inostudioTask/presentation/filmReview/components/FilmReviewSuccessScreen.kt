@@ -16,6 +16,7 @@ import androidx.compose.material.icons.rounded.ArrowCircleDown
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
 import com.example.inostudioTask.R
@@ -59,9 +60,9 @@ fun FilmReviewSuccessScreen(
                     Text(
                         text =
                         if (film.isInDatabase!!) {
-                            context.getString(R.string.delete_favorite)
+                            stringResource(R.string.delete_favorite)
                         } else {
-                            context.getString(R.string.add_favorite)
+                            stringResource(R.string.add_favorite)
                         }
                     )
                 }
@@ -86,7 +87,7 @@ fun FilmReviewSuccessScreen(
             Spacer(modifier = Modifier.padding(15.dp))
 
             Text(
-                text = context.getString(R.string.posters),
+                text = stringResource(R.string.posters),
                 style = MaterialTheme.typography.h1,
                 color = MaterialTheme.colors.onSurface
             )
@@ -106,7 +107,7 @@ fun FilmReviewSuccessScreen(
             Spacer(modifier = Modifier.padding(15.dp))
 
             Text(
-                text = context.getString(R.string.actors),
+                text = stringResource(R.string.actors),
                 style = MaterialTheme.typography.h1,
                 color = MaterialTheme.colors.onSurface
             )
@@ -131,7 +132,7 @@ fun FilmReviewSuccessScreen(
                     Modifier.fillMaxSize()
                 ) {
                     Text(
-                        context.getString(R.string.review),
+                        stringResource(R.string.review),
                         style = MaterialTheme.typography.body1,
                         color = MaterialTheme.colors.onSurface
                     )
@@ -170,14 +171,14 @@ fun FilmReviewSuccessScreen(
                     }
                 ) {
                     Text(
-                        text = context.getString(R.string.watch_video),
+                        text = stringResource(R.string.watch_video),
                         color = MaterialTheme.colors.onSurface
                     )
                 }
             }
 
             Text(
-                text = context.getString(R.string.release_date, film.releaseDate),
+                text = stringResource(R.string.release_date, film.releaseDate?: ""),
                 style = MaterialTheme.typography.body1,
                 color = MaterialTheme.colors.onSurface
             )
@@ -185,7 +186,7 @@ fun FilmReviewSuccessScreen(
             Spacer(modifier = Modifier.height(15.dp))
 
             Text(
-                text = context.getString(R.string.avg_rating, film.voteAverage),
+                text = stringResource(R.string.avg_rating, film.voteAverage),
                 style = MaterialTheme.typography.body1,
                 color = MaterialTheme.colors.onSurface
             )

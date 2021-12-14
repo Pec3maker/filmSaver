@@ -9,7 +9,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
@@ -25,14 +25,14 @@ fun FilmListScreen(
     viewModel: FilmListViewModel = hiltViewModel()
 ) {
     val uiState = viewModel.state.value
-    val context = LocalContext.current
+    val searchText = viewModel.searchText.value
 
     Column {
         SearchBar(
-            hint = context.getString(R.string.searchbar_hint),
+            hint = stringResource(id = R.string.searchbar_hint),
             modifier = Modifier
                 .fillMaxWidth(),
-            text = viewModel.searchText.value,
+            text = searchText,
             onTextChange = { viewModel.searchFilms(it) }
         )
 
@@ -56,7 +56,7 @@ fun FilmListScreen(
                 )
             }
             is FilmListState.Empty -> {
-                FilmListEmptyScreen(viewModel.searchText.value)
+                FilmListEmptyScreen(searchText)
             }
         }
     }
@@ -66,14 +66,13 @@ fun FilmListScreen(
 fun FilmListEmptyScreen(
     searchText: String
 ) {
-    val context = LocalContext.current
     Row(
         modifier = Modifier.fillMaxSize(),
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.Top
     ) {
         Text(
-            text = context.getString(R.string.not_found, searchText),
+            text = stringResource(R.string.not_found, searchText),
             color = MaterialTheme.colors.error
         )
     }

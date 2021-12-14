@@ -10,7 +10,7 @@ import androidx.compose.material.icons.rounded.Error
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.inostudioTask.R
@@ -20,8 +20,6 @@ fun ErrorScreen(
     onButtonClick: () -> Unit,
     text: String
 ) {
-    val context = LocalContext.current
-
     Column(
         modifier = Modifier
             .fillMaxSize(),
@@ -54,7 +52,7 @@ fun ErrorScreen(
             onClick = { onButtonClick() }
         ) {
             Text(
-                text = context.getString(R.string.refresh_string),
+                text = stringResource(R.string.refresh_string),
                 color = MaterialTheme.colors.onSurface
             )
         }
