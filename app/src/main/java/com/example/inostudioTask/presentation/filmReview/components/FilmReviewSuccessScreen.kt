@@ -149,11 +149,21 @@ fun FilmReviewSuccessScreen(
                     )
                 }
 
+                val reviewText = film.reviews.results[0].content
                 AnimatedVisibility(visible = editable) {
                     Text(
-                        text = film.reviews.results[0].content,
+                        text = reviewText,
                         style = MaterialTheme.typography.body1,
                         color = MaterialTheme.colors.onSurface
+                    )
+                }
+
+                AnimatedVisibility(visible = !editable) {
+                    Text(
+                        text = reviewText,
+                        style = MaterialTheme.typography.body1,
+                        color = MaterialTheme.colors.onSurface,
+                        maxLines = 5
                     )
                 }
 

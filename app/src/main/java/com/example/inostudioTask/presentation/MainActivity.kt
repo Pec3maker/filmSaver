@@ -47,12 +47,12 @@ class MainActivity : ComponentActivity() {
 
                 Surface(color = MaterialTheme.colors.background) {
                     val navController = rememberNavController()
+                    val navBackStackEntry by navController.currentBackStackEntryAsState()
+                    val currentDestination = navBackStackEntry?.destination
+
                     Scaffold(
                         bottomBar = {
                             BottomNavigation {
-                                val navBackStackEntry by navController.currentBackStackEntryAsState()
-                                val currentDestination = navBackStackEntry?.destination
-
                                 items.forEach { screen ->
                                     BottomNavigationItem(
                                         icon = {
@@ -85,8 +85,7 @@ class MainActivity : ComponentActivity() {
                                 modifier = Modifier.fillMaxWidth(),
                                 title = { Text(text = stringResource(R.string.top_app_title)) },
                                 navigationIcon = {
-                                    val navBackStackEntry by navController.currentBackStackEntryAsState()
-                                    if ( navBackStackEntry?.destination?.route != Screen.FilmsListScreen.route) {
+                                    if (currentDestination?.route != Screen.FilmsListScreen.route) {
                                         Icon(
                                             Icons.Rounded.ArrowBackIos,
                                             contentDescription = null,
