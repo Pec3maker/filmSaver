@@ -22,16 +22,14 @@ import kotlinx.coroutines.flow.collect
 fun FilmListScreen(
     navController: NavController,
     viewModel: FilmListViewModel = hiltViewModel(),
-    scaffoldState: ScaffoldState
+    showSnackBar: suspend (String) -> Unit
 ) {
     val uiState = viewModel.uiState.value
     val searchText = viewModel.searchTextState.value
-    
-    LaunchedEffect(scaffoldState.snackbarHostState) {
+
+    LaunchedEffect(true) {
         viewModel.errorMessage.collect {
-            scaffoldState.snackbarHostState.showSnackbar(
-                message = it
-            )
+            showSnackBar(it)
         }
     }
 

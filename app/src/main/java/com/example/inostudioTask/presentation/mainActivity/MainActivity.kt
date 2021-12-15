@@ -13,6 +13,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.rounded.ArrowBackIos
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -108,10 +109,9 @@ fun MainScreen() {
             composable(
                 route = Screen.FilmsListScreen.route
             ) {
-                FilmListScreen(
-                    navController = navController,
-                    scaffoldState = scaffoldState
-                )
+                FilmListScreen(navController = navController) {
+                    scaffoldState.snackbarHostState.showSnackbar(it)
+                }
             }
             composable(
                 route = "${Screen.FilmReviewScreen.route}/{movie_id}",
