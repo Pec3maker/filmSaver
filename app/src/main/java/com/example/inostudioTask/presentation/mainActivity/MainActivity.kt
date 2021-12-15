@@ -54,8 +54,10 @@ fun MainScreen() {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
+    val scaffoldState = rememberScaffoldState()
 
     Scaffold(
+        scaffoldState = scaffoldState,
         bottomBar = {
             BottomNavigationBar(
                 navigate = { route ->
@@ -107,7 +109,8 @@ fun MainScreen() {
                 route = Screen.FilmsListScreen.route
             ) {
                 FilmListScreen(
-                    navController = navController
+                    navController = navController,
+                    scaffoldState = scaffoldState
                 )
             }
             composable(

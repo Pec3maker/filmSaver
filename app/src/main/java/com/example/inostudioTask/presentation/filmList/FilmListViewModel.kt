@@ -10,6 +10,8 @@ import com.example.inostudioTask.data.remote.dto.toFilmEntity
 import com.example.inostudioTask.domain.repository.FilmRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.channels.BufferOverflow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
@@ -23,22 +25,26 @@ class FilmListViewModel @Inject constructor(
 
     private val _state = mutableStateOf<FilmListState<Film>>(FilmListState.Empty)
     private var coroutineJob: Job = Job()
+
     val uiState: State<FilmListState<Film>> = _state
     val searchTextState = mutableStateOf("")
     val progressBarState = mutableStateOf(false)
-    val snackBarHostState = SnackbarHostState()
+    val errorMessage = MutableSharedFlow<String>(
+        replay = 1,
+        onBufferOverflow = BufferOverflow.DROP_OLDEST
+    )
 
     init {
         onDatabaseUpdate()
-        refresh()
+        searchFilms()
     }
 
-    fun refresh() {
-        searchFilms(searchTextState.value)
+    fun onSearchTextUpdate(text: String) {
+        searchTextState.value = text;
+        searchFilms()
     }
 
-    fun searchFilms(text: String) {
-        searchTextState.value = text
+    fun searchFilms() {
         if (searchTextState.value.isEmpty()) {
             getFilms(Constants.SEARCH_PAGE)
         } else {
@@ -77,15 +83,21 @@ class FilmListViewModel @Inject constructor(
                 )
                 _state.value = fillFilmsAccessory(data)
             } catch (e: HttpException) {
-                _state.value = FilmListState.Error(
-                    message = e.message
-                )
+                errorHandler(e)
             } catch (e: IOException) {
-                _state.value = FilmListState.Error(
-                    message = e.message
-                )
+                errorHandler(e)
             }
             progressBarState.value = false
+        }
+    }
+
+    private suspend fun errorHandler(e: Exception) {
+        if (_state.value !is FilmListState.Success) {
+            _state.value = FilmListState.Error(
+                message = e.message
+            )
+        } else {
+            errorMessage.emit(e.message?: "")
         }
     }
 
@@ -106,9 +118,9 @@ class FilmListViewModel @Inject constructor(
                     _state.value = fillFilmsAccessory(data)
                 }
             } catch (e: HttpException) {
-                snackBarHostState.showSnackbar(e.message?: "")
+                errorHandler(e)
             } catch (e: IOException) {
-                snackBarHostState.showSnackbar(e.message?: "")
+                errorHandler(e)
             }
             progressBarState.value = false
         }

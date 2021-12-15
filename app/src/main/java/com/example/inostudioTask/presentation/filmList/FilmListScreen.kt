@@ -16,14 +16,24 @@ import com.example.inostudioTask.data.remote.dto.Film
 import com.example.inostudioTask.presentation.Screen
 import com.example.inostudioTask.presentation.common.ErrorScreen
 import com.example.inostudioTask.presentation.filmList.components.*
+import kotlinx.coroutines.flow.collect
 
 @Composable
 fun FilmListScreen(
     navController: NavController,
-    viewModel: FilmListViewModel = hiltViewModel()
+    viewModel: FilmListViewModel = hiltViewModel(),
+    scaffoldState: ScaffoldState
 ) {
     val uiState = viewModel.uiState.value
     val searchText = viewModel.searchTextState.value
+    
+    LaunchedEffect(scaffoldState.snackbarHostState) {
+        viewModel.errorMessage.collect {
+            scaffoldState.snackbarHostState.showSnackbar(
+                message = it
+            )
+        }
+    }
 
     Column {
         SearchBar(
@@ -31,7 +41,9 @@ fun FilmListScreen(
             modifier = Modifier
                 .fillMaxWidth(),
             text = searchText,
-            onTextChange = { viewModel.searchFilms(it) }
+            onTextChange = {
+                viewModel.onSearchTextUpdate(it)
+            }
         )
 
         when (uiState) {
@@ -47,7 +59,7 @@ fun FilmListScreen(
             }
             is FilmListState.Error -> {
                 ErrorScreen(
-                    onButtonClick = { viewModel.refresh() },
+                    onButtonClick = { viewModel.searchFilms() },
                     text = uiState.message?: ""
                 )
             }
@@ -55,14 +67,6 @@ fun FilmListScreen(
                 FilmListEmptyScreen(searchText)
             }
         }
-    }
-    Box(
-        modifier = Modifier
-            .fillMaxHeight()
-            .padding(bottom = 50.dp),
-        contentAlignment = Alignment.BottomCenter
-    ) {
-        SnackbarHost(hostState = viewModel.snackBarHostState)
     }
 }
 
