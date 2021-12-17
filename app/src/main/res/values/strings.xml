@@ -10,6 +10,7 @@
     <string name="actors">Cast</string>
     <string name="posters">Posters</string>
     <string name="watch_video">Watch video</string>
+    <string name="review_list">View review list</string>
     <string name="delete_favorite">dislike</string>
     <string name="add_favorite">like</string>
 </resources>

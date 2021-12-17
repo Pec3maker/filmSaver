@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.rounded.ArrowBackIos
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -112,30 +111,34 @@ fun MainScreen() {
                     scaffoldState.snackbarHostState.showSnackbar(it)
                 }
             }
+
             composable(
                 route = "${Screen.FilmReviewScreen.route}/{movie_id}",
                 arguments = listOf(
                     navArgument("movie_id") { type = NavType.StringType },
                 )
             ) {
-                FilmReviewScreen()
+                FilmReviewScreen(navController = navController)
             }
 
-//                        composable(
-//                            route = Screen.ActorsListScreen.route
-//                        ) {
-//                                ActorsListScreen(
-//                                    navController = navController
-//                                )
-//                        }
-//
-//                        composable(
-//                            route = Screen.FavoritesListScreen.route
-//                        ) {
-//                                FavoritesListScreen(
-//                                    navController = navController
-//                                )
-//                        }
+            composable(
+                route = Screen.ActorsListScreen.route
+            ) {
+                TODO()
+            }
+
+            composable(
+                route = Screen.FavoritesListScreen.route
+            ) {
+                TODO()
+            }
+
+            composable(
+                route = Screen.ReviewListScreen.route
+            ) {
+                TODO()
+            }
+
         }
     }
 }

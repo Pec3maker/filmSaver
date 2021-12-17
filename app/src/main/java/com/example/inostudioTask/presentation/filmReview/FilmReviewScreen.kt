@@ -7,6 +7,8 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
+import com.example.inostudioTask.presentation.Screen
 import com.example.inostudioTask.presentation.common.ErrorScreen
 import com.example.inostudioTask.presentation.filmReview.components.FilmReviewSuccessScreen
 import com.google.accompanist.pager.ExperimentalPagerApi
@@ -16,6 +18,7 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 @Composable
 fun FilmReviewScreen(
     viewModel: FilmReviewViewModel = hiltViewModel(),
+    navController: NavController
 ) {
     val uiState = viewModel.state.value
 
@@ -28,6 +31,7 @@ fun FilmReviewScreen(
                 FilmReviewSuccessScreen(
                     film = uiState.data,
                     onFavoriteClick = { viewModel.addFavorite(it) },
+                    navigate = { navController.navigate(Screen.ReviewListScreen.route) }
                 )
             }
             is FilmReviewState.Loading -> {
