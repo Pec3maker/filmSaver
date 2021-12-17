@@ -143,12 +143,13 @@ fun MainScreen() {
 
 @Composable
 fun TopBar(
-    navigationIcon: @Composable () -> Unit
+    navigationIcon: @Composable () -> Unit,
 ) {
     TopAppBar(
         modifier = Modifier.fillMaxWidth(),
         title = { Text(text = stringResource(R.string.top_app_title)) },
-        navigationIcon = { navigationIcon() }
+        navigationIcon = { navigationIcon() },
+        backgroundColor = MaterialTheme.colors.onSecondary
     )
 }
 
@@ -166,7 +167,9 @@ fun BottomNavigationBar (
     BottomNavigation(
         modifier = Modifier
             .fillMaxWidth()
-            .padding()
+            .padding(),
+        backgroundColor = MaterialTheme.colors.onSecondary
+
     ) {
         items.forEach { screen ->
             BottomNavigationItem(

@@ -107,11 +107,9 @@ fun FilmListSuccessScreen(
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .fillMaxHeight(0.9f)
+            .fillMaxHeight(0.91f)
             .padding(top = 5.dp)
-            .padding(horizontal = 11.dp),
-        shape = MaterialTheme.shapes.small,
-        elevation = 5.dp,
+            .padding(horizontal = 5.dp),
         backgroundColor = MaterialTheme.colors.background
     ) {
         LazyColumn(

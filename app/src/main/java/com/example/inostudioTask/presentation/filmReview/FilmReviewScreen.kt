@@ -6,7 +6,6 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.inostudioTask.presentation.common.ErrorScreen
 import com.example.inostudioTask.presentation.filmReview.components.FilmReviewSuccessScreen
@@ -23,7 +22,6 @@ fun FilmReviewScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .padding(10.dp)
     ) {
         when(uiState) {
             is FilmReviewState.Success -> {
