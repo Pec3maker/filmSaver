@@ -47,6 +47,7 @@ fun FilmReviewSuccessScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .verticalScroll(scrollState)
+                .padding(2.dp)
         ) {
             Image(
                 painter = rememberImagePainter(film.imageUrl(film.posterPath ?: "")),
@@ -55,22 +56,6 @@ fun FilmReviewSuccessScreen(
                     .fillMaxSize()
                     .height(300.dp)
             )
-
-            Spacer(modifier = Modifier.padding(10.dp))
-            Row(Modifier.fillMaxWidth()) {
-                Button(onClick = { onFavoriteClick(film) }) {
-                    Text(
-                        text =
-                        if (film.isInDatabase!!) {
-                            stringResource(R.string.delete_favorite)
-                        } else {
-                            stringResource(R.string.add_favorite)
-                        }
-                    )
-                }
-            }
-
-            Spacer(modifier = Modifier.height(30.dp))
 
             Text(
                 text = film.originalTitle,
@@ -162,20 +147,38 @@ fun FilmReviewSuccessScreen(
                 Spacer(modifier = Modifier.padding(15.dp))
             }
 
-            if (film.videos?.results?.isEmpty() == false) {
+            Row(
+                Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
                 Button(
-                    onClick = {
-                        val webIntent = Intent(
-                            Intent.ACTION_VIEW,
-                            Uri.parse(film.videoUrl())
-                        )
-                        context.startActivity(webIntent)
-                    }
+                    onClick = { onFavoriteClick(film) }
                 ) {
                     Text(
-                        text = stringResource(R.string.watch_video),
+                        text =
+                        if (film.isInDatabase!!) {
+                            stringResource(R.string.delete_favorite)
+                        } else {
+                            stringResource(R.string.add_favorite)
+                        },
                         color = MaterialTheme.colors.onSurface
                     )
+                }
+                if (film.videos?.results?.isEmpty() == false) {
+                    Button(
+                        onClick = {
+                            val webIntent = Intent(
+                                Intent.ACTION_VIEW,
+                                Uri.parse(film.videoUrl())
+                            )
+                            context.startActivity(webIntent)
+                        }
+                    ) {
+                        Text(
+                            text = stringResource(R.string.watch_video),
+                            color = MaterialTheme.colors.onSurface
+                        )
+                    }
                 }
             }
 
