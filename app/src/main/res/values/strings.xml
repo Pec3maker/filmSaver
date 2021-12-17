@@ -1,3 +1,15 @@
 <resources>
-    <string name="app_name">inostudio_task</string>
+    <string name="app_name">inostudioTask</string>
+    <string name="release_date">Release date: %1$s</string>
+    <string name="review">Review:</string>
+    <string name="avg_rating">Rating: %1$f</string>
+    <string name="searchbar_hint">Search…</string>
+    <string name="top_app_title">Films</string>
+    <string name="refresh_string">Refresh</string>
+    <string name="not_found">No movies found for %1$s</string>
+    <string name="actors">Cast:</string>
+    <string name="posters">Posters:</string>
+    <string name="watch_video">Watch video</string>
+    <string name="delete_favorite">dislike</string>
+    <string name="add_favorite">like</string>
 </resources>

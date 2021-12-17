@@ -1,9 +1,7 @@
 package com.example.inostudioTask.presentation.filmList
 
-import com.example.inostudioTask.domain.model.Film
-
-data class FilmListState(
-    val isLoading: Boolean = false,
-    val films: List<Film> = emptyList(),
-    val error: String = "",
-)
+sealed class FilmListState<out T> {
+    data class Success<T>(val data: List<T>): FilmListState<T>()
+    object Empty: FilmListState<Nothing>()
+    data class Error(val message: String?): FilmListState<Nothing>()
+}

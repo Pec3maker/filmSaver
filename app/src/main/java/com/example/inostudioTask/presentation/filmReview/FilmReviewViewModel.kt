@@ -6,43 +6,96 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.inostudioTask.common.Constants
-import com.example.inostudioTask.common.Resource
-import com.example.inostudioTask.domain.useCase.getFilm.GetFilmUseCase
+import com.example.inostudioTask.data.remote.dto.Film
+import com.example.inostudioTask.data.remote.dto.toFilmEntity
+import com.example.inostudioTask.domain.repository.FilmRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
+import retrofit2.HttpException
+import java.io.IOException
 import javax.inject.Inject
 
 @HiltViewModel
 class FilmReviewViewModel @Inject constructor(
-    private val getFilmUseCase: GetFilmUseCase,
-    savedStateHandle: SavedStateHandle
+    private val repository: FilmRepository,
+    savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
 
-    private val _state = mutableStateOf(FilmReviewState())
-    val state: State<FilmReviewState> = _state
+    private val _state = mutableStateOf<FilmReviewState<Film>>(FilmReviewState.Loading)
+    val state: State<FilmReviewState<Film>> = _state
+    private lateinit var movieId: String
 
     init {
-        savedStateHandle.get<String>("movie_id")?.let { filmId ->
-            getFilm(Constants.API_KEY, filmId, Constants.LANGUAGE)
+        savedStateHandle.get<String>("movie_id")?.let {
+            movieId = it
+        }
+        onDatabaseUpdate()
+        refresh()
+    }
+
+    fun refresh() {
+        getFilm()
+    }
+
+    fun addFavorite(film: Film) {
+        if (film.isInDatabase!!) {
+            deleteFilm(film = film)
+        } else {
+            saveFilm(film = film)
         }
     }
 
-    private fun getFilm(apiKey: String, id: String, language: String) {
-        getFilmUseCase(apiKey = apiKey, id = id, language = language).onEach { result->
-            when(result) {
-                is Resource.Success -> {
-                    _state.value = FilmReviewState(film = result.data)
-                }
-                is Resource.Error -> {
-                    _state.value = FilmReviewState(
-                        error = result.message ?:  "Unexpected error occurred"
-                    )
-                }
-                is Resource.Loading -> {
-                    _state.value = FilmReviewState(isLoading = true)
+    private fun getFilm() {
+        viewModelScope.launch {
+            try {
+                _state.value = FilmReviewState.Loading
+                val film = repository.getFilmsById(
+                    apiKey = Constants.API_KEY,
+                    id = movieId,
+                    language = Constants.LANGUAGE,
+                    additionalInfo = Constants.ADDITIONAL_INFO
+                )
+                _state.value = fillFilmAccessory(film)
+            } catch (e: HttpException) {
+                _state.value = FilmReviewState.Error(
+                    message = e.message
+                )
+            } catch (e: IOException) {
+                _state.value = FilmReviewState.Error(
+                    message = e.message
+                )
+            }
+        }
+    }
+
+    private fun onDatabaseUpdate() {
+        viewModelScope.launch {
+            repository.updateDatabaseFlow.collect {
+                val filmListState = _state.value
+                if (filmListState is FilmReviewState.Success) {
+                    _state.value = fillFilmAccessory(filmListState.data)
                 }
             }
-        }.launchIn(viewModelScope)
+        }
+    }
+
+    private fun saveFilm(film: Film) {
+        viewModelScope.launch {
+            repository.insertFilmDatabase(film.toFilmEntity())
+        }
+    }
+
+    private fun deleteFilm(film: Film) {
+        viewModelScope.launch {
+            repository.deleteFilmDatabase(film.toFilmEntity())
+        }
+    }
+
+    private fun fillFilmAccessory(film: Film): FilmReviewState.Success<Film>{
+        val changedFilm = film.copy(
+            isInDatabase = repository.filmListDatabase.any { it.id == film.id }
+        )
+        return FilmReviewState.Success(changedFilm)
     }
 }
