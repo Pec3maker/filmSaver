@@ -124,7 +124,6 @@ class FilmListViewModel @Inject constructor(
             }
             progressBarState.value = false
         }
-
     }
 
     private fun saveFilm(film: Film) {

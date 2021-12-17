@@ -101,9 +101,8 @@ fun FilmReviewSuccessScreen(
 
             LazyRow(
                 modifier = Modifier
-                    .fillMaxSize()
-                    .background(MaterialTheme.colors.background),
-                contentPadding = PaddingValues(20.dp)
+                    .fillMaxWidth(),
+                contentPadding = PaddingValues(5.dp)
             ) {
                 film.credits?.cast?.let {
                     items(it.count()) { index ->
