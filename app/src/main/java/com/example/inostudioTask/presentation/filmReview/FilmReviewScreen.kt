@@ -23,7 +23,7 @@ fun FilmReviewScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .padding(20.dp)
+            .padding(10.dp)
     ) {
         when(uiState) {
             is FilmReviewState.Success -> {

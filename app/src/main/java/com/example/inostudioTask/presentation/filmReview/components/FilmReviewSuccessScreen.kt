@@ -38,7 +38,7 @@ fun FilmReviewSuccessScreen(
     Card(
         modifier = Modifier
             .fillMaxHeight(0.9f)
-            .padding(5.dp),
+            .padding(2.dp),
         backgroundColor = MaterialTheme.colors.background,
         elevation = 5.dp,
         shape = MaterialTheme.shapes.small
