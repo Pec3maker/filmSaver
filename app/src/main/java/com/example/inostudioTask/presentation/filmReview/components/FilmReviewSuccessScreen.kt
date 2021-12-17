@@ -33,7 +33,6 @@ fun FilmReviewSuccessScreen(
     onFavoriteClick: (Film) -> Unit,
     navigate: () -> Unit
 ) {
-    val expanded by remember { mutableStateOf(false) }
     val scrollState = rememberScrollState()
 
     Card(
@@ -69,7 +68,7 @@ fun FilmReviewSuccessScreen(
 
             Spacer(modifier = Modifier.padding(2.dp))
 
-            Review(film, expanded)
+            Review(film)
 
             Spacer(modifier = Modifier.padding(2.dp))
 
@@ -175,10 +174,9 @@ private fun Buttons(
 
 @Composable
 private fun Review(
-    film: Film,
-    expanded: Boolean
+    film: Film
 ) {
-    var expanded1 = expanded
+    var expanded by remember { mutableStateOf(false) }
     Card(
         modifier = Modifier.padding(2.dp),
         elevation = 4.dp,
@@ -205,7 +203,7 @@ private fun Review(
                             .padding(7.dp)
                             .fillMaxSize()
                             .clickable {
-                                expanded1 = !expanded1
+                                expanded = !expanded
                             },
                     )
                 }
@@ -217,7 +215,7 @@ private fun Review(
                     modifier = Modifier
                         .animateContentSize()
                         .padding(2.dp),
-                    maxLines = if (expanded1) Int.MAX_VALUE else film.linesToShow
+                    maxLines = if (expanded) Int.MAX_VALUE else film.linesToShow
                 )
             }
         }
