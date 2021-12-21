@@ -9,7 +9,6 @@ import com.example.inostudioTask.data.remote.dto.toFilmEntity
 import com.example.inostudioTask.domain.repository.FilmRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -28,10 +27,7 @@ class FilmListViewModel @Inject constructor(
     val uiState: State<FilmListState<Film>> = _state
     val searchTextState = mutableStateOf("")
     val progressBarState = mutableStateOf(true)
-    val errorMessage = MutableSharedFlow<String>(
-        replay = 1,
-        onBufferOverflow = BufferOverflow.DROP_OLDEST
-    )
+    val errorMessage = MutableSharedFlow<String>()
 
     init {
         onDatabaseUpdate()
