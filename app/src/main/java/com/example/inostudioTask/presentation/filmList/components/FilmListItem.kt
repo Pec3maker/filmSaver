@@ -6,6 +6,12 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
+import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.outlined.Star
+import androidx.compose.material.icons.outlined.StarBorder
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -19,6 +25,7 @@ import coil.compose.rememberImagePainter
 import com.example.inostudioTask.R
 import com.example.inostudioTask.common.Constants
 import com.example.inostudioTask.data.remote.dto.Film
+import com.example.inostudioTask.presentation.common.ExtraInfo
 
 @Composable
 fun FilmListItem(
@@ -37,12 +44,13 @@ fun FilmListItem(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .clickable { onItemClick(film) }
-                .padding(10.dp),
-            horizontalArrangement = Arrangement.Start
+                .clickable { onItemClick(film) },
+            horizontalArrangement = Arrangement.SpaceAround,
+            verticalAlignment = Alignment.CenterVertically
         ) {
             Card(
-                elevation = 2.dp
+                elevation = 2.dp,
+                modifier = Modifier.padding(start = 2.dp)
             ) {
                 Image(
                     painter = rememberImagePainter(
@@ -50,47 +58,55 @@ fun FilmListItem(
                     ),
                     contentDescription = null,
                     contentScale = ContentScale.Crop,
-                    modifier = Modifier.size(width = 110.dp, height = 110.dp)
+                    modifier = Modifier
+                        .size(width = 110.dp, height = 125.dp)
                 )
             }
 
             Column(
-                Modifier.fillMaxSize(),
-                verticalArrangement = Arrangement.SpaceBetween
+                Modifier
+                    .fillMaxHeight()
+                    .padding(start = 5.dp),
+                verticalArrangement = Arrangement.Top
             ) {
-                Text(
-                    text = film.title,
-                    fontSize = 22.sp,
-                    style = MaterialTheme.typography.h1,
-                    overflow = TextOverflow.Ellipsis,
-                    maxLines = 2,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier
-                        .padding(horizontal = 5.dp)
-                        .fillMaxWidth()
-                )
-
-                Button(
-                    onClick = { onFavoriteClick(film) },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 10.dp)
-                        .height(50.dp)
-                        .align(Alignment.CenterHorizontally),
-                    colors = ButtonDefaults.buttonColors(
-                        backgroundColor = MaterialTheme.colors.background
-                    )
+                Row(
+                    Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Text(
-                        text =
-                        if (film.isInDatabase!!) {
-                            stringResource(R.string.delete_favorite)
-                        } else {
-                            stringResource(R.string.add_favorite)
-                        },
-                        style = MaterialTheme.typography.body1,
-                        textAlign = TextAlign.Center
+                        text = film.title,
+                        fontSize = 19.sp,
+                        style = MaterialTheme.typography.h1,
+                        overflow = TextOverflow.Ellipsis,
+                        maxLines = 2,
+                        textAlign = TextAlign.Left,
+                        modifier = Modifier
+                            .fillMaxWidth(0.7f)
                     )
+
+                    Icon(
+                        imageVector =
+                        if (film.isInDatabase!!) {
+                            Icons.Filled.Favorite
+                        } else {
+                            Icons.Filled.FavoriteBorder
+                        },
+                        contentDescription = null,
+                        modifier = Modifier
+                            .clickable { onFavoriteClick(film) }
+                            .size(30.dp)
+                    )
+                }
+
+                Text(
+                    text = film.overview,
+                    style = MaterialTheme.typography.body2,
+                    color = MaterialTheme.colors.onSurface,
+                    maxLines = 2
+                )
+
+                Row(verticalAlignment = Alignment.Bottom) {
+                    ExtraInfo(film = film)
                 }
             }
         }

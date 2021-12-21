@@ -1,6 +1,5 @@
 package com.example.inostudioTask.presentation.filmList
 
-import androidx.compose.material.SnackbarHostState
 import androidx.compose.runtime.*
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -28,7 +27,7 @@ class FilmListViewModel @Inject constructor(
 
     val uiState: State<FilmListState<Film>> = _state
     val searchTextState = mutableStateOf("")
-    val progressBarState = mutableStateOf(false)
+    val progressBarState = mutableStateOf(true)
     val errorMessage = MutableSharedFlow<String>(
         replay = 1,
         onBufferOverflow = BufferOverflow.DROP_OLDEST

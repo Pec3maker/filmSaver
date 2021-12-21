@@ -5,9 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBackIos
@@ -25,9 +23,12 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.inostudioTask.R
-import com.example.inostudioTask.presentation.Screen
+import com.example.inostudioTask.presentation.common.Screen
+import com.example.inostudioTask.presentation.castList.CastListScreen
+import com.example.inostudioTask.presentation.favoriteFilmList.FavoriteFilmListScreen
 import com.example.inostudioTask.presentation.filmList.FilmListScreen
-import com.example.inostudioTask.presentation.filmReview.FilmReviewScreen
+import com.example.inostudioTask.presentation.filmOverview.FilmOverviewScreen
+import com.example.inostudioTask.presentation.filmReviewList.FilmReviewListScreen
 import com.example.inostudioTask.presentation.ui.theme.MainTheme
 import com.google.accompanist.pager.ExperimentalPagerApi
 import dagger.hilt.android.AndroidEntryPoint
@@ -99,46 +100,51 @@ fun MainScreen() {
                 }
             }
         }
-    ) {
-        NavHost(
-            navController = navController,
-            startDestination = Screen.FilmsListScreen.route
+    ) { contentPadding ->
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(contentPadding)
         ) {
-            composable(
-                route = Screen.FilmsListScreen.route
+            NavHost(
+                navController = navController,
+                startDestination = Screen.FilmsListScreen.route
             ) {
-                FilmListScreen(navController = navController) {
-                    scaffoldState.snackbarHostState.showSnackbar(it)
+                composable(
+                    route = Screen.FilmsListScreen.route
+                ) {
+                    FilmListScreen(navController = navController) {
+                        scaffoldState.snackbarHostState.showSnackbar(it)
+                    }
+                }
+
+                composable(
+                    route = "${Screen.FilmReviewScreen.route}/{movie_id}",
+                    arguments = listOf(
+                        navArgument("movie_id") { type = NavType.StringType },
+                    )
+                ) {
+                    FilmOverviewScreen(navController = navController)
+                }
+
+                composable(
+                    route = Screen.CastListScreen.route
+                ) {
+                    CastListScreen()
+                }
+
+                composable(
+                    route = Screen.FavoriteFilmListScreen.route
+                ) {
+                    FavoriteFilmListScreen()
+                }
+
+                composable(
+                    route = Screen.FilmReviewListScreen.route
+                ) {
+                    FilmReviewListScreen()
                 }
             }
-
-            composable(
-                route = "${Screen.FilmReviewScreen.route}/{movie_id}",
-                arguments = listOf(
-                    navArgument("movie_id") { type = NavType.StringType },
-                )
-            ) {
-                FilmReviewScreen(navController = navController)
-            }
-
-            composable(
-                route = Screen.ActorsListScreen.route
-            ) {
-                TODO()
-            }
-
-            composable(
-                route = Screen.FavoritesListScreen.route
-            ) {
-                TODO()
-            }
-
-            composable(
-                route = Screen.ReviewListScreen.route
-            ) {
-                TODO()
-            }
-
         }
     }
 }
@@ -162,14 +168,13 @@ fun BottomNavigationBar (
 ) {
     val items = listOf(
         Screen.FilmsListScreen,
-        Screen.ActorsListScreen,
-        Screen.FavoritesListScreen
+        Screen.CastListScreen,
+        Screen.FavoriteFilmListScreen
     )
 
     BottomNavigation(
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(),
+            .fillMaxWidth(),
         backgroundColor = MaterialTheme.colors.onSecondary
     ) {
         items.forEach { screen ->

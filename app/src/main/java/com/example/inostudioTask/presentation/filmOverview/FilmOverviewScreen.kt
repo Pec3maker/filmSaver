@@ -1,4 +1,4 @@
-package com.example.inostudioTask.presentation.filmReview
+package com.example.inostudioTask.presentation.filmOverview
 
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.*
@@ -8,16 +8,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.example.inostudioTask.presentation.Screen
+import com.example.inostudioTask.presentation.common.Screen
 import com.example.inostudioTask.presentation.common.ErrorScreen
-import com.example.inostudioTask.presentation.filmReview.components.FilmReviewSuccessScreen
+import com.example.inostudioTask.presentation.filmOverview.components.FilmOverviewSuccessScreen
 import com.google.accompanist.pager.ExperimentalPagerApi
 
 @ExperimentalPagerApi
 @ExperimentalAnimationApi
 @Composable
-fun FilmReviewScreen(
-    viewModel: FilmReviewViewModel = hiltViewModel(),
+fun FilmOverviewScreen(
+    viewModel: FilmOverviewViewModel = hiltViewModel(),
     navController: NavController
 ) {
     val uiState = viewModel.state.value
@@ -27,17 +27,17 @@ fun FilmReviewScreen(
             .fillMaxSize()
     ) {
         when(uiState) {
-            is FilmReviewState.Success -> {
-                FilmReviewSuccessScreen(
+            is FilmOverviewState.Success -> {
+                FilmOverviewSuccessScreen(
                     film = uiState.data,
                     onFavoriteClick = { viewModel.addFavorite(it) },
-                    navigate = { navController.navigate(Screen.ReviewListScreen.route) }
+                    navigate = { navController.navigate(Screen.FilmReviewListScreen.route) }
                 )
             }
-            is FilmReviewState.Loading -> {
+            is FilmOverviewState.Loading -> {
                 CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
             }
-            is FilmReviewState.Error -> {
+            is FilmOverviewState.Error -> {
                 ErrorScreen(
                     text = uiState.message?: "",
                     onButtonClick = { viewModel.refresh() }

@@ -1,4 +1,4 @@
-package com.example.inostudioTask.presentation.filmReview.components
+package com.example.inostudioTask.presentation.filmOverview.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*

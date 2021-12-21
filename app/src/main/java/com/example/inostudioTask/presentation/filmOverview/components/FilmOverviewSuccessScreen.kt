@@ -1,4 +1,4 @@
-package com.example.inostudioTask.presentation.filmReview.components
+package com.example.inostudioTask.presentation.filmOverview.components
 
 import android.content.Intent
 import android.net.Uri
@@ -21,88 +21,57 @@ import androidx.compose.ui.unit.sp
 import coil.compose.rememberImagePainter
 import com.example.inostudioTask.R
 import com.example.inostudioTask.data.remote.dto.*
+import com.example.inostudioTask.presentation.common.ExtraInfo
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 
 @ExperimentalAnimationApi
 @ExperimentalPagerApi
 @Composable
-fun FilmReviewSuccessScreen(
+fun FilmOverviewSuccessScreen(
     film: Film,
     onFavoriteClick: (Film) -> Unit,
     navigate: () -> Unit
 ) {
     val scrollState = rememberScrollState()
-
-    Card(
+    Column(
         modifier = Modifier
-            .fillMaxHeight(0.91f)
-            .padding(horizontal = 2.dp)
-            .padding(top = 5.dp),
-        backgroundColor = MaterialTheme.colors.background,
-        elevation = 3.dp,
-        shape = MaterialTheme.shapes.small
+            .fillMaxSize()
+            .verticalScroll(scrollState)
+            .padding(2.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .verticalScroll(scrollState)
-                .padding(2.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
 
-            Poster(film)
+        Poster(film)
 
-            Spacer(modifier = Modifier.padding(2.dp))
+        Spacer(modifier = Modifier.padding(2.dp))
 
-            FilmInfo(film)
+        FilmInfo(film)
 
-            Spacer(modifier = Modifier.padding(2.dp))
+        Spacer(modifier = Modifier.padding(2.dp))
 
-            Pager(film)
+        Pager(film)
 
-            Spacer(modifier = Modifier.padding(2.dp))
+        Spacer(modifier = Modifier.padding(2.dp))
 
-            Actors(film)
+        Actors(film)
 
-            Spacer(modifier = Modifier.padding(2.dp))
+        Spacer(modifier = Modifier.padding(2.dp))
 
-            Review(film)
+        Review(film)
 
-            Spacer(modifier = Modifier.padding(2.dp))
+        Spacer(modifier = Modifier.padding(2.dp))
 
-            Buttons(
-                onFavoriteClick = { onFavoriteClick(film) },
-                onReviewClick = { navigate() },
-                film = film
-            )
+        Buttons(
+            onFavoriteClick = { onFavoriteClick(film) },
+            onReviewClick = { navigate() },
+            film = film
+        )
 
-            Spacer(modifier = Modifier.height(2.dp))
+        Spacer(modifier = Modifier.height(2.dp))
 
-            ExtraInfo(film)
-        }
+        ExtraInfo(film)
     }
-}
-
-@Composable
-private fun ExtraInfo(film: Film) {
-    Text(
-        text = stringResource(R.string.release_date, film.releaseDate ?: ""),
-        style = MaterialTheme.typography.body1,
-        color = MaterialTheme.colors.onSurface,
-        modifier = Modifier.Companion
-            .padding(2.dp)
-    )
-
-    Spacer(modifier = Modifier.height(2.dp))
-
-    Text(
-        text = stringResource(R.string.avg_rating, film.voteAverage),
-        style = MaterialTheme.typography.body1,
-        color = MaterialTheme.colors.onSurface,
-        modifier = Modifier.Companion
-            .padding(2.dp)
-    )
 }
 
 @Composable
