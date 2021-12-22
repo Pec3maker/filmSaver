@@ -68,9 +68,7 @@ fun FilmListScreen(
             is ListState.Empty -> {
                 FilmListEmptyScreen(searchText = searchText)
             }
-            is ListState.Loading -> {
-
-            }
+            is ListState.Loading -> Unit
         }
     }
 }

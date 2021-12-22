@@ -46,9 +46,7 @@ fun FilmReviewListScreen(
             is ListState.Success -> {
                 SuccessScreen(data = uiState.data)
             }
-            is ListState.Empty -> {
-
-            }
+            is ListState.Empty -> Unit
         }
     }
 }
