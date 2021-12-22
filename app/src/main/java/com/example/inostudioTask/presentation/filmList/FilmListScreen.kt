@@ -13,7 +13,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.inostudioTask.R
 import com.example.inostudioTask.data.remote.dto.Film
-import com.example.inostudioTask.presentation.Screen
+import com.example.inostudioTask.presentation.common.Screen
 import com.example.inostudioTask.presentation.common.ErrorScreen
 import com.example.inostudioTask.presentation.filmList.components.*
 import kotlinx.coroutines.flow.collect
@@ -58,11 +58,14 @@ fun FilmListScreen(
             is FilmListState.Error -> {
                 ErrorScreen(
                     onButtonClick = { viewModel.searchFilms() },
-                    text = uiState.message?: ""
+                    text = uiState.message ?: ""
                 )
             }
             is FilmListState.Empty -> {
-                FilmListEmptyScreen(searchText)
+                FilmListEmptyScreen(
+                    searchText = searchText,
+                    progressBarState = viewModel.progressBarState.value
+                )
             }
         }
     }
@@ -70,8 +73,13 @@ fun FilmListScreen(
 
 @Composable
 fun FilmListEmptyScreen(
-    searchText: String
+    searchText: String,
+    progressBarState: Boolean
 ) {
+    if (progressBarState) {
+        FilmListLoadingScreen()
+    }
+
     Row(
         modifier = Modifier.fillMaxSize(),
         horizontalArrangement = Arrangement.Center,
@@ -104,26 +112,17 @@ fun FilmListSuccessScreen(
     if (progressBarState) {
         FilmListLoadingScreen()
     }
-    Card(
+
+    LazyColumn(
         modifier = Modifier
-            .fillMaxWidth()
-            .fillMaxHeight(0.9f)
-            .padding(top = 5.dp)
-            .padding(horizontal = 11.dp),
-        shape = MaterialTheme.shapes.small,
-        elevation = 5.dp,
-        backgroundColor = MaterialTheme.colors.background
+            .fillMaxSize(),
     ) {
-        LazyColumn(
-            modifier = Modifier.fillMaxSize(),
-        ) {
-            items(filmList) { film ->
-                FilmListItem(
-                    film = film,
-                    onItemClick = { navigate(it.id) },
-                    onFavoriteClick = { addFavorite(it) }
-                )
-            }
+        items(filmList) { film ->
+            FilmListItem(
+                film = film,
+                onItemClick = { navigate(it.id) },
+                onFavoriteClick = { addFavorite(it) }
+            )
         }
     }
 }

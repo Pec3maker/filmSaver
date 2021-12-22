@@ -1,4 +1,4 @@
-package com.example.inostudioTask.presentation.filmReview
+package com.example.inostudioTask.presentation.filmOverview
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
@@ -17,13 +17,13 @@ import java.io.IOException
 import javax.inject.Inject
 
 @HiltViewModel
-class FilmReviewViewModel @Inject constructor(
+class FilmOverviewViewModel @Inject constructor(
     private val repository: FilmRepository,
     savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
 
-    private val _state = mutableStateOf<FilmReviewState<Film>>(FilmReviewState.Loading)
-    val state: State<FilmReviewState<Film>> = _state
+    private val _state = mutableStateOf<FilmOverviewState<Film>>(FilmOverviewState.Loading)
+    val state: State<FilmOverviewState<Film>> = _state
     private lateinit var movieId: String
 
     init {
@@ -49,7 +49,7 @@ class FilmReviewViewModel @Inject constructor(
     private fun getFilm() {
         viewModelScope.launch {
             try {
-                _state.value = FilmReviewState.Loading
+                _state.value = FilmOverviewState.Loading
                 val film = repository.getFilmsById(
                     apiKey = Constants.API_KEY,
                     id = movieId,
@@ -58,11 +58,11 @@ class FilmReviewViewModel @Inject constructor(
                 )
                 _state.value = fillFilmAccessory(film)
             } catch (e: HttpException) {
-                _state.value = FilmReviewState.Error(
+                _state.value = FilmOverviewState.Error(
                     message = e.message
                 )
             } catch (e: IOException) {
-                _state.value = FilmReviewState.Error(
+                _state.value = FilmOverviewState.Error(
                     message = e.message
                 )
             }
@@ -73,7 +73,7 @@ class FilmReviewViewModel @Inject constructor(
         viewModelScope.launch {
             repository.updateDatabaseFlow.collect {
                 val filmListState = _state.value
-                if (filmListState is FilmReviewState.Success) {
+                if (filmListState is FilmOverviewState.Success) {
                     _state.value = fillFilmAccessory(filmListState.data)
                 }
             }
@@ -92,10 +92,10 @@ class FilmReviewViewModel @Inject constructor(
         }
     }
 
-    private fun fillFilmAccessory(film: Film): FilmReviewState.Success<Film>{
+    private fun fillFilmAccessory(film: Film): FilmOverviewState.Success<Film>{
         val changedFilm = film.copy(
             isInDatabase = repository.filmListDatabase.any { it.id == film.id }
         )
-        return FilmReviewState.Success(changedFilm)
+        return FilmOverviewState.Success(changedFilm)
     }
 }

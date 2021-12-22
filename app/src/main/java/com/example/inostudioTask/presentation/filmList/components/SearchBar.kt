@@ -29,7 +29,7 @@ fun SearchBar(
             modifier = Modifier
                 .fillMaxWidth()
                 .background(MaterialTheme.colors.background)
-                .padding(horizontal = 10.dp),
+                .padding(4.dp),
             textStyle = TextStyle(color = MaterialTheme.colors.onSurface),
             singleLine = true,
             maxLines = 1
