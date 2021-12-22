@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.inostudioTask.common.Constants
 import com.example.inostudioTask.data.remote.dto.ReviewResponse
 import com.example.inostudioTask.domain.repository.FilmRepository
+import com.example.inostudioTask.presentation.common.ListState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
@@ -21,8 +22,8 @@ class FilmReviewListViewModel @Inject constructor(
 ): ViewModel() {
 
     private lateinit var movieId: String
-    private val _state = mutableStateOf<FilmReviewListState<ReviewResponse>>(FilmReviewListState.Loading)
-    val state: State<FilmReviewListState<ReviewResponse>> = _state
+    private val _state = mutableStateOf<ListState<ReviewResponse>>(ListState.Loading)
+    val state: State<ListState<ReviewResponse>> = _state
 
     init {
         savedStateHandle.get<String>("movie_id")?.let {
@@ -38,18 +39,18 @@ class FilmReviewListViewModel @Inject constructor(
     private fun searchReviews(page: Int) {
         viewModelScope.launch {
             try {
-                _state.value = FilmReviewListState.Loading
+                _state.value = ListState.Loading
                 val data = repository.getReviewList(
                     apiKey = Constants.API_KEY,
                     id = movieId,
                     page = page,
                     language = Constants.LANGUAGE
                 )
-                _state.value = FilmReviewListState.Success(data)
+                _state.value = ListState.Success(data)
             } catch (e: HttpException) {
-                _state.value = FilmReviewListState.Error(e.message?: "")
+                _state.value = ListState.Error(e.message?: "")
             } catch (e: IOException) {
-                _state.value = FilmReviewListState.Error(e.message?: "")
+                _state.value = ListState.Error(e.message?: "")
             }
         }
     }

@@ -10,7 +10,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ExpandLess
 import androidx.compose.material.icons.rounded.ExpandMore
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -21,6 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.inostudioTask.R
 import com.example.inostudioTask.data.remote.dto.ReviewResponse
+import com.example.inostudioTask.presentation.common.ListState
 import com.example.inostudioTask.presentation.common.components.ErrorScreen
 
 @Composable
@@ -34,17 +34,20 @@ fun FilmReviewListScreen(
             .fillMaxSize()
     ) {
         when (uiState) {
-            is FilmReviewListState.Loading -> {
+            is ListState.Loading -> {
                 CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
             }
-            is FilmReviewListState.Error -> {
+            is ListState.Error -> {
                 ErrorScreen(
                     onButtonClick = { viewModel.refresh() },
                     text = uiState.message
                 )
             }
-            is FilmReviewListState.Success -> {
+            is ListState.Success -> {
                 SuccessScreen(data = uiState.data)
+            }
+            is ListState.Empty -> {
+
             }
         }
     }

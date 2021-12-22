@@ -7,6 +7,7 @@ import com.example.inostudioTask.common.Constants
 import com.example.inostudioTask.data.remote.dto.Film
 import com.example.inostudioTask.data.remote.dto.toFilmEntity
 import com.example.inostudioTask.domain.repository.FilmRepository
+import com.example.inostudioTask.presentation.common.ListState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -21,10 +22,10 @@ class FilmListViewModel @Inject constructor(
     private val repository: FilmRepository,
 ) : ViewModel() {
 
-    private val _state = mutableStateOf<FilmListState<Film>>(FilmListState.Empty)
+    private val _state = mutableStateOf<ListState<Film>>(ListState.Empty)
     private var coroutineJob: Job = Job()
 
-    val uiState: State<FilmListState<Film>> = _state
+    val uiState: State<ListState<Film>> = _state
     val searchTextState = mutableStateOf("")
     val progressBarState = mutableStateOf(true)
     val errorMessage = MutableSharedFlow<String>()
@@ -59,7 +60,7 @@ class FilmListViewModel @Inject constructor(
         viewModelScope.launch {
             repository.updateDatabaseFlow.collect {
                 val filmListState = _state.value
-                if (filmListState is FilmListState.Success) {
+                if (filmListState is ListState.Success) {
                     _state.value = fillFilmsAccessory(filmListState.data)
                 }
             }
@@ -87,10 +88,8 @@ class FilmListViewModel @Inject constructor(
     }
 
     private suspend fun errorHandler(e: Exception) {
-        if (_state.value !is FilmListState.Success) {
-            _state.value = FilmListState.Error(
-                message = e.message
-            )
+        if (_state.value !is ListState.Success) {
+            _state.value = ListState.Error(message = e.message?: "")
         } else {
             errorMessage.emit(e.message?: "")
         }
@@ -108,7 +107,7 @@ class FilmListViewModel @Inject constructor(
                     language = Constants.LANGUAGE
                 )
                 if (data.isEmpty()) {
-                    _state.value = FilmListState.Empty
+                    _state.value = ListState.Empty
                 } else {
                     _state.value = fillFilmsAccessory(data)
                 }
@@ -133,12 +132,12 @@ class FilmListViewModel @Inject constructor(
         }
     }
 
-    private fun fillFilmsAccessory(filmList: List<Film>): FilmListState.Success<Film>{
+    private fun fillFilmsAccessory(filmList: List<Film>): ListState.Success<Film>{
         val changedFilmList = filmList.toMutableList().apply {
             replaceAll { film ->
                 film.copy(isInDatabase = repository.filmListDatabase.any { it.id == film.id })
             }
         }
-        return FilmListState.Success(changedFilmList)
+        return ListState.Success(changedFilmList)
     }
 }

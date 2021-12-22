@@ -13,6 +13,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.inostudioTask.R
 import com.example.inostudioTask.data.remote.dto.Film
+import com.example.inostudioTask.presentation.common.ListState
 import com.example.inostudioTask.presentation.common.Screen
 import com.example.inostudioTask.presentation.common.components.ErrorScreen
 import com.example.inostudioTask.presentation.filmList.components.*
@@ -44,28 +45,31 @@ fun FilmListScreen(
             }
         )
 
+        if (viewModel.progressBarState.value) {
+            FilmListLoadingScreen()
+        }
+
         when (uiState) {
-            is FilmListState.Success -> {
+            is ListState.Success -> {
                 FilmListSuccessScreen(
                     filmList = uiState.data,
                     navigate = {
                         navController.navigate("${Screen.FilmReviewScreen.route}/${it}")
                     },
-                    addFavorite = { viewModel.addFavorite(it) },
-                    progressBarState = viewModel.progressBarState.value
+                    addFavorite = { viewModel.addFavorite(it) }
                 )
             }
-            is FilmListState.Error -> {
+            is ListState.Error -> {
                 ErrorScreen(
                     onButtonClick = { viewModel.searchFilms() },
                     text = uiState.message ?: ""
                 )
             }
-            is FilmListState.Empty -> {
-                FilmListEmptyScreen(
-                    searchText = searchText,
-                    progressBarState = viewModel.progressBarState.value
-                )
+            is ListState.Empty -> {
+                FilmListEmptyScreen(searchText = searchText)
+            }
+            is ListState.Loading -> {
+
             }
         }
     }
@@ -73,13 +77,8 @@ fun FilmListScreen(
 
 @Composable
 fun FilmListEmptyScreen(
-    searchText: String,
-    progressBarState: Boolean
+    searchText: String
 ) {
-    if (progressBarState) {
-        FilmListLoadingScreen()
-    }
-
     Row(
         modifier = Modifier.fillMaxSize(),
         horizontalArrangement = Arrangement.Center,
@@ -106,13 +105,8 @@ fun FilmListLoadingScreen() {
 fun FilmListSuccessScreen(
     filmList: List<Film>,
     navigate: (Int) -> Unit,
-    addFavorite: (Film) -> Unit,
-    progressBarState: Boolean
+    addFavorite: (Film) -> Unit
 ) {
-    if (progressBarState) {
-        FilmListLoadingScreen()
-    }
-
     LazyColumn(
         modifier = Modifier
             .fillMaxSize(),
