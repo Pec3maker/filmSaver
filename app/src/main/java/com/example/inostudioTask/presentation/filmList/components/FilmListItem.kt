@@ -78,18 +78,18 @@ fun FilmListItem(
                             .fillMaxWidth(0.7f)
                     )
 
-                    Icon(
-                        imageVector =
-                        if (film.isInDatabase!!) {
-                            Icons.Filled.Favorite
-                        } else {
-                            Icons.Filled.FavoriteBorder
-                        },
-                        contentDescription = null,
-                        modifier = Modifier
-                            .clickable { onFavoriteClick(film) }
-                            .size(30.dp)
-                    )
+                    IconButton(onClick = { onFavoriteClick(film) }) {
+                        Icon(
+                            imageVector =
+                            if (film.isInDatabase!!) {
+                                Icons.Filled.Favorite
+                            } else {
+                                Icons.Filled.FavoriteBorder
+                            },
+                            contentDescription = null,
+                            modifier = Modifier.size(30.dp)
+                        )
+                    }
                 }
 
                 Text(
