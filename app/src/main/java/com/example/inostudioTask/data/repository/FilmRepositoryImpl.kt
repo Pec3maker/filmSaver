@@ -79,6 +79,20 @@ class FilmRepositoryImpl @Inject constructor(
         ).results
     }
 
+    override suspend fun getReviewList(
+        apiKey: String,
+        id: String,
+        page: Int,
+        language: String
+    ): List<ReviewResponse> {
+        return api.getReviewList(
+            apiKey = apiKey,
+            filmId = id,
+            page = page,
+            language = language
+        ).results
+    }
+
     override suspend fun insertFilmDatabase(film: FilmEntity) {
         dao.insertFilm(film = film)
     }

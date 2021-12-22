@@ -29,6 +29,13 @@ interface FilmRepository {
         language: String
     ): List<Film>
 
+    suspend fun getReviewList(
+        apiKey: String,
+        id: String,
+        page: Int,
+        language: String
+    ): List<ReviewResponse>
+
     suspend fun insertFilmDatabase(film: FilmEntity)
 
     suspend fun deleteFilmDatabase(film: FilmEntity)

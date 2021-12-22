@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.sp
 import coil.compose.rememberImagePainter
 import com.example.inostudioTask.common.Constants
 import com.example.inostudioTask.data.remote.dto.Film
-import com.example.inostudioTask.presentation.common.ExtraInfo
+import com.example.inostudioTask.presentation.common.components.ExtraInfo
 
 @Composable
 fun FilmListItem(

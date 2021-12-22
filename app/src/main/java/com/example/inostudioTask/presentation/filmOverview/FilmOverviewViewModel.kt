@@ -19,7 +19,7 @@ import javax.inject.Inject
 @HiltViewModel
 class FilmOverviewViewModel @Inject constructor(
     private val repository: FilmRepository,
-    savedStateHandle: SavedStateHandle,
+    savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
     private val _state = mutableStateOf<FilmOverviewState<Film>>(FilmOverviewState.Loading)

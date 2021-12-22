@@ -29,4 +29,12 @@ interface FilmApi {
         @Query("language") language: String,
         @Query("append_to_response") additionalInfo: String
     ): Film
+
+    @GET("/3/movie/{movie_id}/reviews")
+    suspend fun getReviewList(
+        @Path("movie_id") filmId: String,
+        @Query("api_key") apiKey: String,
+        @Query("language") language: String,
+        @Query("page") page: Int
+    ): ReviewList
 }

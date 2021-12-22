@@ -14,7 +14,7 @@ import androidx.navigation.NavController
 import com.example.inostudioTask.R
 import com.example.inostudioTask.data.remote.dto.Film
 import com.example.inostudioTask.presentation.common.Screen
-import com.example.inostudioTask.presentation.common.ErrorScreen
+import com.example.inostudioTask.presentation.common.components.ErrorScreen
 import com.example.inostudioTask.presentation.filmList.components.*
 import kotlinx.coroutines.flow.collect
 

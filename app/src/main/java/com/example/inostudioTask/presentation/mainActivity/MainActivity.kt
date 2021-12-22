@@ -79,8 +79,8 @@ fun MainScreen() {
             )
         },
         topBar = {
-            TopBar {
-                if (currentDestination?.route != Screen.FilmsListScreen.route) {
+            if (currentDestination?.route != Screen.FilmsListScreen.route) {
+                TopBar {
                     Icon(
                         Icons.Rounded.ArrowBackIos,
                         contentDescription = null,
@@ -140,7 +140,10 @@ fun MainScreen() {
                 }
 
                 composable(
-                    route = Screen.FilmReviewListScreen.route
+                    route = "${Screen.FilmReviewListScreen.route}/{movie_id}",
+                    arguments = listOf(
+                        navArgument("movie_id") { type = NavType.StringType },
+                    )
                 ) {
                     FilmReviewListScreen()
                 }
