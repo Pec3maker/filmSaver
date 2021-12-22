@@ -79,8 +79,8 @@ fun MainScreen() {
             )
         },
         topBar = {
-            if (currentDestination?.route != Screen.FilmsListScreen.route) {
-                TopBar {
+            TopBar {
+                if (currentDestination?.route != Screen.FilmsListScreen.route) {
                     Icon(
                         Icons.Rounded.ArrowBackIos,
                         contentDescription = null,
@@ -88,13 +88,7 @@ fun MainScreen() {
                             .padding(5.dp)
                             .fillMaxSize()
                             .clickable {
-                                navController.popBackStack(
-                                    destinationId = navController
-                                        .graph
-                                        .findStartDestination()
-                                        .id,
-                                    inclusive = false
-                                )
+                                navController.popBackStack()
                             }
                     )
                 }
