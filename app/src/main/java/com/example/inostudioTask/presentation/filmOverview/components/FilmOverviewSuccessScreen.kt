@@ -21,7 +21,7 @@ import androidx.compose.ui.unit.sp
 import coil.compose.rememberImagePainter
 import com.example.inostudioTask.R
 import com.example.inostudioTask.data.remote.dto.*
-import com.example.inostudioTask.presentation.common.ExtraInfo
+import com.example.inostudioTask.presentation.common.components.ExtraInfo
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 

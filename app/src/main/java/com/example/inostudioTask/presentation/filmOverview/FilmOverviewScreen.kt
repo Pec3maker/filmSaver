@@ -8,8 +8,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.example.inostudioTask.presentation.common.ReviewState
 import com.example.inostudioTask.presentation.common.Screen
-import com.example.inostudioTask.presentation.common.ErrorScreen
+import com.example.inostudioTask.presentation.common.components.ErrorScreen
 import com.example.inostudioTask.presentation.filmOverview.components.FilmOverviewSuccessScreen
 import com.google.accompanist.pager.ExperimentalPagerApi
 
@@ -27,17 +28,21 @@ fun FilmOverviewScreen(
             .fillMaxSize()
     ) {
         when(uiState) {
-            is FilmOverviewState.Success -> {
+            is ReviewState.Success -> {
                 FilmOverviewSuccessScreen(
                     film = uiState.data,
                     onFavoriteClick = { viewModel.addFavorite(it) },
-                    navigate = { navController.navigate(Screen.FilmReviewListScreen.route) }
+                    navigate = {
+                        navController.navigate(
+                            "${Screen.FilmReviewListScreen.route}/${uiState.data.id}"
+                        )
+                    }
                 )
             }
-            is FilmOverviewState.Loading -> {
+            is ReviewState.Loading -> {
                 CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
             }
-            is FilmOverviewState.Error -> {
+            is ReviewState.Error -> {
                 ErrorScreen(
                     text = uiState.message?: "",
                     onButtonClick = { viewModel.refresh() }

@@ -1,4 +1,4 @@
-package com.example.inostudioTask.presentation.common
+package com.example.inostudioTask.presentation.common.components
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button

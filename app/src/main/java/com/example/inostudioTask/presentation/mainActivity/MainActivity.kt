@@ -88,13 +88,7 @@ fun MainScreen() {
                             .padding(5.dp)
                             .fillMaxSize()
                             .clickable {
-                                navController.popBackStack(
-                                    destinationId = navController
-                                        .graph
-                                        .findStartDestination()
-                                        .id,
-                                    inclusive = false
-                                )
+                                navController.popBackStack()
                             }
                     )
                 }
@@ -140,7 +134,10 @@ fun MainScreen() {
                 }
 
                 composable(
-                    route = Screen.FilmReviewListScreen.route
+                    route = "${Screen.FilmReviewListScreen.route}/{movie_id}",
+                    arguments = listOf(
+                        navArgument("movie_id") { type = NavType.StringType },
+                    )
                 ) {
                     FilmReviewListScreen()
                 }
