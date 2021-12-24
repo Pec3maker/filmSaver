@@ -4,5 +4,5 @@ import com.squareup.moshi.Json
 
 data class ActorsList(
     @Json(name = "results")
-    val results: List<ActorResponse>,
+    val results: List<Actor>,
 )

@@ -1,4 +1,4 @@
-package com.example.inostudioTask.domain.model.dataBase
+package com.example.inostudioTask.data.dataSource.dto
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

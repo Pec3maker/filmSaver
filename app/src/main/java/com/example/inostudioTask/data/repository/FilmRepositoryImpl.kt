@@ -1,9 +1,10 @@
 package com.example.inostudioTask.data.repository
 
 import com.example.inostudioTask.data.dataSource.FilmDao
+import com.example.inostudioTask.data.dataSource.dto.ActorEntity
 import com.example.inostudioTask.data.remote.FilmApi
 import com.example.inostudioTask.data.remote.dto.*
-import com.example.inostudioTask.domain.model.dataBase.FilmEntity
+import com.example.inostudioTask.data.dataSource.dto.FilmEntity
 import com.example.inostudioTask.domain.repository.FilmRepository
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.BufferOverflow
@@ -19,6 +20,9 @@ class FilmRepositoryImpl @Inject constructor(
     private val coroutineContext: CoroutineContext = Dispatchers.IO + SupervisorJob()
     private val scope: CoroutineScope = CoroutineScope(coroutineContext)
 
+    override var filmListDatabase = emptyList<FilmEntity>()
+    override var actorListDatabase = emptyList<ActorEntity>()
+
     override val updateDatabaseFlow = MutableSharedFlow<Unit>(
         replay = 1,
         onBufferOverflow = BufferOverflow.DROP_OLDEST
@@ -31,12 +35,21 @@ class FilmRepositoryImpl @Inject constructor(
                 updateDatabaseFlow.emit(Unit)
             }
         }
-    }
 
-    override var filmListDatabase = emptyList<FilmEntity>()
+        scope.launch {
+            getActorsDatabase().collect { actors ->
+                actorListDatabase = actors
+                updateDatabaseFlow.emit(Unit)
+            }
+        }
+    }
 
     private fun getFilmsDatabase(): Flow<List<FilmEntity>> {
         return dao.getFilms()
+    }
+
+    private fun getActorsDatabase(): Flow<List<ActorEntity>> {
+        return dao.getActors()
     }
 
     override suspend fun getFilms(
@@ -97,7 +110,7 @@ class FilmRepositoryImpl @Inject constructor(
         apiKey: String,
         page: Int,
         language: String
-    ): List<ActorResponse> {
+    ): List<Actor> {
         return api.getPopularActors(
             apiKey = apiKey,
             page = page,
@@ -114,6 +127,18 @@ class FilmRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getFilmsByIdDatabase(id: Int): FilmEntity? {
-        return dao.getFilmsById(id)
+        return dao.getFilmsById(id = id)
+    }
+
+    override suspend fun insertActorDatabase(actor: ActorEntity) {
+        dao.insertActor(actor = actor)
+    }
+
+    override suspend fun deleteActorDatabase(actor: ActorEntity) {
+        dao.deleteActor(actor = actor)
+    }
+
+    override suspend fun getActorByIdDatabase(id: Int): ActorEntity? {
+        return dao.getActorById(id)
     }
 }
