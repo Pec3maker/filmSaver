@@ -93,6 +93,18 @@ class FilmRepositoryImpl @Inject constructor(
         ).results
     }
 
+    override suspend fun getActorsList(
+        apiKey: String,
+        page: Int,
+        language: String
+    ): List<ActorResponse> {
+        return api.getPopularActors(
+            apiKey = apiKey,
+            page = page,
+            language = language
+        ).results
+    }
+
     override suspend fun insertFilmDatabase(film: FilmEntity) {
         dao.insertFilm(film = film)
     }
