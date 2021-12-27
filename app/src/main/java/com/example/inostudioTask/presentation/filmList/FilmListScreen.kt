@@ -62,7 +62,7 @@ fun FilmListScreen(
             is ListState.Error -> {
                 ErrorScreen(
                     onButtonClick = { viewModel.searchFilms() },
-                    text = uiState.message ?: ""
+                    text = uiState.message
                 )
             }
             is ListState.Empty -> {

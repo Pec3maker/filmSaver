@@ -1,5 +1,6 @@
 package com.example.inostudioTask.data.repository
 
+import com.example.inostudioTask.data.dataSource.ActorDao
 import com.example.inostudioTask.data.dataSource.FilmDao
 import com.example.inostudioTask.data.dataSource.dto.ActorEntity
 import com.example.inostudioTask.data.remote.FilmApi
@@ -14,7 +15,8 @@ import kotlin.coroutines.CoroutineContext
 
 class FilmRepositoryImpl @Inject constructor(
     private val api: FilmApi,
-    private val dao: FilmDao
+    private val filmDao: FilmDao,
+    private val actorDao: ActorDao
 ) : FilmRepository {
 
     private val coroutineContext: CoroutineContext = Dispatchers.IO + SupervisorJob()
@@ -45,11 +47,11 @@ class FilmRepositoryImpl @Inject constructor(
     }
 
     private fun getFilmsDatabase(): Flow<List<FilmEntity>> {
-        return dao.getFilms()
+        return filmDao.getFilms()
     }
 
     private fun getActorsDatabase(): Flow<List<ActorEntity>> {
-        return dao.getActors()
+        return actorDao.getActors()
     }
 
     override suspend fun getFilms(
@@ -119,26 +121,26 @@ class FilmRepositoryImpl @Inject constructor(
     }
 
     override suspend fun insertFilmDatabase(film: FilmEntity) {
-        dao.insertFilm(film = film)
+        filmDao.insertFilm(film = film)
     }
 
     override suspend fun deleteFilmDatabase(film: FilmEntity) {
-        dao.deleteFilm(film = film)
+        filmDao.deleteFilm(film = film)
     }
 
     override suspend fun getFilmsByIdDatabase(id: Int): FilmEntity? {
-        return dao.getFilmsById(id = id)
+        return filmDao.getFilmsById(id = id)
     }
 
     override suspend fun insertActorDatabase(actor: ActorEntity) {
-        dao.insertActor(actor = actor)
+        actorDao.insertActor(actor = actor)
     }
 
     override suspend fun deleteActorDatabase(actor: ActorEntity) {
-        dao.deleteActor(actor = actor)
+        actorDao.deleteActor(actor = actor)
     }
 
     override suspend fun getActorByIdDatabase(id: Int): ActorEntity? {
-        return dao.getActorById(id)
+        return actorDao.getActorById(id)
     }
 }

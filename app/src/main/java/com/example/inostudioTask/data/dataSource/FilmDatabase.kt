@@ -9,7 +9,9 @@ import com.example.inostudioTask.data.dataSource.dto.FilmEntity
     entities = [FilmEntity::class, ActorEntity::class],
     version = 1
 )
+
 abstract class FilmDatabase: RoomDatabase() {
 
     abstract val filmDao: FilmDao
+    abstract val actorDao: ActorDao
 }

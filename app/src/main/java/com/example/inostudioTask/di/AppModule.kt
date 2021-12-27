@@ -45,5 +45,9 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideDao(db: FilmDatabase) = db.filmDao
+    fun provideFilmDao(db: FilmDatabase) = db.filmDao
+
+    @Provides
+    @Singleton
+    fun provideActorDao(db: FilmDatabase) = db.actorDao
 }
