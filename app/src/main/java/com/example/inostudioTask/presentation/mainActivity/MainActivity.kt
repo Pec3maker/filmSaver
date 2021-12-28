@@ -14,6 +14,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavType
@@ -23,6 +24,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.inostudioTask.R
+import com.example.inostudioTask.presentation.actorReview.ActorReviewScreen
 import com.example.inostudioTask.presentation.common.Screen
 import com.example.inostudioTask.presentation.castList.CastListScreen
 import com.example.inostudioTask.presentation.favoriteFilmList.FavoriteFilmListScreen
@@ -62,13 +64,8 @@ fun MainScreen() {
             BottomNavigationBar(
                 navigate = { route ->
                     navController.navigate(route) {
-                        popUpTo(
-                            navController.graph.findStartDestination().id
-                        ) {
-                            saveState = true
-                        }
+                        popUpTo(navController.graph.findStartDestination().id)
                         launchSingleTop = true
-                        restoreState = true
                     }
                 },
                 isSelected = { route ->
@@ -124,7 +121,7 @@ fun MainScreen() {
                 composable(
                     route = Screen.CastListScreen.route
                 ) {
-                    CastListScreen()
+                    CastListScreen(navController = navController)
                 }
 
                 composable(
@@ -140,6 +137,12 @@ fun MainScreen() {
                     )
                 ) {
                     FilmReviewListScreen()
+                }
+
+                composable(
+                    route = Screen.ActorReviewScreen.route,
+                ) {
+                    ActorReviewScreen()
                 }
             }
         }

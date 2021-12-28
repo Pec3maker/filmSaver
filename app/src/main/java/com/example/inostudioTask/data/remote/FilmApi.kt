@@ -37,4 +37,11 @@ interface FilmApi {
         @Query("language") language: String,
         @Query("page") page: Int
     ): ReviewList
+
+    @GET("/3/person/popular")
+    suspend fun getPopularActors(
+        @Query("api_key") apiKey: String,
+        @Query("language") language: String,
+        @Query("page") page: Int
+    ): ActorsList
 }

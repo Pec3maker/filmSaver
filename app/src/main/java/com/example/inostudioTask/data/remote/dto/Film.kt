@@ -1,7 +1,7 @@
 package com.example.inostudioTask.data.remote.dto
 
 import com.example.inostudioTask.common.Constants
-import com.example.inostudioTask.domain.model.dataBase.FilmEntity
+import com.example.inostudioTask.data.dataSource.dto.FilmEntity
 import com.squareup.moshi.Json
 
 data class Film(

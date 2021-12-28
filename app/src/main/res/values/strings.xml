@@ -14,4 +14,5 @@
     <string name="delete_favorite">dislike</string>
     <string name="add_favorite">like</string>
     <string name="author">Author: %1$s</string>
+    <string name="popularity">Popularity: %1$s</string>
 </resources>
