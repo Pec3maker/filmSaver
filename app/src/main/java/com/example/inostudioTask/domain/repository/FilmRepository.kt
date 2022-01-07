@@ -44,6 +44,13 @@ interface FilmRepository {
         language: String
     ): List<Actor>
 
+    suspend fun getActorDetails(
+        apiKey: String,
+        personId: String,
+        language: String,
+        additionalInfo: String
+    ): Actor
+
     suspend fun insertFilmDatabase(film: FilmEntity)
 
     suspend fun deleteFilmDatabase(film: FilmEntity)

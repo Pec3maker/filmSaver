@@ -55,7 +55,7 @@ class FilmOverviewViewModel @Inject constructor(
                     apiKey = Constants.API_KEY,
                     id = movieId,
                     language = Constants.LANGUAGE,
-                    additionalInfo = Constants.ADDITIONAL_INFO
+                    additionalInfo = Constants.FILM_ADDITIONAL_INFO
                 )
                 _state.value = fillFilmAccessory(film)
             } catch (e: HttpException) {

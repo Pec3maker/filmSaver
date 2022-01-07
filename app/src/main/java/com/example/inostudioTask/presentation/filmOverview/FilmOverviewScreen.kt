@@ -23,10 +23,7 @@ fun FilmOverviewScreen(
 ) {
     val uiState = viewModel.state.value
 
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-    ) {
+    Box(modifier = Modifier.fillMaxSize()) {
         when(uiState) {
             is ReviewState.Success -> {
                 FilmOverviewSuccessScreen(

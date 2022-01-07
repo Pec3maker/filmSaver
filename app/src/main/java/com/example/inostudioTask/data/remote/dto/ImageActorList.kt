@@ -1,3 +1,8 @@
 package com.example.inostudioTask.data.remote.dto
 
-data class ImageActorList()
+import com.squareup.moshi.Json
+
+data class ImageActorList(
+    @Json(name = "profiles")
+    val images: List<ImageResponse>
+)
