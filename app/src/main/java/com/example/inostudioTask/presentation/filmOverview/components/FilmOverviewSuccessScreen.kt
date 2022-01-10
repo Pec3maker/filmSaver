@@ -22,7 +22,7 @@ import coil.compose.rememberImagePainter
 import com.example.inostudioTask.R
 import com.example.inostudioTask.data.remote.dto.*
 import com.example.inostudioTask.presentation.common.components.ExtraInfo
-import com.example.inostudioTask.presentation.common.components.getLikedItemText
+import com.example.inostudioTask.presentation.common.components.LikedItemText
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 
@@ -46,23 +46,23 @@ fun FilmOverviewSuccessScreen(
 
         FilmPoster(film)
 
-        Spacer(modifier = Modifier.padding(2.dp))
+        Spacer(modifier = Modifier.height(2.dp))
 
         FilmInfo(film)
 
-        Spacer(modifier = Modifier.padding(2.dp))
+        Spacer(modifier = Modifier.height(2.dp))
 
         FilmImages(film)
 
-        Spacer(modifier = Modifier.padding(2.dp))
+        Spacer(modifier = Modifier.height(2.dp))
 
         Actors(film) { onActorClick(it) }
 
-        Spacer(modifier = Modifier.padding(2.dp))
+        Spacer(modifier = Modifier.height(2.dp))
 
         Review(film)
 
-        Spacer(modifier = Modifier.padding(2.dp))
+        Spacer(modifier = Modifier.height(2.dp))
 
         Buttons(
             onFavoriteClick = { onFavoriteClick(film) },
@@ -93,10 +93,7 @@ private fun Buttons(
                 backgroundColor = MaterialTheme.colors.background
             )
         ) {
-            Text(
-                text = stringResource(id = getLikedItemText(film.isInDatabase!!)),
-                color = MaterialTheme.colors.onSurface
-            )
+            LikedItemText(isInDatabase = film.isInDatabase!!)
         }
 
         if (film.videos?.results?.isEmpty() == false) {
@@ -219,7 +216,7 @@ private fun Actors(
             ) {
                 film.credits?.cast?.let { actorList ->
                     items(actorList.count()) { index ->
-                        ActorItem( actor = actorList[index] ) { onActorClick(it) }
+                        ActorItem(actor = actorList[index]) { onActorClick(it) }
                         Spacer(modifier = Modifier.padding(5.dp))
                     }
                 }

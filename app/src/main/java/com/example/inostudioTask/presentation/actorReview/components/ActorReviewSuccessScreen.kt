@@ -1,6 +1,5 @@
 package com.example.inostudioTask.presentation.actorReview.components
 
-import android.util.Log
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
@@ -16,7 +15,7 @@ import androidx.compose.ui.unit.sp
 import coil.compose.rememberImagePainter
 import com.example.inostudioTask.R
 import com.example.inostudioTask.data.remote.dto.*
-import com.example.inostudioTask.presentation.common.components.getLikedItemText
+import com.example.inostudioTask.presentation.common.components.LikedItemText
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 
@@ -58,10 +57,7 @@ fun ActorReviewSuccessScreen(
                 backgroundColor = MaterialTheme.colors.background
             )
         ) {
-            Text(
-                text = stringResource(id = getLikedItemText(actor.isInDatabase!!)),
-                color = MaterialTheme.colors.onSurface
-            )
+            LikedItemText(isInDatabase = actor.isInDatabase!!)
         }
     }
 }
@@ -180,7 +176,7 @@ private fun ActorPhotos(actor: Actor) {
                         shape = MaterialTheme.shapes.small
                     ) {
                         Image(
-                            painter = rememberImagePainter(actor.getImageUrl(page)),
+                            painter = rememberImagePainter(actor.imageList.url(page)),
                             contentDescription = null,
                             alignment = Alignment.Center,
                             contentScale = ContentScale.FillWidth
@@ -233,7 +229,7 @@ private fun ProfileImage(actor: Actor) {
         border = BorderStroke(width = 1.dp, color = MaterialTheme.colors.onSurface)
     ) {
         Image(
-            painter = rememberImagePainter(actor.getProfilePathUrl()),
+            painter = rememberImagePainter(actor.profilePathUrl()),
             contentDescription = null,
             modifier = Modifier
                 .fillMaxSize(),
