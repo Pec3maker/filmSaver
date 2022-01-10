@@ -1,5 +1,6 @@
 package com.example.inostudioTask.presentation.actorReview.components
 
+import android.util.Log
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
@@ -178,6 +179,7 @@ private fun ActorPhotos(actor: Actor) {
                         elevation = 3.dp,
                         shape = MaterialTheme.shapes.small
                     ) {
+                        Log.d("a", actor.getImageUrl(page)?: "")
                         Image(
                             painter = rememberImagePainter(actor.getImageUrl(page)),
                             contentDescription = null,
