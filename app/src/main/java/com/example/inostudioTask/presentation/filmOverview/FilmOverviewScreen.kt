@@ -23,19 +23,23 @@ fun FilmOverviewScreen(
 ) {
     val uiState = viewModel.state.value
 
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-    ) {
+    Box(modifier = Modifier.fillMaxSize()) {
         when(uiState) {
             is ReviewState.Success -> {
                 FilmOverviewSuccessScreen(
                     film = uiState.data,
                     onFavoriteClick = { viewModel.addFavorite(it) },
-                    navigate = {
+                    onReviewClick = {
                         navController.navigate(
                             "${Screen.FilmReviewListScreen.route}/${uiState.data.id}"
                         )
+                    },
+                    onActorClick = {
+                        navController.navigate(
+                            "${Screen.ActorReviewScreen.route}/$it"
+                        ) {
+                            launchSingleTop = true
+                        }
                     }
                 )
             }

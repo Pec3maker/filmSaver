@@ -44,4 +44,12 @@ interface FilmApi {
         @Query("language") language: String,
         @Query("page") page: Int
     ): ActorsList
+
+    @GET("/3/person/{person_id}")
+    suspend fun getActorDetails(
+        @Path("person_id") personId: String,
+        @Query("api_key") apiKey: String,
+        @Query("language") language: String,
+        @Query("append_to_response") additionalInfo: String
+    ): Actor
 }

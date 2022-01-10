@@ -19,7 +19,7 @@ data class Film(
     @Json(name = "vote_average")
     val voteAverage: Double,
     val credits: CreditList? = null,
-    val images: ImageList? = null,
+    val images: ImageFilmList? = null,
     val reviews: ReviewList? = null,
     val videos: VideoList? = null,
     var isInDatabase: Boolean? = null,

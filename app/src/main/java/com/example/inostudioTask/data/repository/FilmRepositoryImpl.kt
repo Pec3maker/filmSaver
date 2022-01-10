@@ -120,6 +120,20 @@ class FilmRepositoryImpl @Inject constructor(
         ).results
     }
 
+    override suspend fun getActorDetails(
+        apiKey: String,
+        personId: String,
+        language: String,
+        additionalInfo: String
+    ): Actor {
+        return api.getActorDetails(
+            apiKey = apiKey,
+            personId = personId,
+            language = language,
+            additionalInfo = additionalInfo
+        )
+    }
+
     override suspend fun insertFilmDatabase(film: FilmEntity) {
         filmDao.insertFilm(film = film)
     }

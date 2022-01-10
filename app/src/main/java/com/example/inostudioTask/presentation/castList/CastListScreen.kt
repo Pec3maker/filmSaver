@@ -48,7 +48,9 @@ fun CastListScreen(
             is ListState.Success -> {
                 SuccessScreen(
                     actorList = uiState.data,
-                    navigate = { navController.navigate(Screen.ActorReviewScreen.route) },
+                    navigate = {
+                        navController.navigate("${Screen.ActorReviewScreen.route}/$it")
+                    },
                     addFavorite = { viewModel.addFavorite(it) }
                 )
             }
@@ -60,7 +62,7 @@ fun CastListScreen(
 @Composable
 fun SuccessScreen(
     actorList: List<Actor>,
-    navigate: () -> Unit,
+    navigate: (Int) -> Unit,
     addFavorite: (Actor) -> Unit
 ) {
     LazyColumn(
@@ -70,7 +72,7 @@ fun SuccessScreen(
         items(actorList) { actor ->
             ActorItem(
                 actor = actor,
-                onItemClick = { navigate() },
+                onItemClick = { navigate(actor.id) },
                 onFavoriteClick = { addFavorite(it)})
         }
     }

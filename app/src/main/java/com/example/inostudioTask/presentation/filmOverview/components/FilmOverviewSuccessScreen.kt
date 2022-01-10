@@ -22,6 +22,7 @@ import coil.compose.rememberImagePainter
 import com.example.inostudioTask.R
 import com.example.inostudioTask.data.remote.dto.*
 import com.example.inostudioTask.presentation.common.components.ExtraInfo
+import com.example.inostudioTask.presentation.common.components.LikeButton
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 
@@ -31,7 +32,8 @@ import com.google.accompanist.pager.HorizontalPager
 fun FilmOverviewSuccessScreen(
     film: Film,
     onFavoriteClick: (Film) -> Unit,
-    navigate: () -> Unit
+    onReviewClick: () -> Unit,
+    onActorClick: (Int) -> Unit
 ) {
     val scrollState = rememberScrollState()
     Column(
@@ -42,29 +44,29 @@ fun FilmOverviewSuccessScreen(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
-        Poster(film)
+        FilmPoster(film)
 
-        Spacer(modifier = Modifier.padding(2.dp))
+        Spacer(modifier = Modifier.height(2.dp))
 
         FilmInfo(film)
 
-        Spacer(modifier = Modifier.padding(2.dp))
+        Spacer(modifier = Modifier.height(2.dp))
 
-        Pager(film)
+        FilmImages(film)
 
-        Spacer(modifier = Modifier.padding(2.dp))
+        Spacer(modifier = Modifier.height(2.dp))
 
-        Actors(film)
+        Actors(film) { onActorClick(it) }
 
-        Spacer(modifier = Modifier.padding(2.dp))
+        Spacer(modifier = Modifier.height(2.dp))
 
         Review(film)
 
-        Spacer(modifier = Modifier.padding(2.dp))
+        Spacer(modifier = Modifier.height(2.dp))
 
         Buttons(
             onFavoriteClick = { onFavoriteClick(film) },
-            onReviewClick = { navigate() },
+            onReviewClick = { onReviewClick() },
             film = film
         )
 
@@ -85,22 +87,7 @@ private fun Buttons(
         Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceEvenly
     ) {
-        Button(
-            onClick = { onFavoriteClick() },
-            colors = ButtonDefaults.buttonColors(
-                backgroundColor = MaterialTheme.colors.background
-            )
-        ) {
-            Text(
-                text =
-                if (film.isInDatabase!!) {
-                    stringResource(R.string.delete_favorite)
-                } else {
-                    stringResource(R.string.add_favorite)
-                },
-                color = MaterialTheme.colors.onSurface
-            )
-        }
+        LikeButton(isInDatabase = film.isInDatabase!!) { onFavoriteClick() }
 
         if (film.videos?.results?.isEmpty() == false) {
             Button(
@@ -191,7 +178,10 @@ private fun Review(
 }
 
 @Composable
-private fun Actors(film: Film) {
+private fun Actors(
+    film: Film,
+    onActorClick: (Int) -> Unit
+) {
     Card(
         modifier = Modifier
             .padding(2.dp)
@@ -217,9 +207,9 @@ private fun Actors(film: Film) {
                     .fillMaxWidth(),
                 contentPadding = PaddingValues(5.dp)
             ) {
-                film.credits?.cast?.let {
-                    items(it.count()) { index ->
-                        ActorItem(actor = it[index])
+                film.credits?.cast?.let { actorList ->
+                    items(actorList.count()) { index ->
+                        ActorItem(actor = actorList[index]) { onActorClick(it) }
                         Spacer(modifier = Modifier.padding(5.dp))
                     }
                 }
@@ -230,7 +220,7 @@ private fun Actors(film: Film) {
 
 @ExperimentalPagerApi
 @Composable
-private fun Pager(film: Film) {
+private fun FilmImages(film: Film) {
     Card(
         modifier = Modifier
             .padding(2.dp)
@@ -307,7 +297,7 @@ private fun FilmInfo(film: Film) {
 }
 
 @Composable
-private fun Poster(film: Film) {
+private fun FilmPoster(film: Film) {
     Card(
         modifier = Modifier
             .height(400.dp)

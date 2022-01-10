@@ -140,9 +140,12 @@ fun MainScreen() {
                 }
 
                 composable(
-                    route = Screen.ActorReviewScreen.route,
+                    route = "${Screen.ActorReviewScreen.route}/{actor_id}",
+                    arguments = listOf(
+                        navArgument("actor_id") { type = NavType.StringType },
+                    )
                 ) {
-                    ActorReviewScreen()
+                    ActorReviewScreen(navController = navController)
                 }
             }
         }
