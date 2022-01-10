@@ -15,7 +15,7 @@ import androidx.compose.ui.unit.sp
 import coil.compose.rememberImagePainter
 import com.example.inostudioTask.R
 import com.example.inostudioTask.data.remote.dto.*
-import com.example.inostudioTask.presentation.common.components.LikedItemText
+import com.example.inostudioTask.presentation.common.components.LikeButton
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 
@@ -23,7 +23,7 @@ import com.google.accompanist.pager.HorizontalPager
 @Composable
 fun ActorReviewSuccessScreen(
     actor: Actor,
-    onFavoriteClick: (Actor) -> Unit,
+    onFavoriteClick: () -> Unit,
     onFilmClick: (Int) -> Unit
 ) {
     val scrollState = rememberScrollState()
@@ -51,13 +51,8 @@ fun ActorReviewSuccessScreen(
 
         Spacer(modifier = Modifier.height(2.dp))
 
-        Button(
-            onClick = { onFavoriteClick(actor) },
-            colors = ButtonDefaults.buttonColors(
-                backgroundColor = MaterialTheme.colors.background
-            )
-        ) {
-            LikedItemText(isInDatabase = actor.isInDatabase!!)
+        LikeButton(isInDatabase = actor.isInDatabase!!) {
+            onFavoriteClick()
         }
     }
 }

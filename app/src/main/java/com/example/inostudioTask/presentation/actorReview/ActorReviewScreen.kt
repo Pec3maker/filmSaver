@@ -32,7 +32,7 @@ fun ActorReviewScreen(
             is ReviewState.Success -> {
                 ActorReviewSuccessScreen(
                     actor = uiState.data,
-                    onFavoriteClick = { viewModel.addFavorite(it) },
+                    onFavoriteClick = { viewModel.addFavorite(actor = uiState.data) },
                     onFilmClick = {
                         navController.navigate(
                             "${Screen.FilmReviewScreen.route}/$it",

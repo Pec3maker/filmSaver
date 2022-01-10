@@ -22,7 +22,7 @@ import coil.compose.rememberImagePainter
 import com.example.inostudioTask.R
 import com.example.inostudioTask.data.remote.dto.*
 import com.example.inostudioTask.presentation.common.components.ExtraInfo
-import com.example.inostudioTask.presentation.common.components.LikedItemText
+import com.example.inostudioTask.presentation.common.components.LikeButton
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 
@@ -87,14 +87,7 @@ private fun Buttons(
         Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceEvenly
     ) {
-        Button(
-            onClick = { onFavoriteClick() },
-            colors = ButtonDefaults.buttonColors(
-                backgroundColor = MaterialTheme.colors.background
-            )
-        ) {
-            LikedItemText(isInDatabase = film.isInDatabase!!)
-        }
+        LikeButton(isInDatabase = film.isInDatabase!!) { onFavoriteClick() }
 
         if (film.videos?.results?.isEmpty() == false) {
             Button(
