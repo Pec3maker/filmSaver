@@ -1,6 +1,7 @@
 package com.example.inostudioTask.presentation.filmOverview.components
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
@@ -16,10 +17,15 @@ import com.example.inostudioTask.data.remote.dto.CastResponse
 import com.example.inostudioTask.data.remote.dto.profileUrl
 
 @Composable
-fun ActorItem(actor: CastResponse) {
+fun ActorItem(
+    actor: CastResponse,
+    onActorClick: (Int) -> Unit
+) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
+            .clickable { onActorClick(actor.id) }
     ) {
         Card(
             modifier = Modifier

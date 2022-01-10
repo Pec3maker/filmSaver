@@ -1,11 +1,8 @@
 package com.example.inostudioTask.presentation.actorReview.components
 
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Image
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -18,14 +15,16 @@ import androidx.compose.ui.unit.sp
 import coil.compose.rememberImagePainter
 import com.example.inostudioTask.R
 import com.example.inostudioTask.data.remote.dto.*
+import com.example.inostudioTask.presentation.common.components.getLikedItemText
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 
 @ExperimentalPagerApi
 @Composable
-fun SuccessScreen(
+fun ActorReviewSuccessScreen(
     actor: Actor,
-    onFavoriteClick: (Actor) -> Unit
+    onFavoriteClick: (Actor) -> Unit,
+    onFilmClick: (Int) -> Unit
 ) {
     val scrollState = rememberScrollState()
     Column(
@@ -36,21 +35,21 @@ fun SuccessScreen(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
-        Poster(actor)
+        ProfileImage(actor)
 
-        Spacer(modifier = Modifier.padding(2.dp))
+        Spacer(modifier = Modifier.height(2.dp))
 
-        ActorInfo(actor)
+        ActorInformation(actor)
 
-        Spacer(modifier = Modifier.padding(2.dp))
+        Spacer(modifier = Modifier.height(2.dp))
 
-        Pager(actor)
+        ActorPhotos(actor)
 
-        Spacer(modifier = Modifier.padding(2.dp))
+        Spacer(modifier = Modifier.height(2.dp))
 
-        Movies(actor)
+        StaredMovies(actor) { onFilmClick(it) }
 
-        Spacer(modifier = Modifier.padding(2.dp))
+        Spacer(modifier = Modifier.height(2.dp))
 
         Button(
             onClick = { onFavoriteClick(actor) },
@@ -59,12 +58,7 @@ fun SuccessScreen(
             )
         ) {
             Text(
-                text =
-                if (actor.isInDatabase!!) {
-                    stringResource(R.string.delete_favorite)
-                } else {
-                    stringResource(R.string.add_favorite)
-                },
+                text = stringResource(id = getLikedItemText(actor.isInDatabase!!)),
                 color = MaterialTheme.colors.onSurface
             )
         }
@@ -72,7 +66,10 @@ fun SuccessScreen(
 }
 
 @Composable
-private fun Movies(actor: Actor) {
+private fun StaredMovies(
+    actor: Actor,
+    onFilmClick: (Int) -> Unit
+) {
     Card(
         modifier = Modifier
             .padding(2.dp)
@@ -100,7 +97,7 @@ private fun Movies(actor: Actor) {
             ) {
                 actor.movies?.results?.let {
                     items(it.count()) { index ->
-                        FilmItem(film = it[index])
+                        FilmItem(film = it[index]) { onFilmClick(it) }
                         Spacer(modifier = Modifier.padding(5.dp))
                     }
                 }
@@ -110,10 +107,15 @@ private fun Movies(actor: Actor) {
 }
 
 @Composable
-fun FilmItem(film: Film) {
+fun FilmItem(
+    film: Film,
+    onFilmClick: (Int) -> Unit
+) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
+            .clickable { onFilmClick(film.id) }
     ) {
         Card(
             modifier = Modifier
@@ -142,7 +144,7 @@ fun FilmItem(film: Film) {
 
 @ExperimentalPagerApi
 @Composable
-private fun Pager(actor: Actor) {
+private fun ActorPhotos(actor: Actor) {
     Card(
         modifier = Modifier
             .padding(2.dp)
@@ -177,7 +179,7 @@ private fun Pager(actor: Actor) {
                         shape = MaterialTheme.shapes.small
                     ) {
                         Image(
-                            painter = rememberImagePainter(actor.imageUrl(it[page].filePath)),
+                            painter = rememberImagePainter(actor.getImageUrl(page)),
                             contentDescription = null,
                             alignment = Alignment.Center,
                             contentScale = ContentScale.FillWidth
@@ -190,7 +192,7 @@ private fun Pager(actor: Actor) {
 }
 
 @Composable
-private fun ActorInfo(actor: Actor) {
+private fun ActorInformation(actor: Actor) {
     Card(
         modifier = Modifier.padding(2.dp),
         elevation = 4.dp,
@@ -219,8 +221,7 @@ private fun ActorInfo(actor: Actor) {
 }
 
 @Composable
-private fun Poster(actor: Actor) {
-
+private fun ProfileImage(actor: Actor) {
     Card(
         modifier = Modifier
             .height(400.dp)
@@ -231,7 +232,7 @@ private fun Poster(actor: Actor) {
         border = BorderStroke(width = 1.dp, color = MaterialTheme.colors.onSurface)
     ) {
         Image(
-            painter = rememberImagePainter(actor.imageUrl(actor.profilePath ?: "")),
+            painter = rememberImagePainter(actor.getProfilePathUrl()),
             contentDescription = null,
             modifier = Modifier
                 .fillMaxSize(),

@@ -31,6 +31,13 @@ fun Actor.toActorEntity(): ActorEntity {
     )
 }
 
-fun Actor.imageUrl(image: String): String {
-    return Constants.IMAGE_PATH.plus(image)
+fun Actor.getImageUrl(id: Int): String? {
+    if (imageList != null) {
+        return Constants.IMAGE_PATH.plus(imageList.images[id])
+    }
+    return null
+}
+
+fun Actor.getProfilePathUrl(): String {
+    return Constants.IMAGE_PATH.plus(profilePath)
 }

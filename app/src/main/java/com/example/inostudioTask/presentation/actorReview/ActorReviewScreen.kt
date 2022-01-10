@@ -7,15 +7,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.inostudioTask.presentation.actorReview.components.SuccessScreen
+import androidx.navigation.NavController
+import com.example.inostudioTask.presentation.actorReview.components.ActorReviewSuccessScreen
 import com.example.inostudioTask.presentation.common.ReviewState
+import com.example.inostudioTask.presentation.common.Screen
 import com.example.inostudioTask.presentation.common.components.ErrorScreen
 import com.google.accompanist.pager.ExperimentalPagerApi
 
 @ExperimentalPagerApi
 @Composable
 fun ActorReviewScreen(
-    viewModel: ActorReviewViewModel = hiltViewModel()
+    viewModel: ActorReviewViewModel = hiltViewModel(),
+    navController: NavController
 ) {
     val uiState = viewModel.state.value
 
@@ -27,9 +30,16 @@ fun ActorReviewScreen(
             }
 
             is ReviewState.Success -> {
-                SuccessScreen(
+                ActorReviewSuccessScreen(
                     actor = uiState.data,
-                    onFavoriteClick = { viewModel.addFavorite(it) }
+                    onFavoriteClick = { viewModel.addFavorite(it) },
+                    onFilmClick = {
+                        navController.navigate(
+                            "${Screen.FilmReviewScreen.route}/$it",
+                        ) {
+                            launchSingleTop = true
+                        }
+                    }
                 )
             }
 

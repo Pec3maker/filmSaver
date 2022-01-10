@@ -145,7 +145,7 @@ fun MainScreen() {
                         navArgument("actor_id") { type = NavType.StringType },
                     )
                 ) {
-                    ActorReviewScreen()
+                    ActorReviewScreen(navController = navController)
                 }
             }
         }

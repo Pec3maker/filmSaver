@@ -49,7 +49,7 @@ fun CastListScreen(
                 SuccessScreen(
                     actorList = uiState.data,
                     navigate = {
-                        navController.navigate("${Screen.ActorReviewScreen.route}/${it}")
+                        navController.navigate("${Screen.ActorReviewScreen.route}/$it")
                     },
                     addFavorite = { viewModel.addFavorite(it) }
                 )
