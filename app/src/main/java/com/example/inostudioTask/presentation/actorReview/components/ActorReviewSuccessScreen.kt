@@ -176,7 +176,7 @@ private fun ActorPhotos(actor: Actor) {
                         shape = MaterialTheme.shapes.small
                     ) {
                         Image(
-                            painter = rememberImagePainter(actor.imageList.url(page)),
+                            painter = rememberImagePainter(actor.imageList.images[page].url()),
                             contentDescription = null,
                             alignment = Alignment.Center,
                             contentScale = ContentScale.FillWidth
