@@ -23,7 +23,7 @@ import com.google.accompanist.pager.HorizontalPager
 @Composable
 fun ActorReviewSuccessScreen(
     actor: Actor,
-    onFavoriteClick: () -> Unit,
+    onFavoriteClick: (Actor) -> Unit,
     onFilmClick: (Int) -> Unit
 ) {
     val scrollState = rememberScrollState()
@@ -52,7 +52,7 @@ fun ActorReviewSuccessScreen(
         Spacer(modifier = Modifier.height(2.dp))
 
         LikeButton(isInDatabase = actor.isInDatabase!!) {
-            onFavoriteClick()
+            onFavoriteClick(actor)
         }
     }
 }
