@@ -19,4 +19,3 @@ fun LikedItemText(isInDatabase: Boolean) {
         color = MaterialTheme.colors.onSurface
     )
 }
-
