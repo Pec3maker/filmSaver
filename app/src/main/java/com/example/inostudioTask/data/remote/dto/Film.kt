@@ -6,7 +6,7 @@ import com.squareup.moshi.Json
 
 data class Film(
     @Json(name = "backdrop_path")
-    val backdropPath: String?,
+    val backdropPath: String? = null,
     val id: Int,
     @Json(name = "original_title")
     val originalTitle: String,

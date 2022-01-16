@@ -16,4 +16,5 @@
     <string name="author">Author: %1$s</string>
     <string name="popularity">Popularity: %1$s</string>
     <string name="films">Films</string>
+    <string name="not_found_favorites">No favorites found. Add some</string>
 </resources>
