@@ -4,24 +4,27 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Movie
-import androidx.compose.material.icons.filled.Person
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.example.inostudioTask.R
 import com.example.inostudioTask.presentation.favoriteList.actorList.ActorListScreen
+import com.example.inostudioTask.presentation.favoriteList.components.Tabs
 import com.example.inostudioTask.presentation.favoriteList.filmList.FilmListScreen
+import com.google.accompanist.pager.ExperimentalPagerApi
+import com.google.accompanist.pager.HorizontalPager
+import com.google.accompanist.pager.rememberPagerState
+import kotlinx.coroutines.launch
 
+@ExperimentalPagerApi
 @Composable
 fun FavoriteListScreen(
     navController: NavController,
-    viewModel: FavoriteListViewModel = hiltViewModel()
 ) {
+
+    val pagerState = rememberPagerState()
+    val scope = rememberCoroutineScope()
 
     val items = listOf(
         Tabs.FilmsScreen,
@@ -31,13 +34,17 @@ fun FavoriteListScreen(
     Box(Modifier.fillMaxSize()) {
         Column {
             TabRow(
-                selectedTabIndex = viewModel.tabRowState.value,
+                selectedTabIndex = pagerState.currentPage,
                 backgroundColor = MaterialTheme.colors.background
             ) {
                 items.forEachIndexed { index, tab ->
                     Tab(
-                        selected = viewModel.tabRowState.value == index,
-                        onClick = { viewModel.tabRowState.value = index },
+                        selected = pagerState.currentPage == index,
+                        onClick = {
+                            scope.launch {
+                                pagerState.animateScrollToPage(index)
+                            }
+                        },
                         icon = {
                             Icon(imageVector = tab.icon, contentDescription = null)
                         },
@@ -48,16 +55,16 @@ fun FavoriteListScreen(
                 }
             }
 
-            if (viewModel.tabRowState.value == items.indexOf(Tabs.FilmsScreen)) {
-                FilmListScreen(navController = navController)
-            } else {
-                ActorListScreen(navController = navController)
+            HorizontalPager(
+                count = items.size,
+                state = pagerState,
+            ) { page ->
+                if (page == items.indexOf(Tabs.FilmsScreen)) {
+                    FilmListScreen(navController = navController)
+                } else {
+                    ActorListScreen(navController = navController)
+                }
             }
         }
     }
-}
-
-sealed class Tabs(val text: Int, val icon: ImageVector) {
-    object FilmsScreen: Tabs(text = R.string.films, icon = Icons.Filled.Movie)
-    object ActorsScreen: Tabs(text = R.string.actors, icon = Icons.Filled.Person)
 }
