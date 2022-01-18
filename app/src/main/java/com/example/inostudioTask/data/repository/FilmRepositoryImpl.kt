@@ -8,7 +8,6 @@ import com.example.inostudioTask.data.remote.dto.*
 import com.example.inostudioTask.data.dataSource.dto.FilmEntity
 import com.example.inostudioTask.domain.repository.FilmRepository
 import kotlinx.coroutines.*
-import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.*
 import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
@@ -22,26 +21,19 @@ class FilmRepositoryImpl @Inject constructor(
     private val coroutineContext: CoroutineContext = Dispatchers.IO + SupervisorJob()
     private val scope: CoroutineScope = CoroutineScope(coroutineContext)
 
-    override var filmListDatabase = emptyList<FilmEntity>()
-    override var actorListDatabase = emptyList<ActorEntity>()
-
-    override val updateDatabaseFlow = MutableSharedFlow<Unit>(
-        replay = 1,
-        onBufferOverflow = BufferOverflow.DROP_OLDEST
-    )
+    override val filmListFlow = MutableStateFlow(emptyList<FilmEntity>())
+    override val actorListFlow = MutableStateFlow(emptyList<ActorEntity>())
 
     init {
         scope.launch {
             getFilmsDatabase().collect { films ->
-                filmListDatabase = films
-                updateDatabaseFlow.emit(Unit)
+                filmListFlow.emit(films)
             }
         }
 
         scope.launch {
             getActorsDatabase().collect { actors ->
-                actorListDatabase = actors
-                updateDatabaseFlow.emit(Unit)
+                actorListFlow.emit(actors)
             }
         }
     }

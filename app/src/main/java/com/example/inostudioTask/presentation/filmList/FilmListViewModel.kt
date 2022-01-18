@@ -58,7 +58,7 @@ class FilmListViewModel @Inject constructor(
 
     private fun onDatabaseUpdate() {
         viewModelScope.launch {
-            repository.updateDatabaseFlow.collect {
+            repository.filmListFlow.collect {
                 val filmListState = _state.value
                 if (filmListState is ListState.Success) {
                     _state.value = fillFilmsAccessory(filmListState.data)
@@ -135,7 +135,7 @@ class FilmListViewModel @Inject constructor(
     private fun fillFilmsAccessory(filmList: List<Film>): ListState.Success<Film>{
         val changedFilmList = filmList.toMutableList().apply {
             replaceAll { film ->
-                film.copy(isInDatabase = repository.filmListDatabase.any { it.id == film.id })
+                film.copy(isInDatabase = repository.filmListFlow.value.any { it.id == film.id })
             }
         }
         return ListState.Success(changedFilmList)

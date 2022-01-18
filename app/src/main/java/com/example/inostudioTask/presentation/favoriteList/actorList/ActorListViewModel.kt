@@ -28,9 +28,11 @@ class ActorListViewModel @Inject constructor(
 
     private fun onDatabaseUpdate() {
         viewModelScope.launch {
-            repository.updateDatabaseFlow.collect {
-                if (repository.actorListDatabase.isNotEmpty()) {
-                    _state.value = ListState.Success(repository.actorListDatabase.map { it.toActor() })
+            repository.actorListFlow.collect {
+                if (it.isNotEmpty()) {
+                    _state.value = ListState.Success(
+                        it.map { actorEntity -> actorEntity.toActor() }
+                    )
                 } else {
                     _state.value = ListState.Empty
                 }
