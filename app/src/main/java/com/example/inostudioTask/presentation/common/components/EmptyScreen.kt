@@ -1,4 +1,4 @@
-package com.example.inostudioTask.presentation.favoriteList.components
+package com.example.inostudioTask.presentation.common.components
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Icon
@@ -12,10 +12,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.example.inostudioTask.R
 
 @Composable
-fun EmptyScreen() {
+fun EmptyScreen(
+    text: Int
+) {
     Column(
         modifier = Modifier
             .fillMaxSize(),
@@ -33,7 +34,7 @@ fun EmptyScreen() {
         Spacer(modifier = Modifier.padding(5.dp))
 
         Text(
-            text = stringResource(id = R.string.not_found_favorites),
+            text = stringResource(id = text),
             color = MaterialTheme.colors.error,
             textAlign = TextAlign.Center,
             modifier = Modifier

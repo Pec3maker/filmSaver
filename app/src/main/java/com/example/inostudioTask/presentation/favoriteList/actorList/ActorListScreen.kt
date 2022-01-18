@@ -8,10 +8,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.example.inostudioTask.R
 import com.example.inostudioTask.presentation.common.ListState
 import com.example.inostudioTask.presentation.common.Screen
 import com.example.inostudioTask.presentation.common.components.ActorListComponent
-import com.example.inostudioTask.presentation.favoriteList.components.EmptyScreen
+import com.example.inostudioTask.presentation.common.components.EmptyScreen
 
 @Composable
 fun ActorListScreen(
@@ -26,7 +27,7 @@ fun ActorListScreen(
             }
 
             is ListState.Empty -> {
-                EmptyScreen()
+                EmptyScreen(R.string.not_found_favorites)
             }
 
             is ListState.Success -> {

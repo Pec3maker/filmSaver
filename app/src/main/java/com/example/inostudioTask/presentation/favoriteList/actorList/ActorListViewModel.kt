@@ -24,23 +24,16 @@ class ActorListViewModel @Inject constructor(
 
     init {
         onDatabaseUpdate()
-        getActorList()
-    }
-
-    private fun getActorList() {
-        _state.value = ListState.Loading
-        val data = repository.actorListDatabase
-        if (data.isNotEmpty()) {
-            _state.value = ListState.Success(repository.actorListDatabase.map { it.toActor() })
-        } else {
-            _state.value = ListState.Empty
-        }
     }
 
     private fun onDatabaseUpdate() {
         viewModelScope.launch {
             repository.updateDatabaseFlow.collect {
-                getActorList()
+                if (repository.actorListDatabase.isNotEmpty()) {
+                    _state.value = ListState.Success(repository.actorListDatabase.map { it.toActor() })
+                } else {
+                    _state.value = ListState.Empty
+                }
             }
         }
     }

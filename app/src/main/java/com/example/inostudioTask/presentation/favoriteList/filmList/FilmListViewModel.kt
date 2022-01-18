@@ -24,23 +24,16 @@ class FilmListViewModel @Inject constructor(
 
     init {
         onDatabaseUpdate()
-        getFilmList()
-    }
-
-    private fun getFilmList() {
-        _state.value = ListState.Loading
-        val data = repository.filmListDatabase
-        if (data.isNotEmpty()) {
-            _state.value = ListState.Success(repository.filmListDatabase.map { it.toFilm() })
-        } else {
-            _state.value = ListState.Empty
-        }
     }
 
     private fun onDatabaseUpdate() {
         viewModelScope.launch {
             repository.updateDatabaseFlow.collect {
-                getFilmList()
+                if (repository.filmListDatabase.isNotEmpty()) {
+                    _state.value = ListState.Success(repository.filmListDatabase.map { it.toFilm() })
+                } else {
+                    _state.value = ListState.Empty
+                }
             }
         }
     }
