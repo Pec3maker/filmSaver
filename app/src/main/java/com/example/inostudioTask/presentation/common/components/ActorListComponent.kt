@@ -1,31 +1,53 @@
-package com.example.inostudioTask.presentation.filmList.components
+package com.example.inostudioTask.presentation.common.components
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberImagePainter
+import com.example.inostudioTask.R
 import com.example.inostudioTask.common.Constants
-import com.example.inostudioTask.data.remote.dto.Film
-import com.example.inostudioTask.presentation.common.components.ExtraInfo
+import com.example.inostudioTask.data.remote.dto.Actor
 
 @Composable
-fun FilmListItem(
-    film: Film,
-    onItemClick: (Film) -> Unit,
-    onFavoriteClick: (Film) -> Unit
+fun ActorListComponent(
+    actorList: List<Actor>,
+    navigate: (Int) -> Unit,
+    addFavorite: (Actor) -> Unit
+) {
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxSize(),
+    ) {
+        items(actorList) { actor ->
+            ActorItem(
+                actor = actor,
+                onItemClick = { navigate(actor.id) },
+                onFavoriteClick = { addFavorite(it)})
+        }
+    }
+}
+
+@Composable
+fun ActorItem(
+    actor: Actor,
+    onItemClick: () -> Unit,
+    onFavoriteClick: (Actor) -> Unit
 ) {
     Card(
         border = BorderStroke(width = 1.dp, color = MaterialTheme.colors.primary),
@@ -38,7 +60,7 @@ fun FilmListItem(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .clickable { onItemClick(film) },
+                .clickable { onItemClick() },
             horizontalArrangement = Arrangement.SpaceAround,
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -48,7 +70,7 @@ fun FilmListItem(
             ) {
                 Image(
                     painter = rememberImagePainter(
-                        "${Constants.IMAGE_PATH}${film.posterPath}"
+                        "${Constants.IMAGE_PATH}${actor.profilePath}"
                     ),
                     contentDescription = null,
                     contentScale = ContentScale.Crop,
@@ -68,7 +90,7 @@ fun FilmListItem(
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Text(
-                        text = film.title,
+                        text = actor.name,
                         fontSize = 19.sp,
                         style = MaterialTheme.typography.h1,
                         overflow = TextOverflow.Ellipsis,
@@ -78,10 +100,10 @@ fun FilmListItem(
                             .fillMaxWidth(0.7f)
                     )
 
-                    IconButton(onClick = { onFavoriteClick(film) }) {
+                    IconButton(onClick = { onFavoriteClick(actor) }) {
                         Icon(
                             imageVector =
-                            if (film.isInDatabase!!) {
+                            if (actor.isInDatabase!!) {
                                 Icons.Filled.Favorite
                             } else {
                                 Icons.Filled.FavoriteBorder
@@ -92,15 +114,12 @@ fun FilmListItem(
                     }
                 }
 
-                Text(
-                    text = film.overview,
-                    style = MaterialTheme.typography.body2,
-                    color = MaterialTheme.colors.onSurface,
-                    maxLines = 2
-                )
-
                 Row(verticalAlignment = Alignment.Bottom) {
-                    ExtraInfo(film = film)
+                    Text(
+                        text = stringResource(id = R.string.popularity, actor.popularity),
+                        style = MaterialTheme.typography.body2,
+                        color = MaterialTheme.colors.onSurface
+                    )
                 }
             }
         }

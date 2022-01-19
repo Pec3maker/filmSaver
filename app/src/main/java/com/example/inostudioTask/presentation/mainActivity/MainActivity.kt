@@ -14,7 +14,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavType
@@ -27,7 +26,7 @@ import com.example.inostudioTask.R
 import com.example.inostudioTask.presentation.actorReview.ActorReviewScreen
 import com.example.inostudioTask.presentation.common.Screen
 import com.example.inostudioTask.presentation.castList.CastListScreen
-import com.example.inostudioTask.presentation.favoriteFilmList.FavoriteFilmListScreen
+import com.example.inostudioTask.presentation.favoriteList.FavoriteListScreen
 import com.example.inostudioTask.presentation.filmList.FilmListScreen
 import com.example.inostudioTask.presentation.filmOverview.FilmOverviewScreen
 import com.example.inostudioTask.presentation.filmReviewList.FilmReviewListScreen
@@ -125,9 +124,9 @@ fun MainScreen() {
                 }
 
                 composable(
-                    route = Screen.FavoriteFilmListScreen.route
+                    route = Screen.FavoriteListScreen.route
                 ) {
-                    FavoriteFilmListScreen()
+                    FavoriteListScreen(navController = navController)
                 }
 
                 composable(
@@ -172,7 +171,7 @@ fun BottomNavigationBar (
     val items = listOf(
         Screen.FilmsListScreen,
         Screen.CastListScreen,
-        Screen.FavoriteFilmListScreen
+        Screen.FavoriteListScreen
     )
 
     BottomNavigation(

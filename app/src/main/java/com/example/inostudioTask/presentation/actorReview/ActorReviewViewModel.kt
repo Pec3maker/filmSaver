@@ -80,7 +80,7 @@ class ActorReviewViewModel @Inject constructor(
 
     private fun onDatabaseUpdate() {
         viewModelScope.launch {
-            repository.updateDatabaseFlow.collect {
+            repository.actorListFlow.collect {
                 val actorListState = _state.value
                 if (actorListState is ReviewState.Success) {
                     _state.value = fillActorAccessory(actorListState.data)
@@ -91,7 +91,7 @@ class ActorReviewViewModel @Inject constructor(
 
     private fun fillActorAccessory(actor: Actor): ReviewState.Success<Actor> {
         val changedActor = actor.copy(
-            isInDatabase = repository.actorListDatabase.any { it.id == actor.id }
+            isInDatabase = repository.actorListFlow.value.any { it.id == actor.id }
         )
         return ReviewState.Success(changedActor)
     }
