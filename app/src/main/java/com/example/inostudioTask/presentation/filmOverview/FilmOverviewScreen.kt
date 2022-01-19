@@ -9,7 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.inostudioTask.presentation.common.ReviewState
-import com.example.inostudioTask.presentation.common.Screen
+import com.example.inostudioTask.presentation.common.Screens
 import com.example.inostudioTask.presentation.common.components.ErrorScreen
 import com.example.inostudioTask.presentation.filmOverview.components.FilmOverviewSuccessScreen
 import com.google.accompanist.pager.ExperimentalPagerApi
@@ -31,12 +31,12 @@ fun FilmOverviewScreen(
                     onFavoriteClick = { viewModel.addFavorite(it) },
                     onReviewClick = {
                         navController.navigate(
-                            "${Screen.FilmReviewListScreen.route}/${uiState.data.id}"
+                            "${Screens.FilmReviewListScreen.route}/${uiState.data.id}"
                         )
                     },
                     onActorClick = {
                         navController.navigate(
-                            "${Screen.ActorReviewScreen.route}/$it"
+                            "${Screens.ActorReviewScreen.route}/$it"
                         ) {
                             launchSingleTop = true
                         }

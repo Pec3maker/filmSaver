@@ -10,12 +10,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
 import com.example.inostudioTask.presentation.favoriteList.actorList.ActorListScreen
-import com.example.inostudioTask.presentation.favoriteList.components.Tabs
+import com.example.inostudioTask.presentation.common.Tabs
 import com.example.inostudioTask.presentation.favoriteList.filmList.FilmListScreen
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
 import kotlinx.coroutines.launch
+import kotlin.reflect.KClass
 
 @ExperimentalPagerApi
 @Composable
@@ -25,11 +26,7 @@ fun FavoriteListScreen(
 
     val pagerState = rememberPagerState()
     val scope = rememberCoroutineScope()
-
-    val items = listOf(
-        Tabs.FilmsScreen,
-        Tabs.ActorsScreen
-    )
+    val items = Tabs.values()
 
     Box(Modifier.fillMaxSize()) {
         Column {
@@ -59,7 +56,7 @@ fun FavoriteListScreen(
                 count = items.size,
                 state = pagerState,
             ) { page ->
-                if (page == items.indexOf(Tabs.FilmsScreen)) {
+                if (page == items.indexOf(Tabs.FILMS)) {
                     FilmListScreen(navController = navController)
                 } else {
                     ActorListScreen(navController = navController)

@@ -10,7 +10,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.inostudioTask.presentation.actorReview.components.ActorReviewSuccessScreen
 import com.example.inostudioTask.presentation.common.ReviewState
-import com.example.inostudioTask.presentation.common.Screen
+import com.example.inostudioTask.presentation.common.Screens
 import com.example.inostudioTask.presentation.common.components.ErrorScreen
 import com.google.accompanist.pager.ExperimentalPagerApi
 
@@ -35,7 +35,7 @@ fun ActorReviewScreen(
                     onFavoriteClick = { viewModel.addFavorite(it) },
                     onFilmClick = {
                         navController.navigate(
-                            "${Screen.FilmReviewScreen.route}/$it",
+                            "${Screens.FilmReviewScreen.route}/$it",
                         ) {
                             launchSingleTop = true
                         }
