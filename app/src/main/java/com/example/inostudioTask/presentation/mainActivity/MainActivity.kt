@@ -68,9 +68,14 @@ fun MainScreen() {
         bottomBar = {
             BottomNavigationBar(
                 navigate = { route ->
-                    navController.navigate(route) {
-                        popUpTo(navController.graph.findStartDestination().id)
-                        launchSingleTop = true
+                    if (
+                        currentDestination?.hierarchy?.any {
+                            it.route == route
+                        } == false
+                    ) {
+                        navController.navigate(route) {
+                            popUpTo(navController.graph.findStartDestination().id)
+                        }
                     }
                 },
                 isSelected = { route ->
@@ -82,20 +87,25 @@ fun MainScreen() {
             )
         },
         topBar = {
-            TopBar {
-                if (!barScreens.any { it.route == currentDestination?.route }) {
-                    Icon(
-                        Icons.Rounded.ArrowBackIos,
-                        contentDescription = null,
-                        Modifier
-                            .padding(5.dp)
-                            .fillMaxSize()
-                            .clickable {
-                                navController.popBackStack()
-                            }
-                    )
+            TopBar(
+                navigationIcon =
+                if (barScreens.none { it.route == currentDestination?.route }) {
+                    {
+                        Icon(
+                            imageVector = Icons.Rounded.ArrowBackIos,
+                            contentDescription = null,
+                            modifier = Modifier
+                                .padding(5.dp)
+                                .fillMaxSize()
+                                .clickable {
+                                    navController.popBackStack()
+                                }
+                        )
+                    }
+                } else {
+                    null
                 }
-            }
+            )
         }
     ) { contentPadding ->
         Box(
@@ -160,12 +170,12 @@ fun MainScreen() {
 
 @Composable
 fun TopBar(
-    navigationIcon: @Composable () -> Unit,
+    navigationIcon: @Composable (() -> Unit)?,
 ) {
     TopAppBar(
         modifier = Modifier.fillMaxWidth(),
         title = { Text(text = stringResource(R.string.top_app_title)) },
-        navigationIcon = { navigationIcon() },
+        navigationIcon = navigationIcon,
         backgroundColor = MaterialTheme.colors.onSecondary
     )
 }
