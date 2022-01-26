@@ -40,6 +40,6 @@ class FilmListViewModel @Inject constructor(
     }
 
     fun deleteFilm(film: Film) {
-        repository.addFavoriteFilm(film.copy(isInDatabase = true))
+        repository.addFavoriteFilm(film.apply { isInDatabase = true })
     }
 }

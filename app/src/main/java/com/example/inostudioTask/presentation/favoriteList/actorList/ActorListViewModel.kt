@@ -40,6 +40,6 @@ class ActorListViewModel @Inject constructor(
     }
 
     fun deleteActor(actor: Actor) {
-        repository.addFavoriteActor(actor = actor.copy(isInDatabase = true))
+        repository.addFavoriteActor(actor = actor.apply { isInDatabase = true })
     }
 }

@@ -19,7 +19,7 @@ data class Actor(
     val imageList: ImageActorList? = null,
     @Json(name = "movie_credits")
     val movies: ActorFilmList? = null,
-    val isInDatabase: Boolean? = null
+    var isInDatabase: Boolean? = null
 )
 
 fun Actor.toActorEntity(): ActorEntity {
