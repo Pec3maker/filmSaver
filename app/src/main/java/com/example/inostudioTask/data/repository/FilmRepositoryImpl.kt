@@ -189,7 +189,4 @@ class FilmRepositoryImpl @Inject constructor(
             deleteFilmDatabase(film.toFilmEntity())
         }
     }
-
-
-
 }
