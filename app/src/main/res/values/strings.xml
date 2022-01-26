@@ -17,7 +17,4 @@
     <string name="popularity">Popularity: %1$s</string>
     <string name="films">Films</string>
     <string name="not_found_favorites">No favorites found. Add some</string>
-    <string name="film_icon">films</string>
-    <string name="cast_icon">cast</string>
-    <string name="favorites_icon">favorites</string>
 </resources>

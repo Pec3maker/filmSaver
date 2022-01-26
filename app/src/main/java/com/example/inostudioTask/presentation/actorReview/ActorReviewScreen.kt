@@ -35,7 +35,7 @@ fun ActorReviewScreen(
                     onFavoriteClick = { viewModel.addFavorite(it) },
                     onFilmClick = {
                         navController.navigate(
-                            "${Screens.FilmReviewScreen.route}/$it",
+                            "${Screens.FILM_REVIEW.route}/$it",
                         ) {
                             launchSingleTop = true
                         }

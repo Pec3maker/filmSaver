@@ -7,7 +7,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.inostudioTask.common.Constants
 import com.example.inostudioTask.data.remote.dto.Film
-import com.example.inostudioTask.data.remote.dto.toFilmEntity
 import com.example.inostudioTask.domain.repository.FilmRepository
 import com.example.inostudioTask.presentation.common.ReviewState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -40,11 +39,7 @@ class FilmOverviewViewModel @Inject constructor(
     }
 
     fun addFavorite(film: Film) {
-        if (film.isInDatabase!!) {
-            deleteFilm(film = film)
-        } else {
-            saveFilm(film = film)
-        }
+        repository.addFavoriteFilm(film = film)
     }
 
     private fun getFilm() {
@@ -78,18 +73,6 @@ class FilmOverviewViewModel @Inject constructor(
                     _state.value = fillFilmAccessory(filmListState.data)
                 }
             }
-        }
-    }
-
-    private fun saveFilm(film: Film) {
-        viewModelScope.launch {
-            repository.insertFilmDatabase(film.toFilmEntity())
-        }
-    }
-
-    private fun deleteFilm(film: Film) {
-        viewModelScope.launch {
-            repository.deleteFilmDatabase(film.toFilmEntity())
         }
     }
 

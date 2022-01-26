@@ -7,7 +7,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.inostudioTask.common.Constants
 import com.example.inostudioTask.data.remote.dto.Actor
-import com.example.inostudioTask.data.remote.dto.toActorEntity
 import com.example.inostudioTask.domain.repository.FilmRepository
 import com.example.inostudioTask.presentation.common.ReviewState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -40,23 +39,7 @@ class ActorReviewViewModel @Inject constructor(
     }
 
     fun addFavorite(actor: Actor) {
-        if (actor.isInDatabase!!) {
-            deleteActor(actor = actor)
-        } else {
-            saveActor(actor = actor)
-        }
-    }
-
-    private fun deleteActor(actor: Actor) {
-        viewModelScope.launch {
-            repository.deleteActorDatabase(actor = actor.toActorEntity())
-        }
-    }
-
-    private fun saveActor(actor: Actor) {
-        viewModelScope.launch {
-            repository.insertActorDatabase(actor = actor.toActorEntity())
-        }
+        repository.addFavoriteActor(actor = actor)
     }
 
     private fun getActor() {

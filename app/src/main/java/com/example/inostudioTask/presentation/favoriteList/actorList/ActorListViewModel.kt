@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.inostudioTask.data.dataSource.dto.toActor
 import com.example.inostudioTask.data.remote.dto.Actor
-import com.example.inostudioTask.data.remote.dto.toActorEntity
 import com.example.inostudioTask.domain.repository.FilmRepository
 import com.example.inostudioTask.presentation.common.ListState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -41,8 +40,6 @@ class ActorListViewModel @Inject constructor(
     }
 
     fun deleteActor(actor: Actor) {
-        viewModelScope.launch {
-            repository.deleteActorDatabase(actor.toActorEntity())
-        }
+        repository.addFavoriteActor(actor = actor.copy(isInDatabase = true))
     }
 }

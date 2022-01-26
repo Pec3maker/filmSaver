@@ -31,12 +31,12 @@ fun FilmOverviewScreen(
                     onFavoriteClick = { viewModel.addFavorite(it) },
                     onReviewClick = {
                         navController.navigate(
-                            "${Screens.FilmReviewListScreen.route}/${uiState.data.id}"
+                            "${Screens.FILMS_REVIEWS.route}/${uiState.data.id}"
                         )
                     },
                     onActorClick = {
                         navController.navigate(
-                            "${Screens.ActorReviewScreen.route}/$it"
+                            "${Screens.ACTOR_REVIEW.route}/$it"
                         ) {
                             launchSingleTop = true
                         }

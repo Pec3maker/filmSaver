@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.inostudioTask.data.dataSource.dto.toFilm
 import com.example.inostudioTask.data.remote.dto.Film
-import com.example.inostudioTask.data.remote.dto.toFilmEntity
 import com.example.inostudioTask.domain.repository.FilmRepository
 import com.example.inostudioTask.presentation.common.ListState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -41,8 +40,6 @@ class FilmListViewModel @Inject constructor(
     }
 
     fun deleteFilm(film: Film) {
-        viewModelScope.launch {
-            repository.deleteFilmDatabase(film.toFilmEntity())
-        }
+        repository.addFavoriteFilm(film.copy(isInDatabase = true))
     }
 }

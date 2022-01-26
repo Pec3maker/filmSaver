@@ -61,4 +61,8 @@ interface FilmRepository {
     suspend fun deleteActorDatabase(actor: ActorEntity)
 
     suspend fun getActorByIdDatabase(id: Int): ActorEntity?
+
+    fun addFavoriteActor(actor: Actor)
+
+    fun addFavoriteFilm(film: Film)
 }

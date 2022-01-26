@@ -12,17 +12,14 @@ import androidx.compose.material.icons.rounded.ArrowBackIos
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.*
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
-import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
-import com.example.inostudioTask.R
 import com.example.inostudioTask.presentation.actorReview.ActorReviewScreen
 import com.example.inostudioTask.presentation.common.Screens
 import com.example.inostudioTask.presentation.castList.CastListScreen
@@ -49,8 +46,8 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-@ExperimentalAnimationApi
 @ExperimentalPagerApi
+@ExperimentalAnimationApi
 @Composable
 fun MainScreen() {
     val navController = rememberNavController()
@@ -58,9 +55,9 @@ fun MainScreen() {
     val currentDestination = navBackStackEntry?.destination
     val scaffoldState = rememberScaffoldState()
     val barScreens = listOf(
-        Screens.FilmsListScreen,
-        Screens.CastListScreen,
-        Screens.FavoriteListScreen
+        Screens.FILM_LIST,
+        Screens.CAST_LIST,
+        Screens.FAVORITES
     )
 
     Scaffold(
@@ -68,22 +65,16 @@ fun MainScreen() {
         bottomBar = {
             BottomNavigationBar(
                 navigate = { route ->
-                    if (
-                        currentDestination?.hierarchy?.any {
-                            it.route == route
-                        } == false
-                    ) {
-                        navController.navigate(route) {
-                            popUpTo(navController.graph.findStartDestination().id)
-                        }
+                    navController.navigate(route) {
+                        popUpTo(navController.graph.findStartDestination().id)
+                        launchSingleTop = true
                     }
                 },
                 isSelected = { route ->
                     currentDestination?.hierarchy?.any {
                         it.route == route
                     } == true
-                },
-                screens = barScreens
+                }
             )
         },
         topBar = {
@@ -104,7 +95,10 @@ fun MainScreen() {
                     }
                 } else {
                     null
-                }
+                },
+                title = Screens.values().find { screen ->
+                    currentDestination?.route?.startsWith(screen.route) == true
+                }?.text ?: ""
             )
         }
     ) { contentPadding ->
@@ -115,55 +109,77 @@ fun MainScreen() {
         ) {
             NavHost(
                 navController = navController,
-                startDestination = Screens.FilmsListScreen.route
+                startDestination = BottomNavItems.FILMS.text
             ) {
-                composable(
-                    route = Screens.FilmsListScreen.route
-                ) {
-                    FilmListScreen(navController = navController) {
-                        scaffoldState.snackbarHostState.showSnackbar(it)
-                    }
-                }
-
-                composable(
-                    route = "${Screens.FilmReviewScreen.route}/{movie_id}",
-                    arguments = listOf(
-                        navArgument("movie_id") { type = NavType.StringType },
-                    )
-                ) {
-                    FilmOverviewScreen(navController = navController)
-                }
-
-                composable(
-                    route = Screens.CastListScreen.route
-                ) {
-                    CastListScreen(navController = navController)
-                }
-
-                composable(
-                    route = Screens.FavoriteListScreen.route
-                ) {
-                    FavoriteListScreen(navController = navController)
-                }
-
-                composable(
-                    route = "${Screens.FilmReviewListScreen.route}/{movie_id}",
-                    arguments = listOf(
-                        navArgument("movie_id") { type = NavType.StringType },
-                    )
-                ) {
-                    FilmReviewListScreen()
-                }
-
-                composable(
-                    route = "${Screens.ActorReviewScreen.route}/{actor_id}",
-                    arguments = listOf(
-                        navArgument("actor_id") { type = NavType.StringType },
-                    )
-                ) {
-                    ActorReviewScreen(navController = navController)
-                }
+                filmsGraph(navController = navController, scaffoldState = scaffoldState)
+                castGraph(navController = navController)
+                favoritesGraph(navController = navController)
             }
+        }
+    }
+}
+
+@ExperimentalAnimationApi
+@ExperimentalPagerApi
+fun NavGraphBuilder.filmsGraph(navController: NavController, scaffoldState: ScaffoldState) {
+    navigation(startDestination = Screens.FILM_LIST.route, route = BottomNavItems.FILMS.text) {
+
+        composable(
+            route = Screens.FILM_LIST.route
+        ) {
+            FilmListScreen(navController = navController) {
+                scaffoldState.snackbarHostState.showSnackbar(it)
+            }
+        }
+
+        composable(
+            route = "${Screens.FILM_REVIEW.route}/{movie_id}",
+            arguments = listOf(
+                navArgument("movie_id") { type = NavType.StringType },
+            )
+        ) {
+            FilmOverviewScreen(navController = navController)
+        }
+
+        composable(
+            route = "${Screens.FILMS_REVIEWS.route}/{movie_id}",
+            arguments = listOf(
+                navArgument("movie_id") { type = NavType.StringType },
+            )
+        ) {
+            FilmReviewListScreen()
+        }
+    }
+}
+
+@ExperimentalPagerApi
+fun NavGraphBuilder.castGraph(navController: NavController) {
+    navigation(startDestination = Screens.CAST_LIST.route, route = BottomNavItems.CAST.text) {
+
+        composable(
+            route = Screens.CAST_LIST.route
+        ) {
+            CastListScreen(navController = navController)
+        }
+
+        composable(
+            route = "${Screens.ACTOR_REVIEW.route}/{actor_id}",
+            arguments = listOf(
+                navArgument("actor_id") { type = NavType.StringType },
+            )
+        ) {
+            ActorReviewScreen(navController = navController)
+        }
+    }
+}
+
+@ExperimentalPagerApi
+fun NavGraphBuilder.favoritesGraph(navController: NavController) {
+    navigation(startDestination = Screens.FAVORITES.route, route = BottomNavItems.FAVORITES.text) {
+        composable(
+            route = Screens.FAVORITES.route
+        ) {
+            FavoriteListScreen(navController = navController)
         }
     }
 }
@@ -171,10 +187,11 @@ fun MainScreen() {
 @Composable
 fun TopBar(
     navigationIcon: @Composable (() -> Unit)?,
+    title: String
 ) {
     TopAppBar(
         modifier = Modifier.fillMaxWidth(),
-        title = { Text(text = stringResource(R.string.top_app_title)) },
+        title = { Text(text = title) },
         navigationIcon = navigationIcon,
         backgroundColor = MaterialTheme.colors.onSecondary
     )
@@ -183,8 +200,7 @@ fun TopBar(
 @Composable
 fun BottomNavigationBar (
     navigate: (String) -> Unit,
-    isSelected: (String) -> Boolean,
-    screens: List<Screens>
+    isSelected: (String) -> Boolean
 ) {
     val items = BottomNavItems.values()
 
@@ -193,17 +209,17 @@ fun BottomNavigationBar (
             .fillMaxWidth(),
         backgroundColor = MaterialTheme.colors.onSecondary
     ) {
-        items.forEachIndexed { index, item ->
+        items.forEach { item ->
             BottomNavigationItem(
                 icon = {
                     Icon(
                         imageVector = item.icon,
-                        contentDescription = stringResource(id = item.text)
+                        contentDescription = item.text
                     )
                 },
                 label = null,
-                selected = isSelected(screens[index].route),
-                onClick = { navigate(screens[index].route) }
+                selected = isSelected(item.text),
+                onClick = { navigate(item.text) }
             )
         }
     }

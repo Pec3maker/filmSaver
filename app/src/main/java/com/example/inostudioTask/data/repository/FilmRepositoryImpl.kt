@@ -149,4 +149,47 @@ class FilmRepositoryImpl @Inject constructor(
     override suspend fun getActorByIdDatabase(id: Int): ActorEntity? {
         return actorDao.getActorById(id)
     }
+
+    override fun addFavoriteActor(actor: Actor) {
+        if (actor.isInDatabase!!) {
+            deleteActor(actor = actor)
+        } else {
+            saveActor(actor = actor)
+        }
+    }
+
+    private fun deleteActor(actor: Actor) {
+        scope.launch {
+            deleteActorDatabase(actor = actor.toActorEntity())
+        }
+    }
+
+    private fun saveActor(actor: Actor) {
+        scope.launch {
+            insertActorDatabase(actor = actor.toActorEntity())
+        }
+    }
+
+    override fun addFavoriteFilm(film: Film) {
+        if (film.isInDatabase!!) {
+            deleteFilm(film = film)
+        } else {
+            saveFilm(film = film)
+        }
+    }
+
+    private fun saveFilm(film: Film) {
+        scope.launch {
+            insertFilmDatabase(film.toFilmEntity())
+        }
+    }
+
+    private fun deleteFilm(film: Film) {
+        scope.launch {
+            deleteFilmDatabase(film.toFilmEntity())
+        }
+    }
+
+
+
 }
