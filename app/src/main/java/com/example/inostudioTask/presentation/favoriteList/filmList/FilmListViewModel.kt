@@ -39,7 +39,9 @@ class FilmListViewModel @Inject constructor(
         }
     }
 
-    fun deleteFilm(film: Film) {
-        repository.addFavoriteFilm(film.apply { isInDatabase = true })
+    fun onFavoriteClick(film: Film) {
+        viewModelScope.launch {
+            repository.onFavoriteClick(film.apply { isInDatabase = true })
+        }
     }
 }

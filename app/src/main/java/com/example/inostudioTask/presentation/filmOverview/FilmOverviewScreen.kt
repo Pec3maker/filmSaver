@@ -28,15 +28,15 @@ fun FilmOverviewScreen(
             is ReviewState.Success -> {
                 FilmOverviewSuccessScreen(
                     film = uiState.data,
-                    onFavoriteClick = { viewModel.addFavorite(it) },
+                    onFavoriteClick = { viewModel.onFavoriteClick(it) },
                     onReviewClick = {
                         navController.navigate(
-                            "${Screens.FILMS_REVIEWS.route}/${uiState.data.id}"
+                            "${Screens.FilmReviewListScreen.route}/${uiState.data.id}"
                         )
                     },
                     onActorClick = {
                         navController.navigate(
-                            "${Screens.ACTOR_REVIEW.route}/$it"
+                            "${Screens.ActorReviewScreen.route}/$it"
                         ) {
                             launchSingleTop = true
                         }

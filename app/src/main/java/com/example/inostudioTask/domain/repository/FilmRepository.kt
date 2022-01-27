@@ -50,19 +50,19 @@ interface FilmRepository {
         additionalInfo: String
     ): Actor
 
-    suspend fun insertFilmDatabase(film: FilmEntity)
+    suspend fun insertItemDatabase(film: FilmEntity)
 
-    suspend fun deleteFilmDatabase(film: FilmEntity)
+    suspend fun insertItemDatabase(actor: ActorEntity)
 
-    suspend fun getFilmsByIdDatabase(id: Int): FilmEntity?
+    suspend fun deleteItemDatabase(film: FilmEntity)
 
-    suspend fun insertActorDatabase(actor: ActorEntity)
+    suspend fun deleteItemDatabase(actor: ActorEntity)
 
-    suspend fun deleteActorDatabase(actor: ActorEntity)
+    suspend fun getFilmByIdDatabase(id: Int): FilmEntity?
 
     suspend fun getActorByIdDatabase(id: Int): ActorEntity?
 
-    fun addFavoriteActor(actor: Actor)
+    suspend fun onFavoriteClick(actor: Actor)
 
-    fun addFavoriteFilm(film: Film)
+    suspend fun onFavoriteClick(film: Film)
 }

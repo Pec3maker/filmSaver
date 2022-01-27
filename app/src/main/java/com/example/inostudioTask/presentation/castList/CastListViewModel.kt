@@ -32,8 +32,10 @@ class CastListViewModel @Inject constructor(
         getActorsList(page = Constants.SEARCH_PAGE)
     }
 
-    fun addFavorite(actor: Actor) {
-        repository.addFavoriteActor(actor = actor)
+    fun onFavoriteClick(actor: Actor) {
+        viewModelScope.launch {
+            repository.onFavoriteClick(actor = actor)
+        }
     }
 
     private fun onDatabaseUpdate() {

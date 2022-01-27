@@ -54,10 +54,13 @@ fun MainScreen() {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
     val scaffoldState = rememberScaffoldState()
-    val barScreens = listOf(
-        Screens.FILM_LIST,
-        Screens.CAST_LIST,
-        Screens.FAVORITES
+    val screens = listOf(
+        Screens.FilmsListScreen,
+        Screens.FilmReviewScreen,
+        Screens.CastListScreen,
+        Screens.FavoriteListScreen,
+        Screens.FilmReviewListScreen,
+        Screens.ActorReviewScreen
     )
 
     Scaffold(
@@ -80,7 +83,11 @@ fun MainScreen() {
         topBar = {
             TopBar(
                 navigationIcon =
-                if (barScreens.none { it.route == currentDestination?.route }) {
+                if (
+                    BottomNavItems.values().none {
+                        currentDestination?.route == currentDestination?.parent?.startDestinationRoute
+                    }
+                ) {
                     {
                         Icon(
                             imageVector = Icons.Rounded.ArrowBackIos,
@@ -96,7 +103,7 @@ fun MainScreen() {
                 } else {
                     null
                 },
-                title = Screens.values().find { screen ->
+                title = screens.find { screen ->
                     currentDestination?.route?.startsWith(screen.route) == true
                 }?.text ?: ""
             )
@@ -109,7 +116,7 @@ fun MainScreen() {
         ) {
             NavHost(
                 navController = navController,
-                startDestination = BottomNavItems.FILMS.text
+                startDestination = BottomNavItems.FILMS.route
             ) {
                 filmsGraph(navController = navController, scaffoldState = scaffoldState)
                 castGraph(navController = navController)
@@ -122,10 +129,13 @@ fun MainScreen() {
 @ExperimentalAnimationApi
 @ExperimentalPagerApi
 fun NavGraphBuilder.filmsGraph(navController: NavController, scaffoldState: ScaffoldState) {
-    navigation(startDestination = Screens.FILM_LIST.route, route = BottomNavItems.FILMS.text) {
+    navigation(
+        startDestination = Screens.FilmsListScreen.route,
+        route = BottomNavItems.FILMS.route
+    ) {
 
         composable(
-            route = Screens.FILM_LIST.route
+            route = Screens.FilmsListScreen.route
         ) {
             FilmListScreen(navController = navController) {
                 scaffoldState.snackbarHostState.showSnackbar(it)
@@ -133,7 +143,7 @@ fun NavGraphBuilder.filmsGraph(navController: NavController, scaffoldState: Scaf
         }
 
         composable(
-            route = "${Screens.FILM_REVIEW.route}/{movie_id}",
+            route = "${Screens.FilmReviewScreen.route}/{movie_id}",
             arguments = listOf(
                 navArgument("movie_id") { type = NavType.StringType },
             )
@@ -142,7 +152,7 @@ fun NavGraphBuilder.filmsGraph(navController: NavController, scaffoldState: Scaf
         }
 
         composable(
-            route = "${Screens.FILMS_REVIEWS.route}/{movie_id}",
+            route = "${Screens.FilmReviewListScreen.route}/{movie_id}",
             arguments = listOf(
                 navArgument("movie_id") { type = NavType.StringType },
             )
@@ -154,16 +164,19 @@ fun NavGraphBuilder.filmsGraph(navController: NavController, scaffoldState: Scaf
 
 @ExperimentalPagerApi
 fun NavGraphBuilder.castGraph(navController: NavController) {
-    navigation(startDestination = Screens.CAST_LIST.route, route = BottomNavItems.CAST.text) {
+    navigation(
+        startDestination = Screens.CastListScreen.route,
+        route = BottomNavItems.CAST.route
+    ) {
 
         composable(
-            route = Screens.CAST_LIST.route
+            route = Screens.CastListScreen.route
         ) {
             CastListScreen(navController = navController)
         }
 
         composable(
-            route = "${Screens.ACTOR_REVIEW.route}/{actor_id}",
+            route = "${Screens.ActorReviewScreen.route}/{actor_id}",
             arguments = listOf(
                 navArgument("actor_id") { type = NavType.StringType },
             )
@@ -175,9 +188,12 @@ fun NavGraphBuilder.castGraph(navController: NavController) {
 
 @ExperimentalPagerApi
 fun NavGraphBuilder.favoritesGraph(navController: NavController) {
-    navigation(startDestination = Screens.FAVORITES.route, route = BottomNavItems.FAVORITES.text) {
+    navigation(
+        startDestination = Screens.FavoriteListScreen.route,
+        route = BottomNavItems.FAVORITES.route
+    ) {
         composable(
-            route = Screens.FAVORITES.route
+            route = Screens.FavoriteListScreen.route
         ) {
             FavoriteListScreen(navController = navController)
         }
@@ -214,12 +230,12 @@ fun BottomNavigationBar (
                 icon = {
                     Icon(
                         imageVector = item.icon,
-                        contentDescription = item.text
+                        contentDescription = item.route
                     )
                 },
                 label = null,
-                selected = isSelected(item.text),
-                onClick = { navigate(item.text) }
+                selected = isSelected(item.route),
+                onClick = { navigate(item.route) }
             )
         }
     }

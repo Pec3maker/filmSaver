@@ -47,8 +47,10 @@ class FilmListViewModel @Inject constructor(
         }
     }
 
-    fun addFavorite(film: Film) {
-        repository.addFavoriteFilm(film = film)
+    fun onFavoriteClick(film: Film) {
+        viewModelScope.launch {
+            repository.onFavoriteClick(film = film)
+        }
     }
 
     private fun onDatabaseUpdate() {

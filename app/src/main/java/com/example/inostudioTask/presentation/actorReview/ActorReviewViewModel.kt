@@ -38,8 +38,10 @@ class ActorReviewViewModel @Inject constructor(
         getActor()
     }
 
-    fun addFavorite(actor: Actor) {
-        repository.addFavoriteActor(actor = actor)
+    fun onFavoriteClick(actor: Actor) {
+        viewModelScope.launch {
+            repository.onFavoriteClick(actor = actor)
+        }
     }
 
     private fun getActor() {

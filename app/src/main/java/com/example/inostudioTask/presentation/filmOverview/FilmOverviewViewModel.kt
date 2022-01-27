@@ -38,8 +38,10 @@ class FilmOverviewViewModel @Inject constructor(
         getFilm()
     }
 
-    fun addFavorite(film: Film) {
-        repository.addFavoriteFilm(film = film)
+    fun onFavoriteClick(film: Film) {
+        viewModelScope.launch {
+            repository.onFavoriteClick(film = film)
+        }
     }
 
     private fun getFilm() {

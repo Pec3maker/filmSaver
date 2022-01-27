@@ -53,10 +53,10 @@ fun FilmListScreen(
                     filmList = uiState.data,
                     navigate = {
                         navController.navigate(
-                            "${Screens.FILM_REVIEW.route}/${it}"
+                            "${Screens.FilmReviewScreen.route}/${it}"
                         )
                     },
-                    addFavorite = { viewModel.addFavorite(it) }
+                    addFavorite = { viewModel.onFavoriteClick(it) }
                 )
             }
             is ListState.Error -> {

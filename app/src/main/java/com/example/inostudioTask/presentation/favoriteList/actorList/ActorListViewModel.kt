@@ -39,7 +39,9 @@ class ActorListViewModel @Inject constructor(
         }
     }
 
-    fun deleteActor(actor: Actor) {
-        repository.addFavoriteActor(actor = actor.apply { isInDatabase = true })
+    fun onFavoriteClick(actor: Actor) {
+        viewModelScope.launch {
+            repository.onFavoriteClick(actor = actor.apply { isInDatabase = true })
+        }
     }
 }
