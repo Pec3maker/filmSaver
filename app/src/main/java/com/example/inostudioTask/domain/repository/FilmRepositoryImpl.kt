@@ -1,4 +1,4 @@
-package com.example.inostudioTask.data.repository
+package com.example.inostudioTask.domain.repository
 
 import com.example.inostudioTask.data.dataSource.ActorDao
 import com.example.inostudioTask.data.dataSource.FilmDao
@@ -6,7 +6,6 @@ import com.example.inostudioTask.data.dataSource.dto.ActorEntity
 import com.example.inostudioTask.data.remote.FilmApi
 import com.example.inostudioTask.data.remote.dto.*
 import com.example.inostudioTask.data.dataSource.dto.FilmEntity
-import com.example.inostudioTask.domain.repository.FilmRepository
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import javax.inject.Inject
