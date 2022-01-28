@@ -8,3 +8,15 @@ sealed class Screens(val route: String, val text: String) {
     object FilmReviewListScreen: Screens("film_review_list_screen", "Reviews")
     object ActorReviewScreen: Screens("actor_review_screen", "Actor review")
 }
+
+fun Screens.FilmReviewScreen.route(): String {
+    return "$route/{movie_id}"
+}
+
+fun Screens.FilmReviewListScreen.route(): String  {
+    return "$route/{movie_id}"
+}
+
+fun Screens.ActorReviewScreen.route(): String  {
+    return "${route}/{actor_id}"
+}

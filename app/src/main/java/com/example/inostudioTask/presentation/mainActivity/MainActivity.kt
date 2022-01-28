@@ -24,6 +24,7 @@ import com.example.inostudioTask.presentation.actorReview.ActorReviewScreen
 import com.example.inostudioTask.presentation.common.Screens
 import com.example.inostudioTask.presentation.castList.CastListScreen
 import com.example.inostudioTask.presentation.common.BottomNavItems
+import com.example.inostudioTask.presentation.common.route
 import com.example.inostudioTask.presentation.favoriteList.FavoriteListScreen
 import com.example.inostudioTask.presentation.filmList.FilmListScreen
 import com.example.inostudioTask.presentation.filmOverview.FilmOverviewScreen
@@ -143,7 +144,7 @@ fun NavGraphBuilder.filmsGraph(navController: NavController, scaffoldState: Scaf
         }
 
         composable(
-            route = "${Screens.FilmReviewScreen.route}/{movie_id}",
+            route = Screens.FilmReviewScreen.route(),
             arguments = listOf(
                 navArgument("movie_id") { type = NavType.StringType },
             )
@@ -152,7 +153,7 @@ fun NavGraphBuilder.filmsGraph(navController: NavController, scaffoldState: Scaf
         }
 
         composable(
-            route = "${Screens.FilmReviewListScreen.route}/{movie_id}",
+            route = Screens.FilmReviewListScreen.route(),
             arguments = listOf(
                 navArgument("movie_id") { type = NavType.StringType },
             )
@@ -176,7 +177,7 @@ fun NavGraphBuilder.castGraph(navController: NavController) {
         }
 
         composable(
-            route = "${Screens.ActorReviewScreen.route}/{actor_id}",
+            route = Screens.ActorReviewScreen.route(),
             arguments = listOf(
                 navArgument("actor_id") { type = NavType.StringType },
             )
