@@ -41,7 +41,7 @@ class FilmListViewModel @Inject constructor(
 
     fun onFavoriteClick(film: Film) {
         viewModelScope.launch {
-            repository.onFavoriteClick(film.apply { isInDatabase = true })
+            repository.onFavoriteClick(film.copy(isInDatabase = true))
         }
     }
 }

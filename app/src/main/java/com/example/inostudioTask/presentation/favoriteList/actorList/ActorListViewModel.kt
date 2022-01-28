@@ -41,7 +41,7 @@ class ActorListViewModel @Inject constructor(
 
     fun onFavoriteClick(actor: Actor) {
         viewModelScope.launch {
-            repository.onFavoriteClick(actor = actor.apply { isInDatabase = true })
+            repository.onFavoriteClick(actor = actor.copy(isInDatabase = true))
         }
     }
 }

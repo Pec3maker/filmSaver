@@ -22,7 +22,7 @@ data class Film(
     val images: ImageFilmList? = null,
     val reviews: ReviewList? = null,
     val videos: VideoList? = null,
-    var isInDatabase: Boolean? = null,
+    val isInDatabase: Boolean? = null,
     val linesToShow: Int = 5
 )
 
