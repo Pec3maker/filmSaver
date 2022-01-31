@@ -34,9 +34,7 @@ fun ActorListScreen(
                 ActorListComponent(
                     actorList = uiState.data,
                     navigate = {
-                        navController.navigate(
-                            "${Screens.ActorReviewScreen.route}/$it"
-                        )
+                        navController.navigate(Screens.ActorReviewScreen.getNavigationRoute(it))
                     },
                     addFavorite = { viewModel.onFavoriteClick(it) }
                 )

@@ -9,6 +9,7 @@ import com.example.inostudioTask.common.Constants
 import com.example.inostudioTask.data.remote.dto.ReviewResponse
 import com.example.inostudioTask.domain.repository.FilmRepository
 import com.example.inostudioTask.presentation.common.ListState
+import com.example.inostudioTask.presentation.common.Screens
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import retrofit2.HttpException
@@ -26,7 +27,7 @@ class FilmReviewListViewModel @Inject constructor(
     val state: State<ListState<ReviewResponse>> = _state
 
     init {
-        savedStateHandle.get<String>("movie_id")?.let {
+        savedStateHandle.get<String>(Screens.FilmReviewListScreen.NAV_ARGUMENT_NAME)?.let {
             movieId = it
         }
         refresh()

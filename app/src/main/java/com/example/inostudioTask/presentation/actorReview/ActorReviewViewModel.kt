@@ -9,6 +9,7 @@ import com.example.inostudioTask.common.Constants
 import com.example.inostudioTask.data.remote.dto.Actor
 import com.example.inostudioTask.domain.repository.FilmRepository
 import com.example.inostudioTask.presentation.common.ReviewState
+import com.example.inostudioTask.presentation.common.Screens
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -27,7 +28,7 @@ class ActorReviewViewModel @Inject constructor(
     val state: State<ReviewState<Actor>> = _state
 
     init {
-        savedStateHandle.get<String>("actor_id")?.let {
+        savedStateHandle.get<String>(Screens.ActorReviewScreen.NAV_ARGUMENT_NAME)?.let {
             personId = it
         }
         onDatabaseUpdate()

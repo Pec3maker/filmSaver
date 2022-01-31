@@ -9,6 +9,7 @@ import com.example.inostudioTask.common.Constants
 import com.example.inostudioTask.data.remote.dto.Film
 import com.example.inostudioTask.domain.repository.FilmRepository
 import com.example.inostudioTask.presentation.common.ReviewState
+import com.example.inostudioTask.presentation.common.Screens
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -27,7 +28,7 @@ class FilmOverviewViewModel @Inject constructor(
     private lateinit var movieId: String
 
     init {
-        savedStateHandle.get<String>("movie_id")?.let {
+        savedStateHandle.get<String>(Screens.FilmReviewScreen.NAV_ARGUMENT_NAME)?.let {
             movieId = it
         }
         onDatabaseUpdate()

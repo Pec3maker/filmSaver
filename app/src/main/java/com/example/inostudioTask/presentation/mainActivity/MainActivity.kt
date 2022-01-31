@@ -24,7 +24,6 @@ import com.example.inostudioTask.presentation.actorReview.ActorReviewScreen
 import com.example.inostudioTask.presentation.common.Screens
 import com.example.inostudioTask.presentation.castList.CastListScreen
 import com.example.inostudioTask.presentation.common.BottomNavItems
-import com.example.inostudioTask.presentation.common.route
 import com.example.inostudioTask.presentation.favoriteList.FavoriteListScreen
 import com.example.inostudioTask.presentation.filmList.FilmListScreen
 import com.example.inostudioTask.presentation.filmOverview.FilmOverviewScreen
@@ -55,13 +54,13 @@ fun MainScreen() {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
     val scaffoldState = rememberScaffoldState()
-    val screens = listOf(
+    val screens = listOf<Screens>(
         Screens.FilmsListScreen,
-        Screens.FilmReviewScreen,
+        Screens.FilmReviewScreen(),
         Screens.CastListScreen,
         Screens.FavoriteListScreen,
-        Screens.FilmReviewListScreen,
-        Screens.ActorReviewScreen
+        Screens.FilmReviewListScreen(),
+        Screens.ActorReviewScreen()
     )
 
     Scaffold(
@@ -106,7 +105,7 @@ fun MainScreen() {
                 },
                 title = screens.find { screen ->
                     currentDestination?.route?.startsWith(screen.route) == true
-                }?.text ?: ""
+                }?.title ?: ""
             )
         }
     ) { contentPadding ->
@@ -144,19 +143,15 @@ fun NavGraphBuilder.filmsGraph(navController: NavController, scaffoldState: Scaf
         }
 
         composable(
-            route = Screens.FilmReviewScreen.route(),
-            arguments = listOf(
-                navArgument("movie_id") { type = NavType.StringType },
-            )
+            route = Screens.FilmReviewScreen.route,
+            arguments =  Screens.FilmReviewScreen.arguments
         ) {
             FilmOverviewScreen(navController = navController)
         }
 
         composable(
-            route = Screens.FilmReviewListScreen.route(),
-            arguments = listOf(
-                navArgument("movie_id") { type = NavType.StringType },
-            )
+            route = Screens.FilmReviewListScreen.route,
+            arguments = Screens.FilmReviewListScreen.arguments
         ) {
             FilmReviewListScreen()
         }
@@ -177,10 +172,8 @@ fun NavGraphBuilder.castGraph(navController: NavController) {
         }
 
         composable(
-            route = Screens.ActorReviewScreen.route(),
-            arguments = listOf(
-                navArgument("actor_id") { type = NavType.StringType },
-            )
+            route = Screens.ActorReviewScreen.route,
+            arguments = Screens.ActorReviewScreen.arguments
         ) {
             ActorReviewScreen(navController = navController)
         }

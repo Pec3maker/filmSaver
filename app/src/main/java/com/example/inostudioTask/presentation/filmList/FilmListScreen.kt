@@ -52,9 +52,7 @@ fun FilmListScreen(
                 FilmListComponent(
                     filmList = uiState.data,
                     navigate = {
-                        navController.navigate(
-                            "${Screens.FilmReviewScreen.route}/${it}"
-                        )
+                        navController.navigate(Screens.FilmReviewScreen.getNavigationRoute(it))
                     },
                     addFavorite = { viewModel.onFavoriteClick(it) }
                 )
