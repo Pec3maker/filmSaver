@@ -54,14 +54,6 @@ fun MainScreen() {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
     val scaffoldState = rememberScaffoldState()
-    val screens = listOf<Screens>(
-        Screens.FilmsListScreen,
-        Screens.FilmReviewScreen(),
-        Screens.CastListScreen,
-        Screens.FavoriteListScreen,
-        Screens.FilmReviewListScreen(),
-        Screens.ActorReviewScreen()
-    )
 
     Scaffold(
         scaffoldState = scaffoldState,
@@ -103,9 +95,7 @@ fun MainScreen() {
                 } else {
                     null
                 },
-                title = screens.find { screen ->
-                    currentDestination?.route?.startsWith(screen.route) == true
-                }?.title ?: ""
+                title = Screens.fromRoute(currentDestination?.route).title
             )
         }
     ) { contentPadding ->

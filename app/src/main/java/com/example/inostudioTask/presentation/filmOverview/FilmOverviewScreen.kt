@@ -35,9 +35,7 @@ fun FilmOverviewScreen(
                         )
                     },
                     onActorClick = {
-                        navController.navigate(Screens.ActorReviewScreen.getNavigationRoute(it)) {
-                            launchSingleTop = true
-                        }
+                        navController.navigate(Screens.ActorReviewScreen.getNavigationRoute(it))
                     }
                 )
             }

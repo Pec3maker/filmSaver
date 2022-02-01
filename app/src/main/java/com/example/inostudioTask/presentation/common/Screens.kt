@@ -2,6 +2,7 @@ package com.example.inostudioTask.presentation.common
 
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
+import java.lang.IllegalArgumentException
 
 sealed class Screens(val route: String, val title: String) {
 
@@ -14,12 +15,14 @@ sealed class Screens(val route: String, val title: String) {
         title = "Reviews"
     ) {
         companion object {
+
             private const val ROUTE: String = "film_review_list_screen"
             const val NAV_ARGUMENT_NAME: String = "movie_id"
             const val route = "$ROUTE/{$NAV_ARGUMENT_NAME}"
             val arguments = listOf(navArgument(NAV_ARGUMENT_NAME) { type = NavType.StringType })
 
-            fun getNavigationRoute(movie_id: Int) = "$ROUTE/$movie_id"
+
+            fun getNavigationRoute(movieId: Int) = "$ROUTE/$movieId"
         }
     }
 
@@ -33,7 +36,7 @@ sealed class Screens(val route: String, val title: String) {
             const val route = "$ROUTE/{$NAV_ARGUMENT_NAME}"
             val arguments = listOf(navArgument(NAV_ARGUMENT_NAME) { type = NavType.StringType })
 
-            fun getNavigationRoute(movie_id: Int) = "${ROUTE}/$movie_id"
+            fun getNavigationRoute(movieId: Int) = "$ROUTE/$movieId"
         }
     }
 
@@ -47,7 +50,21 @@ sealed class Screens(val route: String, val title: String) {
             const val route = "$ROUTE/{$NAV_ARGUMENT_NAME}"
             val arguments = listOf(navArgument(NAV_ARGUMENT_NAME) { type = NavType.StringType })
 
-            fun getNavigationRoute(movie_id: Int) = "${ROUTE}/$movie_id"
+            fun getNavigationRoute(movieId: Int) = "$ROUTE/$movieId"
         }
+    }
+
+    companion object {
+        fun fromRoute(route: String?): Screens =
+            when (route) {
+                FilmsListScreen.route -> FilmsListScreen
+                CastListScreen.route -> CastListScreen
+                FavoriteListScreen.route -> FavoriteListScreen
+                FilmReviewListScreen.route -> FilmReviewListScreen()
+                ActorReviewScreen.route -> ActorReviewScreen()
+                FilmReviewScreen.route -> FilmReviewScreen()
+                null -> FilmsListScreen
+                else -> throw IllegalArgumentException("Route $route is not recognized")
+            }
     }
 }
