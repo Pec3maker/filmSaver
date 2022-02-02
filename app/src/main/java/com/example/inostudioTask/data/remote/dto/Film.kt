@@ -24,10 +24,13 @@ data class Film(
     val videos: VideoList? = null,
     val isInDatabase: Boolean? = null,
     val linesToShow: Int = 5
-)
+) {
+    fun imageUrl(image: String): String = Constants.IMAGE_PATH.plus(image)
+}
 
-fun Film.toFilmEntity(): FilmEntity {
-    return FilmEntity(
+
+fun Film.toFilmEntity(): FilmEntity =
+    FilmEntity(
         id = id,
         title = title,
         originalTitle = originalTitle,
@@ -36,14 +39,11 @@ fun Film.toFilmEntity(): FilmEntity {
         releaseDate = releaseDate,
         voteAverage = voteAverage
     )
-}
 
-fun Film.videoUrl(): String {
-    return if (videos != null)
+fun Film.videoUrl(): String =
+    if (videos != null)
         Constants.BASE_YOUTUBE_URL.plus(videos.results[0].key)
-    else  ""
-}
+    else ""
 
-fun Film.imageUrl(image: String): String {
-    return Constants.IMAGE_PATH.plus(image)
-}
+
+fun Film.posterPathUrl(): String = Constants.IMAGE_PATH.plus(posterPath)

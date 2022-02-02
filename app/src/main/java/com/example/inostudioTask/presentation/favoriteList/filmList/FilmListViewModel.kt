@@ -16,7 +16,7 @@ import javax.inject.Inject
 @HiltViewModel
 class FilmListViewModel @Inject constructor(
     private val repository: FilmRepository
-): ViewModel() {
+) : ViewModel() {
 
     private val _state = mutableStateOf<ListState<Film>>(ListState.Loading)
     val state: State<ListState<Film>> = _state

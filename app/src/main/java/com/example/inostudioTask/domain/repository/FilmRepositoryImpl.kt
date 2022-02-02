@@ -3,11 +3,16 @@ package com.example.inostudioTask.domain.repository
 import com.example.inostudioTask.data.dataSource.ActorDao
 import com.example.inostudioTask.data.dataSource.FilmDao
 import com.example.inostudioTask.data.dataSource.dto.ActorEntity
+import com.example.inostudioTask.data.dataSource.dto.FilmEntity
 import com.example.inostudioTask.data.remote.FilmApi
 import com.example.inostudioTask.data.remote.dto.*
-import com.example.inostudioTask.data.dataSource.dto.FilmEntity
-import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
 
@@ -37,131 +42,99 @@ class FilmRepositoryImpl @Inject constructor(
         }
     }
 
-    private fun getFilmsDatabase(): Flow<List<FilmEntity>> {
-        return filmDao.getFilms()
-    }
+    private fun getFilmsDatabase(): Flow<List<FilmEntity>> = filmDao.getFilms()
 
-    private fun getActorsDatabase(): Flow<List<ActorEntity>> {
-        return actorDao.getActors()
-    }
+    private fun getActorsDatabase(): Flow<List<ActorEntity>> = actorDao.getActors()
 
     override suspend fun getFilms(
         apiKey: String,
         page: Int,
         language: String
-    ): List<Film> {
-        return api.getFilms(
+    ): List<Film> =
+        api.getFilms(
             apiKey = apiKey,
             page = page,
             language = language
         ).results
-    }
 
     override suspend fun getFilmsById(
         apiKey: String,
         id: String,
         language: String,
         additionalInfo: String
-    ): Film {
-        return api.getAdditionalInfo(
+    ): Film =
+        api.getAdditionalInfo(
             apiKey = apiKey,
             filmId = id,
             language = language,
             additionalInfo = additionalInfo
         )
-    }
 
     override suspend fun getFilmsBySearch(
         apiKey: String,
         query: String,
         page: Int,
         language: String
-    ): List<Film> {
-        return api.getFilmsBySearch(
+    ): List<Film> =
+        api.getFilmsBySearch(
             apiKey = apiKey,
             query = query,
             page = page,
             language = language
         ).results
-    }
 
     override suspend fun getReviewList(
         apiKey: String,
         id: String,
         page: Int,
         language: String
-    ): List<ReviewResponse> {
-        return api.getReviewList(
+    ): List<ReviewResponse> =
+        api.getReviewList(
             apiKey = apiKey,
             filmId = id,
             page = page,
             language = language
         ).results
-    }
 
     override suspend fun getActorsList(
         apiKey: String,
         page: Int,
         language: String
-    ): List<Actor> {
-        return api.getPopularActors(
+    ): List<Actor> =
+        api.getPopularActors(
             apiKey = apiKey,
             page = page,
             language = language
         ).results
-    }
 
     override suspend fun getActorDetails(
         apiKey: String,
         personId: String,
         language: String,
         additionalInfo: String
-    ): Actor {
-        return api.getActorDetails(
+    ): Actor =
+        api.getActorDetails(
             apiKey = apiKey,
             personId = personId,
             language = language,
             additionalInfo = additionalInfo
         )
-    }
 
-    override suspend fun insertItemDatabase(film: FilmEntity) {
-        filmDao.insertFilm(film = film)
-    }
+    override suspend fun getFilmByIdDatabase(id: Int): FilmEntity? = filmDao.getFilmsById(id)
 
-    override suspend fun deleteItemDatabase(film: FilmEntity) {
-        filmDao.deleteFilm(film = film)
-    }
+    override suspend fun getActorByIdDatabase(id: Int): ActorEntity? = actorDao.getActorById(id)
 
-    override suspend fun getFilmByIdDatabase(id: Int): FilmEntity? {
-        return filmDao.getFilmsById(id = id)
-    }
-
-    override suspend fun insertItemDatabase(actor: ActorEntity) {
-        actorDao.insertActor(actor = actor)
-    }
-
-    override suspend fun deleteItemDatabase(actor: ActorEntity) {
-        actorDao.deleteActor(actor = actor)
-    }
-
-    override suspend fun getActorByIdDatabase(id: Int): ActorEntity? {
-        return actorDao.getActorById(id)
-    }
-
-    override suspend fun onFavoriteClick(actor: Actor) {
+    override suspend fun onFavoriteClick(actor: Actor) =
         if (actor.isInDatabase!!) {
-            deleteItemDatabase(actor = actor.toActorEntity())
+            actorDao.deleteActor(actor.toActorEntity())
         } else {
-            insertItemDatabase(actor = actor.toActorEntity())
+            actorDao.insertActor(actor.toActorEntity())
         }
-    }
 
-    override suspend fun onFavoriteClick(film: Film) {
+    override suspend fun onFavoriteClick(film: Film) =
         if (film.isInDatabase!!) {
-            deleteItemDatabase(film.toFilmEntity())
+            filmDao.deleteFilm(film.toFilmEntity())
         } else {
-            insertItemDatabase(film.toFilmEntity())
+            filmDao.insertFilm(film.toFilmEntity())
         }
-    }
 }

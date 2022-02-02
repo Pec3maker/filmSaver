@@ -5,7 +5,7 @@ import com.example.inostudioTask.data.dataSource.dto.ActorEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao
-interface ActorDao  {
+interface ActorDao {
 
     @Query("SELECT * FROM ActorEntity")
     fun getActors(): Flow<List<ActorEntity>>

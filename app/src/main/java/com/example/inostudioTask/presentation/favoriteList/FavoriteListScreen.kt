@@ -9,14 +9,13 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
-import com.example.inostudioTask.presentation.favoriteList.actorList.ActorListScreen
 import com.example.inostudioTask.presentation.common.Tabs
+import com.example.inostudioTask.presentation.favoriteList.actorList.ActorListScreen
 import com.example.inostudioTask.presentation.favoriteList.filmList.FilmListScreen
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
 import kotlinx.coroutines.launch
-import kotlin.reflect.KClass
 
 @ExperimentalPagerApi
 @Composable

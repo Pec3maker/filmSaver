@@ -22,15 +22,12 @@ data class Actor(
     val isInDatabase: Boolean? = null
 )
 
-fun Actor.toActorEntity(): ActorEntity {
-    return ActorEntity(
+fun Actor.toActorEntity(): ActorEntity =
+    ActorEntity(
         id = id,
         name = name,
         popularity = popularity,
         profilePath = profilePath ?: ""
     )
-}
 
-fun Actor.profilePathUrl(): String {
-    return Constants.IMAGE_PATH.plus(profilePath)
-}
+fun Actor.profilePathUrl(): String = Constants.IMAGE_PATH.plus(profilePath)

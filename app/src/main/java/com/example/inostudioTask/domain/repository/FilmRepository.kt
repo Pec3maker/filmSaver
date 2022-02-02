@@ -1,8 +1,10 @@
 package com.example.inostudioTask.domain.repository
 
 import com.example.inostudioTask.data.dataSource.dto.ActorEntity
-import com.example.inostudioTask.data.remote.dto.*
 import com.example.inostudioTask.data.dataSource.dto.FilmEntity
+import com.example.inostudioTask.data.remote.dto.Actor
+import com.example.inostudioTask.data.remote.dto.Film
+import com.example.inostudioTask.data.remote.dto.ReviewResponse
 import kotlinx.coroutines.flow.StateFlow
 
 interface FilmRepository {
@@ -49,14 +51,6 @@ interface FilmRepository {
         language: String,
         additionalInfo: String
     ): Actor
-
-    suspend fun insertItemDatabase(film: FilmEntity)
-
-    suspend fun insertItemDatabase(actor: ActorEntity)
-
-    suspend fun deleteItemDatabase(film: FilmEntity)
-
-    suspend fun deleteItemDatabase(actor: ActorEntity)
 
     suspend fun getFilmByIdDatabase(id: Int): FilmEntity?
 

@@ -10,6 +10,4 @@ data class ImageResponse(
     val width: Int
 )
 
-fun ImageResponse.url(): String {
-    return Constants.IMAGE_PATH.plus(filePath)
-}
+fun ImageResponse.url(): String = Constants.IMAGE_PATH.plus(filePath)

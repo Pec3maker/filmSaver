@@ -3,7 +3,9 @@ package com.example.inostudioTask.presentation.actorReview.components
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.material.*
+import androidx.compose.material.Card
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -14,7 +16,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberImagePainter
 import com.example.inostudioTask.R
-import com.example.inostudioTask.data.remote.dto.*
+import com.example.inostudioTask.data.remote.dto.Actor
+import com.example.inostudioTask.data.remote.dto.Film
+import com.example.inostudioTask.data.remote.dto.profilePathUrl
+import com.example.inostudioTask.data.remote.dto.url
 import com.example.inostudioTask.presentation.common.components.LikeButton
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
@@ -117,7 +122,12 @@ fun FilmItem(
             shape = MaterialTheme.shapes.small
         ) {
             Image(
-                painter = rememberImagePainter(film.imageUrl(film.posterPath ?: "")),
+                painter =
+                if (film.posterPath.isNullOrEmpty()) {
+                    rememberImagePainter(data = R.drawable.not_found_image)
+                } else {
+                    rememberImagePainter(film.imageUrl(film.posterPath))
+                },
                 contentDescription = null,
                 modifier = Modifier.fillMaxWidth(),
                 alignment = Alignment.Center,

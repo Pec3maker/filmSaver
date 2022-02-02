@@ -27,13 +27,11 @@ import com.example.inostudioTask.presentation.common.components.ErrorScreen
 fun FilmReviewListScreen(
     viewModel: FilmReviewListViewModel = hiltViewModel()
 ) {
-    val uiState = viewModel.state.value
-
     Box(
         modifier = Modifier
             .fillMaxSize()
     ) {
-        when (uiState) {
+        when (val uiState = viewModel.state.value) {
             is ListState.Loading -> {
                 CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
             }

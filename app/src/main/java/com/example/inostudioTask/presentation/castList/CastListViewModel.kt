@@ -18,7 +18,7 @@ import javax.inject.Inject
 @HiltViewModel
 class CastListViewModel @Inject constructor(
     private val repository: FilmRepository
-): ViewModel() {
+) : ViewModel() {
 
     private val _state = mutableStateOf<ListState<Actor>>(ListState.Loading)
     val state: State<ListState<Actor>> = _state
@@ -29,7 +29,7 @@ class CastListViewModel @Inject constructor(
     }
 
     fun refresh() {
-        getActorsList(page = Constants.SEARCH_PAGE)
+        getActorsList()
     }
 
     fun onFavoriteClick(actor: Actor) {
@@ -49,25 +49,25 @@ class CastListViewModel @Inject constructor(
         }
     }
 
-    private fun getActorsList(page: Int) {
+    private fun getActorsList() {
         viewModelScope.launch {
             try {
                 _state.value = ListState.Loading
                 val data = repository.getActorsList(
                     apiKey = Constants.API_KEY,
-                    page = page,
+                    page = Constants.SEARCH_PAGE,
                     language = Constants.LANGUAGE
                 )
                 _state.value = fillActorAccessory(data)
             } catch (e: HttpException) {
-                _state.value = ListState.Error(message = e.message?: "")
+                _state.value = ListState.Error(message = e.message ?: "")
             } catch (e: IOException) {
-                _state.value = ListState.Error(message = e.message?: "")
+                _state.value = ListState.Error(message = e.message ?: "")
             }
         }
     }
 
-    private fun fillActorAccessory(actorList: List<Actor>): ListState.Success<Actor>{
+    private fun fillActorAccessory(actorList: List<Actor>): ListState.Success<Actor> {
         val changedFilmList = actorList.toMutableList().apply {
             replaceAll { actor ->
                 actor.copy(isInDatabase = repository.actorListFlow.value.any { it.id == actor.id })

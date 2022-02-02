@@ -14,6 +14,4 @@ data class CastResponse(
     val profilePath: String?
 )
 
-fun CastResponse.profileUrl(): String {
-    return Constants.IMAGE_PATH.plus(profilePath)
-}
+fun CastResponse.profileUrl(): String = Constants.IMAGE_PATH.plus(profilePath)

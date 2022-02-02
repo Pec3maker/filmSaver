@@ -5,6 +5,4 @@ data class ImageFilmList(
     val posters: List<ImageResponse>
 )
 
-fun ImageFilmList.toCombinedImages(): List<ImageResponse> {
-    return backdrops.plus(posters)
-}
+fun ImageFilmList.toCombinedImages(): List<ImageResponse> = backdrops.plus(posters)

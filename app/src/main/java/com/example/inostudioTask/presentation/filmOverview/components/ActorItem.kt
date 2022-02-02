@@ -2,7 +2,10 @@ package com.example.inostudioTask.presentation.filmOverview.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -13,6 +16,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
+import com.example.inostudioTask.R
 import com.example.inostudioTask.data.remote.dto.CastResponse
 import com.example.inostudioTask.data.remote.dto.profileUrl
 
@@ -35,7 +39,12 @@ fun ActorItem(
             shape = MaterialTheme.shapes.small
         ) {
             Image(
-                painter = rememberImagePainter(actor.profileUrl()),
+                painter =
+                if (actor.profilePath.isNullOrEmpty()) {
+                    rememberImagePainter(data = R.drawable.not_found_image)
+                } else {
+                    rememberImagePainter(actor.profileUrl())
+                },
                 contentDescription = null,
                 modifier = Modifier.fillMaxWidth(),
                 alignment = Alignment.Center,

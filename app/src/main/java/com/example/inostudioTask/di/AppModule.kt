@@ -26,22 +26,21 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideFilmApi(moshi: Moshi): FilmApi {
-        return Retrofit.Builder()
+    fun provideFilmApi(moshi: Moshi): FilmApi =
+        Retrofit
+            .Builder()
             .baseUrl(Constants.BASE_URL)
             .addConverterFactory(MoshiConverterFactory.create(moshi))
             .build()
             .create(FilmApi::class.java)
-    }
 
     @Provides
     @Singleton
-    fun provideFilmDatabase(
-        @ApplicationContext context: Context
-    ) = Room
-        .databaseBuilder(context, FilmDatabase::class.java, Constants.DATABASE_NAME)
-        .fallbackToDestructiveMigration()
-        .build()
+    fun provideFilmDatabase(@ApplicationContext context: Context) =
+        Room
+            .databaseBuilder(context, FilmDatabase::class.java, Constants.DATABASE_NAME)
+            .fallbackToDestructiveMigration()
+            .build()
 
     @Provides
     @Singleton

@@ -20,7 +20,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberImagePainter
 import com.example.inostudioTask.R
-import com.example.inostudioTask.data.remote.dto.*
+import com.example.inostudioTask.data.remote.dto.Film
+import com.example.inostudioTask.data.remote.dto.toCombinedImages
+import com.example.inostudioTask.data.remote.dto.videoUrl
 import com.example.inostudioTask.presentation.common.components.ExtraInfo
 import com.example.inostudioTask.presentation.common.components.LikeButton
 import com.google.accompanist.pager.ExperimentalPagerApi
@@ -109,7 +111,7 @@ private fun Buttons(
             }
         }
 
-        if (film.reviews?.results?.size?: 0  > 1) {
+        if (film.reviews?.results?.size ?: 0 > 1) {
             Button(
                 onClick = {
                     onReviewClick()

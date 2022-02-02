@@ -20,7 +20,7 @@ import javax.inject.Inject
 class FilmReviewListViewModel @Inject constructor(
     private val repository: FilmRepository,
     savedStateHandle: SavedStateHandle
-): ViewModel() {
+) : ViewModel() {
 
     private lateinit var movieId: String
     private val _state = mutableStateOf<ListState<ReviewResponse>>(ListState.Loading)
@@ -34,24 +34,24 @@ class FilmReviewListViewModel @Inject constructor(
     }
 
     fun refresh() {
-        searchReviews(page = Constants.SEARCH_PAGE)
+        searchReviews()
     }
 
-    private fun searchReviews(page: Int) {
+    private fun searchReviews() {
         viewModelScope.launch {
             try {
                 _state.value = ListState.Loading
                 val data = repository.getReviewList(
                     apiKey = Constants.API_KEY,
                     id = movieId,
-                    page = page,
+                    page = Constants.SEARCH_PAGE,
                     language = Constants.LANGUAGE
                 )
                 _state.value = ListState.Success(data)
             } catch (e: HttpException) {
-                _state.value = ListState.Error(e.message?: "")
+                _state.value = ListState.Error(e.message ?: "")
             } catch (e: IOException) {
-                _state.value = ListState.Error(e.message?: "")
+                _state.value = ListState.Error(e.message ?: "")
             }
         }
     }

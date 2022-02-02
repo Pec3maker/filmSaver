@@ -1,8 +1,11 @@
 package com.example.inostudioTask.presentation.filmList
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.material.LinearProgressIndicator
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -14,7 +17,7 @@ import com.example.inostudioTask.presentation.common.ListState
 import com.example.inostudioTask.presentation.common.Screens
 import com.example.inostudioTask.presentation.common.components.ErrorScreen
 import com.example.inostudioTask.presentation.common.components.FilmListComponent
-import com.example.inostudioTask.presentation.filmList.components.*
+import com.example.inostudioTask.presentation.filmList.components.SearchBar
 import kotlinx.coroutines.flow.collect
 
 @Composable
@@ -23,7 +26,6 @@ fun FilmListScreen(
     viewModel: FilmListViewModel = hiltViewModel(),
     showSnackBar: suspend (String) -> Unit
 ) {
-    val uiState = viewModel.uiState.value
     val searchText = viewModel.searchTextState.value
 
     LaunchedEffect(true) {
@@ -47,7 +49,7 @@ fun FilmListScreen(
             FilmListLoadingScreen()
         }
 
-        when (uiState) {
+        when (val uiState = viewModel.state.value) {
             is ListState.Success -> {
                 FilmListComponent(
                     filmList = uiState.data,

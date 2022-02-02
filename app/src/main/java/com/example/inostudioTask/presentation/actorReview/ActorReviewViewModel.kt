@@ -21,7 +21,7 @@ import javax.inject.Inject
 class ActorReviewViewModel @Inject constructor(
     private val repository: FilmRepository,
     savedStateHandle: SavedStateHandle
-): ViewModel() {
+) : ViewModel() {
 
     private lateinit var personId: String
     private val _state = mutableStateOf<ReviewState<Actor>>(ReviewState.Loading)

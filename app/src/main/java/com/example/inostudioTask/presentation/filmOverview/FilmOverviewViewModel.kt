@@ -79,7 +79,7 @@ class FilmOverviewViewModel @Inject constructor(
         }
     }
 
-    private fun fillFilmAccessory(film: Film): ReviewState.Success<Film>{
+    private fun fillFilmAccessory(film: Film): ReviewState.Success<Film> {
         val changedFilm = film.copy(
             isInDatabase = repository.filmListFlow.value.any { it.id == film.id }
         )
