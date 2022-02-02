@@ -23,7 +23,6 @@ import coil.compose.rememberImagePainter
 import com.example.inostudioTask.R
 import com.example.inostudioTask.data.remote.dto.Actor
 import com.example.inostudioTask.data.remote.dto.profilePathUrl
-import com.example.inostudioTask.data.remote.dto.profileUrl
 
 @Composable
 fun ActorListComponent(
@@ -39,7 +38,8 @@ fun ActorListComponent(
             ActorItem(
                 actor = actor,
                 onItemClick = { navigate(actor.id) },
-                onFavoriteClick = { addFavorite(it) })
+                onFavoriteClick = { addFavorite(it) }
+            )
         }
     }
 }
