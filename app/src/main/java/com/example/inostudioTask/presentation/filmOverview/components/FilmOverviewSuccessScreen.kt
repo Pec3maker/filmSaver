@@ -257,10 +257,11 @@ private fun FilmImages(film: Film) {
                         shape = MaterialTheme.shapes.small
                     ) {
                         Image(
+                            modifier = Modifier.fillMaxWidth(),
                             painter = rememberImagePainter(film.imageUrl(it[page].filePath)),
                             contentDescription = null,
                             alignment = Alignment.Center,
-                            contentScale = ContentScale.FillWidth
+                            contentScale = ContentScale.Fit
                         )
                     }
                 }

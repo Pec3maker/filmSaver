@@ -2,10 +2,7 @@ package com.example.inostudioTask.presentation.filmOverview.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.Card
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -27,13 +24,15 @@ fun ActorItem(
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Top,
         modifier = Modifier
             .fillMaxSize()
             .clickable { onActorClick(actor.id) }
     ) {
         Card(
             modifier = Modifier
-                .width(150.dp),
+                .width(150.dp)
+                .height(225.dp),
             backgroundColor = MaterialTheme.colors.background,
             elevation = 3.dp,
             shape = MaterialTheme.shapes.small
@@ -46,9 +45,9 @@ fun ActorItem(
                     rememberImagePainter(actor.profileUrl())
                 },
                 contentDescription = null,
-                modifier = Modifier.fillMaxWidth(),
-                alignment = Alignment.Center,
-                contentScale = ContentScale.FillWidth
+                modifier = Modifier
+                    .fillMaxWidth(),
+                contentScale = ContentScale.FillHeight
             )
         }
 

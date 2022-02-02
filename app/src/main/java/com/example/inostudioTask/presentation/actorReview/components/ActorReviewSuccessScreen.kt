@@ -92,9 +92,9 @@ private fun StaredMovies(
                     .fillMaxWidth(),
                 contentPadding = PaddingValues(5.dp)
             ) {
-                actor.movies?.results?.let {
+                actor.movies?.results?.let { it ->
                     items(it.count()) { index ->
-                        FilmItem(film = it[index]) { onFilmClick(it) }
+                        FilmItem(film = it[index]) { id -> onFilmClick(id) }
                         Spacer(modifier = Modifier.padding(5.dp))
                     }
                 }
@@ -116,7 +116,8 @@ fun FilmItem(
     ) {
         Card(
             modifier = Modifier
-                .width(150.dp),
+                .width(150.dp)
+                .height(225.dp),
             backgroundColor = MaterialTheme.colors.background,
             elevation = 3.dp,
             shape = MaterialTheme.shapes.small
@@ -131,7 +132,7 @@ fun FilmItem(
                 contentDescription = null,
                 modifier = Modifier.fillMaxWidth(),
                 alignment = Alignment.Center,
-                contentScale = ContentScale.FillWidth
+                contentScale = ContentScale.FillHeight
             )
         }
 
