@@ -1,4 +1,4 @@
-package com.example.inostudioTask.data.repository
+package com.example.inostudioTask.domain.repository
 
 import com.example.inostudioTask.data.dataSource.ActorDao
 import com.example.inostudioTask.data.dataSource.FilmDao
@@ -6,7 +6,6 @@ import com.example.inostudioTask.data.dataSource.dto.ActorEntity
 import com.example.inostudioTask.data.remote.FilmApi
 import com.example.inostudioTask.data.remote.dto.*
 import com.example.inostudioTask.data.dataSource.dto.FilmEntity
-import com.example.inostudioTask.domain.repository.FilmRepository
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import javax.inject.Inject
@@ -126,27 +125,43 @@ class FilmRepositoryImpl @Inject constructor(
         )
     }
 
-    override suspend fun insertFilmDatabase(film: FilmEntity) {
+    override suspend fun insertItemDatabase(film: FilmEntity) {
         filmDao.insertFilm(film = film)
     }
 
-    override suspend fun deleteFilmDatabase(film: FilmEntity) {
+    override suspend fun deleteItemDatabase(film: FilmEntity) {
         filmDao.deleteFilm(film = film)
     }
 
-    override suspend fun getFilmsByIdDatabase(id: Int): FilmEntity? {
+    override suspend fun getFilmByIdDatabase(id: Int): FilmEntity? {
         return filmDao.getFilmsById(id = id)
     }
 
-    override suspend fun insertActorDatabase(actor: ActorEntity) {
+    override suspend fun insertItemDatabase(actor: ActorEntity) {
         actorDao.insertActor(actor = actor)
     }
 
-    override suspend fun deleteActorDatabase(actor: ActorEntity) {
+    override suspend fun deleteItemDatabase(actor: ActorEntity) {
         actorDao.deleteActor(actor = actor)
     }
 
     override suspend fun getActorByIdDatabase(id: Int): ActorEntity? {
         return actorDao.getActorById(id)
+    }
+
+    override suspend fun onFavoriteClick(actor: Actor) {
+        if (actor.isInDatabase!!) {
+            deleteItemDatabase(actor = actor.toActorEntity())
+        } else {
+            insertItemDatabase(actor = actor.toActorEntity())
+        }
+    }
+
+    override suspend fun onFavoriteClick(film: Film) {
+        if (film.isInDatabase!!) {
+            deleteItemDatabase(film.toFilmEntity())
+        } else {
+            insertItemDatabase(film.toFilmEntity())
+        }
     }
 }

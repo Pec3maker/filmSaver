@@ -8,7 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.inostudioTask.presentation.common.ListState
-import com.example.inostudioTask.presentation.common.Screen
+import com.example.inostudioTask.presentation.common.Screens
 import com.example.inostudioTask.presentation.common.components.ActorListComponent
 import com.example.inostudioTask.presentation.common.components.ErrorScreen
 
@@ -32,9 +32,11 @@ fun CastListScreen(
                 ActorListComponent(
                     actorList = uiState.data,
                     navigate = {
-                        navController.navigate("${Screen.ActorReviewScreen.route}/$it")
+                        navController.navigate(
+                            Screens.ActorReviewScreen.getNavigationRoute(it)
+                        )
                     },
-                    addFavorite = { viewModel.addFavorite(it) }
+                    addFavorite = { viewModel.onFavoriteClick(it) }
                 )
             }
             is ListState.Empty -> Unit

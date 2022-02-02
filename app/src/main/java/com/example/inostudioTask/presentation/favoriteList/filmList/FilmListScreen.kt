@@ -10,7 +10,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.inostudioTask.R
 import com.example.inostudioTask.presentation.common.ListState
-import com.example.inostudioTask.presentation.common.Screen
+import com.example.inostudioTask.presentation.common.Screens
 import com.example.inostudioTask.presentation.common.components.FilmListComponent
 import com.example.inostudioTask.presentation.common.components.EmptyScreen
 
@@ -34,9 +34,9 @@ fun FilmListScreen(
                 FilmListComponent(
                     filmList = uiState.data,
                     navigate = {
-                        navController.navigate("${Screen.FilmReviewScreen.route}/$it")
+                        navController.navigate(Screens.FilmReviewScreen.getNavigationRoute(it))
                     },
-                    addFavorite = { viewModel.deleteFilm(it) }
+                    addFavorite = { viewModel.onFavoriteClick(it) }
                 )
             }
 

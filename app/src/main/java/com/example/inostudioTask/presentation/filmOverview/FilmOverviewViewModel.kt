@@ -7,9 +7,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.inostudioTask.common.Constants
 import com.example.inostudioTask.data.remote.dto.Film
-import com.example.inostudioTask.data.remote.dto.toFilmEntity
 import com.example.inostudioTask.domain.repository.FilmRepository
 import com.example.inostudioTask.presentation.common.ReviewState
+import com.example.inostudioTask.presentation.common.Screens
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -28,7 +28,7 @@ class FilmOverviewViewModel @Inject constructor(
     private lateinit var movieId: String
 
     init {
-        savedStateHandle.get<String>("movie_id")?.let {
+        savedStateHandle.get<String>(Screens.FilmReviewScreen.NAV_ARGUMENT_NAME)?.let {
             movieId = it
         }
         onDatabaseUpdate()
@@ -39,11 +39,9 @@ class FilmOverviewViewModel @Inject constructor(
         getFilm()
     }
 
-    fun addFavorite(film: Film) {
-        if (film.isInDatabase!!) {
-            deleteFilm(film = film)
-        } else {
-            saveFilm(film = film)
+    fun onFavoriteClick(film: Film) {
+        viewModelScope.launch {
+            repository.onFavoriteClick(film = film)
         }
     }
 
@@ -78,18 +76,6 @@ class FilmOverviewViewModel @Inject constructor(
                     _state.value = fillFilmAccessory(filmListState.data)
                 }
             }
-        }
-    }
-
-    private fun saveFilm(film: Film) {
-        viewModelScope.launch {
-            repository.insertFilmDatabase(film.toFilmEntity())
-        }
-    }
-
-    private fun deleteFilm(film: Film) {
-        viewModelScope.launch {
-            repository.deleteFilmDatabase(film.toFilmEntity())
         }
     }
 
