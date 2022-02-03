@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.sp
 import coil.compose.rememberImagePainter
 import com.example.inostudioTask.R
 import com.example.inostudioTask.data.remote.dto.Film
+import com.example.inostudioTask.data.remote.dto.posterPathUrl
 import com.example.inostudioTask.data.remote.dto.toCombinedImages
 import com.example.inostudioTask.data.remote.dto.videoUrl
 import com.example.inostudioTask.presentation.common.components.ExtraInfo
@@ -311,7 +312,7 @@ private fun FilmPoster(film: Film) {
         border = BorderStroke(width = 1.dp, color = MaterialTheme.colors.onSurface)
     ) {
         Image(
-            painter = rememberImagePainter(film.imageUrl(film.posterPath ?: "")),
+            painter = rememberImagePainter(film.posterPathUrl()),
             contentDescription = null,
             modifier = Modifier
                 .fillMaxSize(),

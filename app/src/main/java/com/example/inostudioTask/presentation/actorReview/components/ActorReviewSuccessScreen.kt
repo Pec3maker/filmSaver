@@ -16,10 +16,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberImagePainter
 import com.example.inostudioTask.R
-import com.example.inostudioTask.data.remote.dto.Actor
-import com.example.inostudioTask.data.remote.dto.Film
-import com.example.inostudioTask.data.remote.dto.profilePathUrl
-import com.example.inostudioTask.data.remote.dto.url
+import com.example.inostudioTask.data.remote.dto.*
 import com.example.inostudioTask.presentation.common.components.LikeButton
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
@@ -127,7 +124,7 @@ fun FilmItem(
                 if (film.posterPath.isNullOrEmpty()) {
                     rememberImagePainter(data = R.drawable.not_found_image)
                 } else {
-                    rememberImagePainter(film.imageUrl(film.posterPath))
+                    rememberImagePainter(film.posterPathUrl())
                 },
                 contentDescription = null,
                 modifier = Modifier.fillMaxWidth(),
