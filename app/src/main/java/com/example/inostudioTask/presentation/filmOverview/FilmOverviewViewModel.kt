@@ -5,9 +5,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.inostudioTask.common.Constants
+import com.example.inostudioTask.common.FilmRepository
 import com.example.inostudioTask.data.remote.dto.Film
-import com.example.inostudioTask.domain.repository.FilmRepository
 import com.example.inostudioTask.presentation.common.ReviewState
 import com.example.inostudioTask.presentation.common.Screens
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -24,6 +23,7 @@ class FilmOverviewViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val _state = mutableStateOf<ReviewState<Film>>(ReviewState.Loading)
+    private val additionalInfo = "videos,images,reviews,credits"
     val state: State<ReviewState<Film>> = _state
     private val movieId: String = savedStateHandle
         .get<String>(Screens.FilmReviewScreen.NAV_ARGUMENT_NAME)!!
@@ -48,10 +48,8 @@ class FilmOverviewViewModel @Inject constructor(
             try {
                 _state.value = ReviewState.Loading
                 val film = repository.getFilmsById(
-                    apiKey = Constants.API_KEY,
                     id = movieId,
-                    language = Constants.LANGUAGE,
-                    additionalInfo = "videos,images,reviews,credits"
+                    additionalInfo = additionalInfo
                 )
                 _state.value = fillFilmAccessory(film)
             } catch (e: HttpException) {

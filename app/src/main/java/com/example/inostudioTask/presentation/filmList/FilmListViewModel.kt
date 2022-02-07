@@ -4,9 +4,8 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.inostudioTask.common.Constants
+import com.example.inostudioTask.common.FilmRepository
 import com.example.inostudioTask.data.remote.dto.Film
-import com.example.inostudioTask.domain.repository.FilmRepository
 import com.example.inostudioTask.presentation.common.ListState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
@@ -36,7 +35,7 @@ class FilmListViewModel @Inject constructor(
     }
 
     fun onSearchTextUpdate(text: String) {
-        searchTextState.value = text;
+        searchTextState.value = text
         searchFilms()
     }
 
@@ -70,11 +69,7 @@ class FilmListViewModel @Inject constructor(
         coroutineJob = viewModelScope.launch {
             progressBarState.value = true
             try {
-                val data = repository.getFilms(
-                    apiKey = Constants.API_KEY,
-                    page = Constants.SEARCH_PAGE,
-                    language = Constants.LANGUAGE
-                )
+                val data = repository.getFilms()
                 _state.value = fillFilmsAccessory(data)
             } catch (e: HttpException) {
                 errorHandler(e)
@@ -98,12 +93,7 @@ class FilmListViewModel @Inject constructor(
         coroutineJob = viewModelScope.launch {
             progressBarState.value = true
             try {
-                val data = repository.getFilmsBySearch(
-                    apiKey = Constants.API_KEY,
-                    page = Constants.SEARCH_PAGE,
-                    query = query,
-                    language = Constants.LANGUAGE
-                )
+                val data = repository.getFilmsBySearch(query = query)
                 if (data.isEmpty()) {
                     _state.value = ListState.Empty
                 } else {

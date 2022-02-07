@@ -1,4 +1,4 @@
-package com.example.inostudioTask.domain.repository
+package com.example.inostudioTask.common
 
 import com.example.inostudioTask.data.dataSource.dto.ActorEntity
 import com.example.inostudioTask.data.dataSource.dto.FilmEntity
@@ -12,43 +12,21 @@ interface FilmRepository {
     val filmListFlow: StateFlow<List<FilmEntity>>
     val actorListFlow: StateFlow<List<ActorEntity>>
 
-    suspend fun getFilms(
-        apiKey: String,
-        page: Int,
-        language: String
-    ): List<Film>
+    suspend fun getFilms(): List<Film>
 
     suspend fun getFilmsById(
-        apiKey: String,
         id: String,
-        language: String,
         additionalInfo: String
     ): Film
 
-    suspend fun getFilmsBySearch(
-        apiKey: String,
-        query: String,
-        page: Int,
-        language: String
-    ): List<Film>
+    suspend fun getFilmsBySearch(query: String): List<Film>
 
-    suspend fun getReviewList(
-        apiKey: String,
-        id: String,
-        page: Int,
-        language: String
-    ): List<ReviewResponse>
+    suspend fun getReviewList(id: String): List<ReviewResponse>
 
-    suspend fun getActorsList(
-        apiKey: String,
-        page: Int,
-        language: String
-    ): List<Actor>
+    suspend fun getActorsList(): List<Actor>
 
     suspend fun getActorDetails(
-        apiKey: String,
         personId: String,
-        language: String,
         additionalInfo: String
     ): Actor
 
@@ -59,4 +37,11 @@ interface FilmRepository {
     suspend fun onFavoriteClick(actor: Actor)
 
     suspend fun onFavoriteClick(film: Film)
+
+    companion object {
+        const val IMAGE_PATH = "https://image.tmdb.org/t/p/w500"
+        const val API_KEY = "f1c1fa32aa618e6adc168c3cc3cc6c46"
+        const val LANGUAGE = "en"
+        const val SEARCH_PAGE = 1
+    }
 }

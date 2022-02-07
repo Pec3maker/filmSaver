@@ -1,5 +1,8 @@
-package com.example.inostudioTask.domain.repository
+package com.example.inostudioTask.common
 
+import com.example.inostudioTask.common.FilmRepository.Companion.API_KEY
+import com.example.inostudioTask.common.FilmRepository.Companion.LANGUAGE
+import com.example.inostudioTask.common.FilmRepository.Companion.SEARCH_PAGE
 import com.example.inostudioTask.data.dataSource.ActorDao
 import com.example.inostudioTask.data.dataSource.FilmDao
 import com.example.inostudioTask.data.dataSource.dto.ActorEntity
@@ -46,77 +49,59 @@ class FilmRepositoryImpl @Inject constructor(
 
     private fun getActorsDatabase(): Flow<List<ActorEntity>> = actorDao.getActors()
 
-    override suspend fun getFilms(
-        apiKey: String,
-        page: Int,
-        language: String
-    ): List<Film> =
+    override suspend fun getFilms(): List<Film> =
         api.getFilms(
-            apiKey = apiKey,
-            page = page,
-            language = language
+            apiKey = API_KEY,
+            page = SEARCH_PAGE,
+            language = LANGUAGE
         ).results
 
     override suspend fun getFilmsById(
-        apiKey: String,
         id: String,
-        language: String,
         additionalInfo: String
     ): Film =
         api.getAdditionalInfo(
-            apiKey = apiKey,
+            apiKey = API_KEY,
             filmId = id,
-            language = language,
+            language = LANGUAGE,
             additionalInfo = additionalInfo
         )
 
     override suspend fun getFilmsBySearch(
-        apiKey: String,
-        query: String,
-        page: Int,
-        language: String
+        query: String
     ): List<Film> =
         api.getFilmsBySearch(
-            apiKey = apiKey,
+            apiKey = API_KEY,
             query = query,
-            page = page,
-            language = language
+            page = SEARCH_PAGE,
+            language = LANGUAGE
         ).results
 
     override suspend fun getReviewList(
-        apiKey: String,
-        id: String,
-        page: Int,
-        language: String
+        id: String
     ): List<ReviewResponse> =
         api.getReviewList(
-            apiKey = apiKey,
+            apiKey = API_KEY,
             filmId = id,
-            page = page,
-            language = language
+            page = SEARCH_PAGE,
+            language = LANGUAGE
         ).results
 
-    override suspend fun getActorsList(
-        apiKey: String,
-        page: Int,
-        language: String
-    ): List<Actor> =
+    override suspend fun getActorsList(): List<Actor> =
         api.getPopularActors(
-            apiKey = apiKey,
-            page = page,
-            language = language
+            apiKey = API_KEY,
+            page = SEARCH_PAGE,
+            language = LANGUAGE
         ).results
 
     override suspend fun getActorDetails(
-        apiKey: String,
         personId: String,
-        language: String,
         additionalInfo: String
     ): Actor =
         api.getActorDetails(
-            apiKey = apiKey,
+            apiKey = API_KEY,
             personId = personId,
-            language = language,
+            language = LANGUAGE,
             additionalInfo = additionalInfo
         )
 

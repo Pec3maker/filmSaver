@@ -1,6 +1,6 @@
 package com.example.inostudioTask.data.remote.dto
 
-import com.example.inostudioTask.common.Constants
+import com.example.inostudioTask.common.FilmRepository.Companion.IMAGE_PATH
 import com.example.inostudioTask.data.dataSource.dto.FilmEntity
 import com.squareup.moshi.Json
 
@@ -25,26 +25,30 @@ data class Film(
     val isInDatabase: Boolean? = null,
     val linesToShow: Int = 5
 ) {
-    fun imageUrl(image: String): String = Constants.IMAGE_PATH.plus(image)
-}
 
+    fun imageUrl(image: String): String = IMAGE_PATH.plus(image)
 
-fun Film.toFilmEntity(): FilmEntity =
-    FilmEntity(
-        id = id,
-        title = title,
-        originalTitle = originalTitle,
-        posterPath = posterPath ?: "",
-        overview = overview,
-        releaseDate = releaseDate,
-        voteAverage = voteAverage
-    )
+    fun toFilmEntity(): FilmEntity =
+        FilmEntity(
+            id = id,
+            title = title,
+            originalTitle = originalTitle,
+            posterPath = posterPath ?: "",
+            overview = overview,
+            releaseDate = releaseDate,
+            voteAverage = voteAverage
+        )
 
-fun Film.videoUrl(): String =
-    if (videos != null) {
-        "https://www.youtube.com/watch?v=".plus(videos.results[0].key)
-    } else {
-        ""
+    fun videoUrl(): String =
+        if (videos != null) {
+            BASE_YOUTUBE_URL.plus(videos.results[0].key)
+        } else {
+            ""
+        }
+
+    fun posterPathUrl(): String = IMAGE_PATH.plus(posterPath)
+
+    companion object {
+        const val BASE_YOUTUBE_URL = "https://www.youtube.com/watch?v="
     }
-
-fun Film.posterPathUrl(): String = Constants.IMAGE_PATH.plus(posterPath)
+}

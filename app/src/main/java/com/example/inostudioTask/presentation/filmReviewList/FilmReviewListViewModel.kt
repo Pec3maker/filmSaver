@@ -5,9 +5,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.inostudioTask.common.Constants
+import com.example.inostudioTask.common.FilmRepository
 import com.example.inostudioTask.data.remote.dto.ReviewResponse
-import com.example.inostudioTask.domain.repository.FilmRepository
 import com.example.inostudioTask.presentation.common.ListState
 import com.example.inostudioTask.presentation.common.Screens
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -39,12 +38,7 @@ class FilmReviewListViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 _state.value = ListState.Loading
-                val data = repository.getReviewList(
-                    apiKey = Constants.API_KEY,
-                    id = movieId,
-                    page = Constants.SEARCH_PAGE,
-                    language = Constants.LANGUAGE
-                )
+                val data = repository.getReviewList(id = movieId)
                 _state.value = ListState.Success(data)
             } catch (e: HttpException) {
                 _state.value = ListState.Error(e.message ?: "")

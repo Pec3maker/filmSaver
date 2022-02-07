@@ -1,6 +1,6 @@
 package com.example.inostudioTask.data.remote.dto
 
-import com.example.inostudioTask.common.Constants
+import com.example.inostudioTask.common.FilmRepository.Companion.IMAGE_PATH
 import com.example.inostudioTask.data.dataSource.dto.ActorEntity
 import com.squareup.moshi.Json
 
@@ -20,14 +20,14 @@ data class Actor(
     @Json(name = "movie_credits")
     val movies: ActorFilmList? = null,
     val isInDatabase: Boolean? = null
-)
+) {
+    fun toActorEntity(): ActorEntity =
+        ActorEntity(
+            id = id,
+            name = name,
+            popularity = popularity,
+            profilePath = profilePath ?: ""
+        )
 
-fun Actor.toActorEntity(): ActorEntity =
-    ActorEntity(
-        id = id,
-        name = name,
-        popularity = popularity,
-        profilePath = profilePath ?: ""
-    )
-
-fun Actor.profilePathUrl(): String = Constants.IMAGE_PATH.plus(profilePath)
+    fun profilePathUrl(): String = IMAGE_PATH.plus(profilePath)
+}
