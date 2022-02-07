@@ -22,7 +22,6 @@ import androidx.compose.ui.unit.sp
 import coil.compose.rememberImagePainter
 import com.example.inostudioTask.R
 import com.example.inostudioTask.data.remote.dto.Actor
-import com.example.inostudioTask.data.remote.dto.profilePathUrl
 
 @Composable
 fun ActorListComponent(

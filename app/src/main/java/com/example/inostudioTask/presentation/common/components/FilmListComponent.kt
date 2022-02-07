@@ -20,7 +20,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberImagePainter
 import com.example.inostudioTask.data.remote.dto.Film
-import com.example.inostudioTask.data.remote.dto.posterPathUrl
 
 @Composable
 fun FilmListComponent(

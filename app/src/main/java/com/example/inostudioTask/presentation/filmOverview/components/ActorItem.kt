@@ -15,7 +15,6 @@ import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
 import com.example.inostudioTask.R
 import com.example.inostudioTask.data.remote.dto.CastResponse
-import com.example.inostudioTask.data.remote.dto.profileUrl
 
 @Composable
 fun ActorItem(
