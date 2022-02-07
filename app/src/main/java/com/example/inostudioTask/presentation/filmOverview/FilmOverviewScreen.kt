@@ -22,7 +22,6 @@ fun FilmOverviewScreen(
     viewModel: FilmOverviewViewModel = hiltViewModel(),
     navController: NavController
 ) {
-
     Box(modifier = Modifier.fillMaxSize()) {
         when (val uiState = viewModel.state.value) {
             is ReviewState.Success -> {

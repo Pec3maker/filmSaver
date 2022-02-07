@@ -23,14 +23,12 @@ class ActorReviewViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-    private lateinit var personId: String
+    private val personId: String = savedStateHandle
+        .get<String>(Screens.ActorReviewScreen.NAV_ARGUMENT_NAME)!!
     private val _state = mutableStateOf<ReviewState<Actor>>(ReviewState.Loading)
     val state: State<ReviewState<Actor>> = _state
 
     init {
-        savedStateHandle.get<String>(Screens.ActorReviewScreen.NAV_ARGUMENT_NAME)?.let {
-            personId = it
-        }
         onDatabaseUpdate()
         refresh()
     }
@@ -53,7 +51,7 @@ class ActorReviewViewModel @Inject constructor(
                     apiKey = Constants.API_KEY,
                     language = Constants.LANGUAGE,
                     personId = personId,
-                    additionalInfo = Constants.ACTOR_ADDITIONAL_INFO
+                    additionalInfo = "images,movie_credits"
                 )
                 _state.value = fillActorAccessory(actor = data)
             } catch (e: HttpException) {

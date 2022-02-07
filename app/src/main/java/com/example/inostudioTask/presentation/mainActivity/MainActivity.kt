@@ -141,7 +141,7 @@ fun NavGraphBuilder.filmsGraph(navController: NavController, scaffoldState: Scaf
             route = Screens.FilmReviewScreen.route,
             arguments = Screens.FilmReviewScreen.arguments
         ) {
-            FilmOverviewScreen(navController = navController)
+            FilmOverviewScreen(navController = navController, )
         }
 
         composable(

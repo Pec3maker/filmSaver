@@ -22,14 +22,12 @@ class FilmReviewListViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-    private lateinit var movieId: String
+    private val movieId: String = savedStateHandle
+        .get<String>(Screens.FilmReviewListScreen.NAV_ARGUMENT_NAME)!!
     private val _state = mutableStateOf<ListState<ReviewResponse>>(ListState.Loading)
     val state: State<ListState<ReviewResponse>> = _state
 
     init {
-        savedStateHandle.get<String>(Screens.FilmReviewListScreen.NAV_ARGUMENT_NAME)?.let {
-            movieId = it
-        }
         refresh()
     }
 

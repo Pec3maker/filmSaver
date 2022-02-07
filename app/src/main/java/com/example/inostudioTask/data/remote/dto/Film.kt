@@ -41,9 +41,10 @@ fun Film.toFilmEntity(): FilmEntity =
     )
 
 fun Film.videoUrl(): String =
-    if (videos != null)
-        Constants.BASE_YOUTUBE_URL.plus(videos.results[0].key)
-    else ""
-
+    if (videos != null) {
+        "https://www.youtube.com/watch?v=".plus(videos.results[0].key)
+    } else {
+        ""
+    }
 
 fun Film.posterPathUrl(): String = Constants.IMAGE_PATH.plus(posterPath)

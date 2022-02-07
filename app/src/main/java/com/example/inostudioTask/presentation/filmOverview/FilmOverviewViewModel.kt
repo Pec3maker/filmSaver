@@ -25,12 +25,10 @@ class FilmOverviewViewModel @Inject constructor(
 
     private val _state = mutableStateOf<ReviewState<Film>>(ReviewState.Loading)
     val state: State<ReviewState<Film>> = _state
-    private lateinit var movieId: String
+    private val movieId: String = savedStateHandle
+        .get<String>(Screens.FilmReviewScreen.NAV_ARGUMENT_NAME)!!
 
     init {
-        savedStateHandle.get<String>(Screens.FilmReviewScreen.NAV_ARGUMENT_NAME)?.let {
-            movieId = it
-        }
         onDatabaseUpdate()
         refresh()
     }
@@ -53,7 +51,7 @@ class FilmOverviewViewModel @Inject constructor(
                     apiKey = Constants.API_KEY,
                     id = movieId,
                     language = Constants.LANGUAGE,
-                    additionalInfo = Constants.FILM_ADDITIONAL_INFO
+                    additionalInfo = "videos,images,reviews,credits"
                 )
                 _state.value = fillFilmAccessory(film)
             } catch (e: HttpException) {
