@@ -1,6 +1,8 @@
 package com.example.inostudioTask.common
 
+import com.example.inostudioTask.common.FilmRepository.Companion.ACTOR_ADDITIONAL_INFO
 import com.example.inostudioTask.common.FilmRepository.Companion.API_KEY
+import com.example.inostudioTask.common.FilmRepository.Companion.FILM_ADDITIONAL_INFO
 import com.example.inostudioTask.common.FilmRepository.Companion.LANGUAGE
 import com.example.inostudioTask.common.FilmRepository.Companion.SEARCH_PAGE
 import com.example.inostudioTask.data.dataSource.ActorDao
@@ -56,15 +58,12 @@ class FilmRepositoryImpl @Inject constructor(
             language = LANGUAGE
         ).results
 
-    override suspend fun getFilmsById(
-        id: String,
-        additionalInfo: String
-    ): Film =
+    override suspend fun getFilmsById(id: String): Film =
         api.getAdditionalInfo(
             apiKey = API_KEY,
             filmId = id,
             language = LANGUAGE,
-            additionalInfo = additionalInfo
+            additionalInfo = FILM_ADDITIONAL_INFO
         )
 
     override suspend fun getFilmsBySearch(
@@ -94,15 +93,12 @@ class FilmRepositoryImpl @Inject constructor(
             language = LANGUAGE
         ).results
 
-    override suspend fun getActorDetails(
-        personId: String,
-        additionalInfo: String
-    ): Actor =
+    override suspend fun getActorDetails(personId: String): Actor =
         api.getActorDetails(
             apiKey = API_KEY,
             personId = personId,
             language = LANGUAGE,
-            additionalInfo = additionalInfo
+            additionalInfo = ACTOR_ADDITIONAL_INFO
         )
 
     override suspend fun getFilmByIdDatabase(id: Int): FilmEntity? = filmDao.getFilmsById(id)

@@ -23,7 +23,6 @@ class FilmOverviewViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val _state = mutableStateOf<ReviewState<Film>>(ReviewState.Loading)
-    private val additionalInfo = "videos,images,reviews,credits"
     val state: State<ReviewState<Film>> = _state
     private val movieId: String = savedStateHandle
         .get<String>(Screens.FilmReviewScreen.NAV_ARGUMENT_NAME)!!
@@ -47,10 +46,7 @@ class FilmOverviewViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 _state.value = ReviewState.Loading
-                val film = repository.getFilmsById(
-                    id = movieId,
-                    additionalInfo = additionalInfo
-                )
+                val film = repository.getFilmsById(id = movieId)
                 _state.value = fillFilmAccessory(film)
             } catch (e: HttpException) {
                 _state.value = ReviewState.Error(
