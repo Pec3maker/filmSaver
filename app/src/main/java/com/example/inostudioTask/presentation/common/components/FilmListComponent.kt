@@ -19,7 +19,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberImagePainter
-import com.example.inostudioTask.common.Constants
 import com.example.inostudioTask.data.remote.dto.Film
 
 @Composable
@@ -68,9 +67,7 @@ fun FilmListItem(
                 modifier = Modifier.padding(start = 2.dp)
             ) {
                 Image(
-                    painter = rememberImagePainter(
-                        "${Constants.IMAGE_PATH}${film.posterPath}"
-                    ),
+                    painter = rememberImagePainter(film.posterPathUrl()),
                     contentDescription = null,
                     contentScale = ContentScale.Crop,
                     modifier = Modifier

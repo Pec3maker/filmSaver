@@ -13,8 +13,8 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
+import com.example.inostudioTask.R
 import com.example.inostudioTask.data.remote.dto.CastResponse
-import com.example.inostudioTask.data.remote.dto.profileUrl
 
 @Composable
 fun ActorItem(
@@ -23,23 +23,30 @@ fun ActorItem(
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Top,
         modifier = Modifier
             .fillMaxSize()
             .clickable { onActorClick(actor.id) }
     ) {
         Card(
             modifier = Modifier
-                .width(150.dp),
+                .width(150.dp)
+                .height(225.dp),
             backgroundColor = MaterialTheme.colors.background,
             elevation = 3.dp,
             shape = MaterialTheme.shapes.small
         ) {
             Image(
-                painter = rememberImagePainter(actor.profileUrl()),
+                painter =
+                if (actor.profilePath.isNullOrEmpty()) {
+                    rememberImagePainter(data = R.drawable.not_found_image)
+                } else {
+                    rememberImagePainter(actor.profileUrl())
+                },
                 contentDescription = null,
-                modifier = Modifier.fillMaxWidth(),
-                alignment = Alignment.Center,
-                contentScale = ContentScale.FillWidth
+                modifier = Modifier
+                    .fillMaxWidth(),
+                contentScale = ContentScale.FillHeight
             )
         }
 

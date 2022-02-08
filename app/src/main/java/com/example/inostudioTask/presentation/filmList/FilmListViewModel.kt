@@ -1,11 +1,11 @@
 package com.example.inostudioTask.presentation.filmList
 
-import androidx.compose.runtime.*
+import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.inostudioTask.common.Constants
+import com.example.inostudioTask.common.FilmRepository
 import com.example.inostudioTask.data.remote.dto.Film
-import com.example.inostudioTask.domain.repository.FilmRepository
 import com.example.inostudioTask.presentation.common.ListState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
@@ -24,7 +24,7 @@ class FilmListViewModel @Inject constructor(
     private val _state = mutableStateOf<ListState<Film>>(ListState.Empty)
     private var coroutineJob: Job = Job()
 
-    val uiState: State<ListState<Film>> = _state
+    val state: State<ListState<Film>> = _state
     val searchTextState = mutableStateOf("")
     val progressBarState = mutableStateOf(true)
     val errorMessage = MutableSharedFlow<String>()
@@ -35,15 +35,15 @@ class FilmListViewModel @Inject constructor(
     }
 
     fun onSearchTextUpdate(text: String) {
-        searchTextState.value = text;
+        searchTextState.value = text
         searchFilms()
     }
 
     fun searchFilms() {
         if (searchTextState.value.isEmpty()) {
-            getFilms(Constants.SEARCH_PAGE)
+            getFilms()
         } else {
-            getFilmsBySearch(page = Constants.SEARCH_PAGE, query = searchTextState.value)
+            getFilmsBySearch(query = searchTextState.value)
         }
     }
 
@@ -64,16 +64,12 @@ class FilmListViewModel @Inject constructor(
         }
     }
 
-    private fun getFilms(page: Int) {
+    private fun getFilms() {
         coroutineJob.cancel()
         coroutineJob = viewModelScope.launch {
             progressBarState.value = true
             try {
-                val data = repository.getFilms(
-                    apiKey = Constants.API_KEY,
-                    page = page,
-                    language = Constants.LANGUAGE
-                )
+                val data = repository.getFilms()
                 _state.value = fillFilmsAccessory(data)
             } catch (e: HttpException) {
                 errorHandler(e)
@@ -86,23 +82,18 @@ class FilmListViewModel @Inject constructor(
 
     private suspend fun errorHandler(e: Exception) {
         if (_state.value !is ListState.Success) {
-            _state.value = ListState.Error(message = e.message?: "")
+            _state.value = ListState.Error(message = e.message ?: "")
         } else {
-            errorMessage.emit(e.message?: "")
+            errorMessage.emit(e.message ?: "")
         }
     }
 
-    private fun getFilmsBySearch(page: Int, query: String) {
+    private fun getFilmsBySearch(query: String) {
         coroutineJob.cancel()
         coroutineJob = viewModelScope.launch {
             progressBarState.value = true
             try {
-                val data = repository.getFilmsBySearch(
-                    apiKey = Constants.API_KEY,
-                    page = page,
-                    query = query,
-                    language = Constants.LANGUAGE
-                )
+                val data = repository.getFilmsBySearch(query = query)
                 if (data.isEmpty()) {
                     _state.value = ListState.Empty
                 } else {
@@ -117,7 +108,7 @@ class FilmListViewModel @Inject constructor(
         }
     }
 
-    private fun fillFilmsAccessory(filmList: List<Film>): ListState.Success<Film>{
+    private fun fillFilmsAccessory(filmList: List<Film>): ListState.Success<Film> {
         val changedFilmList = filmList.toMutableList().apply {
             replaceAll { film ->
                 film.copy(isInDatabase = repository.filmListFlow.value.any { it.id == film.id })

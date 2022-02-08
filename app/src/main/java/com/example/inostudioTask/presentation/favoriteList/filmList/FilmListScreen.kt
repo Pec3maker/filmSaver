@@ -11,8 +11,8 @@ import androidx.navigation.NavController
 import com.example.inostudioTask.R
 import com.example.inostudioTask.presentation.common.ListState
 import com.example.inostudioTask.presentation.common.Screens
-import com.example.inostudioTask.presentation.common.components.FilmListComponent
 import com.example.inostudioTask.presentation.common.components.EmptyScreen
+import com.example.inostudioTask.presentation.common.components.FilmListComponent
 
 @Composable
 fun FilmListScreen(

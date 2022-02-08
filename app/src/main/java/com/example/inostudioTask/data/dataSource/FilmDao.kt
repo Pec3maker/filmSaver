@@ -5,7 +5,7 @@ import com.example.inostudioTask.data.dataSource.dto.FilmEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao
-interface FilmDao  {
+interface FilmDao {
 
     @Query("SELECT * FROM FilmEntity")
     fun getFilms(): Flow<List<FilmEntity>>

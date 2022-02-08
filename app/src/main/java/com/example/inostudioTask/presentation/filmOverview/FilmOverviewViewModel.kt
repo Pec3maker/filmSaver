@@ -5,9 +5,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.inostudioTask.common.Constants
+import com.example.inostudioTask.common.FilmRepository
 import com.example.inostudioTask.data.remote.dto.Film
-import com.example.inostudioTask.domain.repository.FilmRepository
 import com.example.inostudioTask.presentation.common.ReviewState
 import com.example.inostudioTask.presentation.common.Screens
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -25,12 +24,10 @@ class FilmOverviewViewModel @Inject constructor(
 
     private val _state = mutableStateOf<ReviewState<Film>>(ReviewState.Loading)
     val state: State<ReviewState<Film>> = _state
-    private lateinit var movieId: String
+    private val movieId: String = savedStateHandle
+        .get<String>(Screens.FilmReviewScreen.NAV_ARGUMENT_NAME)!!
 
     init {
-        savedStateHandle.get<String>(Screens.FilmReviewScreen.NAV_ARGUMENT_NAME)?.let {
-            movieId = it
-        }
         onDatabaseUpdate()
         refresh()
     }
@@ -49,12 +46,7 @@ class FilmOverviewViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 _state.value = ReviewState.Loading
-                val film = repository.getFilmsById(
-                    apiKey = Constants.API_KEY,
-                    id = movieId,
-                    language = Constants.LANGUAGE,
-                    additionalInfo = Constants.FILM_ADDITIONAL_INFO
-                )
+                val film = repository.getFilmsById(id = movieId)
                 _state.value = fillFilmAccessory(film)
             } catch (e: HttpException) {
                 _state.value = ReviewState.Error(
@@ -79,7 +71,7 @@ class FilmOverviewViewModel @Inject constructor(
         }
     }
 
-    private fun fillFilmAccessory(film: Film): ReviewState.Success<Film>{
+    private fun fillFilmAccessory(film: Film): ReviewState.Success<Film> {
         val changedFilm = film.copy(
             isInDatabase = repository.filmListFlow.value.any { it.id == film.id }
         )

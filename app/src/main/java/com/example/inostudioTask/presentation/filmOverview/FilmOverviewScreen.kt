@@ -1,9 +1,10 @@
 package com.example.inostudioTask.presentation.filmOverview
 
 import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
-import androidx.compose.runtime.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -21,10 +22,8 @@ fun FilmOverviewScreen(
     viewModel: FilmOverviewViewModel = hiltViewModel(),
     navController: NavController
 ) {
-    val uiState = viewModel.state.value
-
     Box(modifier = Modifier.fillMaxSize()) {
-        when(uiState) {
+        when (val uiState = viewModel.state.value) {
             is ReviewState.Success -> {
                 FilmOverviewSuccessScreen(
                     film = uiState.data,
@@ -44,7 +43,7 @@ fun FilmOverviewScreen(
             }
             is ReviewState.Error -> {
                 ErrorScreen(
-                    text = uiState.message?: "",
+                    text = uiState.message ?: "",
                     onButtonClick = { viewModel.refresh() }
                 )
             }

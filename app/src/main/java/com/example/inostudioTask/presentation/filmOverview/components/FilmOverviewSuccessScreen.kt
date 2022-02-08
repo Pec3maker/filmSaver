@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberImagePainter
 import com.example.inostudioTask.R
-import com.example.inostudioTask.data.remote.dto.*
+import com.example.inostudioTask.data.remote.dto.Film
 import com.example.inostudioTask.presentation.common.components.ExtraInfo
 import com.example.inostudioTask.presentation.common.components.LikeButton
 import com.google.accompanist.pager.ExperimentalPagerApi
@@ -109,7 +109,7 @@ private fun Buttons(
             }
         }
 
-        if (film.reviews?.results?.size?: 0  > 1) {
+        if (film.reviews?.results?.size ?: 0 > 1) {
             Button(
                 onClick = {
                     onReviewClick()
@@ -255,10 +255,11 @@ private fun FilmImages(film: Film) {
                         shape = MaterialTheme.shapes.small
                     ) {
                         Image(
+                            modifier = Modifier.fillMaxWidth(),
                             painter = rememberImagePainter(film.imageUrl(it[page].filePath)),
                             contentDescription = null,
                             alignment = Alignment.Center,
-                            contentScale = ContentScale.FillWidth
+                            contentScale = ContentScale.Fit
                         )
                     }
                 }
@@ -308,7 +309,7 @@ private fun FilmPoster(film: Film) {
         border = BorderStroke(width = 1.dp, color = MaterialTheme.colors.onSurface)
     ) {
         Image(
-            painter = rememberImagePainter(film.imageUrl(film.posterPath ?: "")),
+            painter = rememberImagePainter(film.posterPathUrl()),
             contentDescription = null,
             modifier = Modifier
                 .fillMaxSize(),

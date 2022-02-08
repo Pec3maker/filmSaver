@@ -21,7 +21,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberImagePainter
 import com.example.inostudioTask.R
-import com.example.inostudioTask.common.Constants
 import com.example.inostudioTask.data.remote.dto.Actor
 
 @Composable
@@ -38,7 +37,8 @@ fun ActorListComponent(
             ActorItem(
                 actor = actor,
                 onItemClick = { navigate(actor.id) },
-                onFavoriteClick = { addFavorite(it)})
+                onFavoriteClick = { addFavorite(it) }
+            )
         }
     }
 }
@@ -69,9 +69,12 @@ fun ActorItem(
                 modifier = Modifier.padding(start = 2.dp)
             ) {
                 Image(
-                    painter = rememberImagePainter(
-                        "${Constants.IMAGE_PATH}${actor.profilePath}"
-                    ),
+                    painter =
+                    if (actor.profilePath.isNullOrEmpty()) {
+                        rememberImagePainter(data = R.drawable.not_found_image)
+                    } else {
+                        rememberImagePainter(actor.profilePathUrl())
+                    },
                     contentDescription = null,
                     contentScale = ContentScale.Crop,
                     modifier = Modifier

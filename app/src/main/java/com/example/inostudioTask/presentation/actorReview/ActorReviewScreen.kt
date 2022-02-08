@@ -20,10 +20,8 @@ fun ActorReviewScreen(
     viewModel: ActorReviewViewModel = hiltViewModel(),
     navController: NavController
 ) {
-    val uiState = viewModel.state.value
-
     Box(modifier = Modifier.fillMaxSize()) {
-        when (uiState) {
+        when (val uiState = viewModel.state.value) {
 
             is ReviewState.Loading -> {
                 CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
@@ -44,7 +42,7 @@ fun ActorReviewScreen(
             is ReviewState.Error -> {
                 ErrorScreen(
                     onButtonClick = { viewModel.refresh() },
-                    text = uiState.message?: ""
+                    text = uiState.message ?: ""
                 )
             }
         }

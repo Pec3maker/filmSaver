@@ -3,7 +3,9 @@ package com.example.inostudioTask.presentation.actorReview.components
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.material.*
+import androidx.compose.material.Card
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -87,9 +89,9 @@ private fun StaredMovies(
                     .fillMaxWidth(),
                 contentPadding = PaddingValues(5.dp)
             ) {
-                actor.movies?.results?.let {
+                actor.movies?.results?.let { it ->
                     items(it.count()) { index ->
-                        FilmItem(film = it[index]) { onFilmClick(it) }
+                        FilmItem(film = it[index]) { id -> onFilmClick(id) }
                         Spacer(modifier = Modifier.padding(5.dp))
                     }
                 }
@@ -111,17 +113,23 @@ fun FilmItem(
     ) {
         Card(
             modifier = Modifier
-                .width(150.dp),
+                .width(150.dp)
+                .height(225.dp),
             backgroundColor = MaterialTheme.colors.background,
             elevation = 3.dp,
             shape = MaterialTheme.shapes.small
         ) {
             Image(
-                painter = rememberImagePainter(film.imageUrl(film.posterPath ?: "")),
+                painter =
+                if (film.posterPath.isNullOrEmpty()) {
+                    rememberImagePainter(data = R.drawable.not_found_image)
+                } else {
+                    rememberImagePainter(film.posterPathUrl())
+                },
                 contentDescription = null,
                 modifier = Modifier.fillMaxWidth(),
                 alignment = Alignment.Center,
-                contentScale = ContentScale.FillWidth
+                contentScale = ContentScale.FillHeight
             )
         }
 

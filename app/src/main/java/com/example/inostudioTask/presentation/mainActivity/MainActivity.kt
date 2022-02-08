@@ -5,7 +5,10 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBackIos
@@ -13,17 +16,19 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.navigation.*
+import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navigation
 import com.example.inostudioTask.presentation.actorReview.ActorReviewScreen
-import com.example.inostudioTask.presentation.common.Screens
 import com.example.inostudioTask.presentation.castList.CastListScreen
 import com.example.inostudioTask.presentation.common.BottomNavItems
+import com.example.inostudioTask.presentation.common.Screens
 import com.example.inostudioTask.presentation.favoriteList.FavoriteListScreen
 import com.example.inostudioTask.presentation.filmList.FilmListScreen
 import com.example.inostudioTask.presentation.filmOverview.FilmOverviewScreen
@@ -134,7 +139,7 @@ fun NavGraphBuilder.filmsGraph(navController: NavController, scaffoldState: Scaf
 
         composable(
             route = Screens.FilmReviewScreen.route,
-            arguments =  Screens.FilmReviewScreen.arguments
+            arguments = Screens.FilmReviewScreen.arguments
         ) {
             FilmOverviewScreen(navController = navController)
         }
@@ -198,7 +203,7 @@ fun TopBar(
 }
 
 @Composable
-fun BottomNavigationBar (
+fun BottomNavigationBar(
     navigate: (String) -> Unit,
     isSelected: (String) -> Boolean
 ) {
