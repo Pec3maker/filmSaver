@@ -11,12 +11,12 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Inostudio_task">
+        android:theme="@style/Theme.MySplash">
         <activity
             android:name="com.example.inostudioTask.presentation.mainActivity.MainActivity"
             android:exported="true"
             android:label="@string/app_name"
-            android:theme="@style/Theme.Inostudio_task.NoActionBar">
+            android:theme="@style/Theme.MySplash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
