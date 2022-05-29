@@ -92,17 +92,13 @@ fun FilmOverviewSuccessScreen(
             style = MaterialTheme.typography.subtitle1,
             color = Gray300
         )
-
         Spacer(modifier = Modifier.height(32.dp))
-
         Text(
             text = film.overview,
             style = MaterialTheme.typography.subtitle1,
             color = MaterialTheme.colors.onSurface
         )
-
         Spacer(modifier = Modifier.height(32.dp))
-
         film.images?.toCombinedImages()?.let {
             HorizontalPager(
                 count = it.count(),
@@ -131,14 +127,12 @@ fun FilmOverviewSuccessScreen(
                 }
             }
         }
-
         Spacer(modifier = Modifier.height(32.dp))
-
         Buttons(
             onReviewClick = { onReviewClick() },
             film = film
         )
-        Spacer(modifier = Modifier.height(2.dp))
+        Spacer(modifier = Modifier.height(10.dp))
     }
 }
 

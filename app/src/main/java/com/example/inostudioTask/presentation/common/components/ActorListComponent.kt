@@ -53,7 +53,7 @@ fun ActorItem(
     Card(
         border = BorderStroke(width = 1.dp, color = Gray150),
         backgroundColor = MaterialTheme.colors.background,
-        elevation = 3.dp,
+        elevation = 0.dp,
         modifier = Modifier
             .aspectRatio(ratio = 1.3f)
             .clickable { onItemClick() }

@@ -114,9 +114,7 @@ fun ActorReviewSuccessScreen(
                 )
             }
         }
-
         Spacer(modifier = Modifier.height(32.dp))
-
         LazyRow(
             modifier = Modifier.fillMaxWidth()
         ) {
@@ -127,8 +125,7 @@ fun ActorReviewSuccessScreen(
                 }
             }
         }
-
-        Spacer(modifier = Modifier.height(2.dp))
+        Spacer(modifier = Modifier.height(10.dp))
     }
 }
 
@@ -169,7 +166,10 @@ fun FilmItem(
             text = film.originalTitle,
             style = MaterialTheme.typography.subtitle1,
             color = Gray300,
-            textAlign = TextAlign.Center
+            textAlign = TextAlign.Center,
+            modifier = Modifier.width(width = 150.dp),
+            overflow = TextOverflow.Ellipsis,
+            maxLines = 1
         )
     }
 }
