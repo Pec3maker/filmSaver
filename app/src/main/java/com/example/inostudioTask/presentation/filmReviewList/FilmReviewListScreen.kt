@@ -22,6 +22,8 @@ import com.example.inostudioTask.R
 import com.example.inostudioTask.data.remote.dto.ReviewResponse
 import com.example.inostudioTask.presentation.common.ListState
 import com.example.inostudioTask.presentation.common.components.ErrorScreen
+import com.example.inostudioTask.presentation.ui.theme.Gray150
+import com.example.inostudioTask.presentation.ui.theme.Gray300
 
 @Composable
 fun FilmReviewListScreen(
@@ -53,10 +55,12 @@ fun FilmReviewListScreen(
 fun SuccessScreen(data: List<ReviewResponse>) {
     LazyColumn(
         modifier = Modifier
-            .fillMaxSize(),
+            .fillMaxSize()
+            .padding(horizontal = 16.dp),
     ) {
         items(data) { item ->
             ReviewItem(item)
+            Spacer(modifier = Modifier.height(height = 16.dp))
         }
     }
 }
@@ -65,21 +69,21 @@ fun SuccessScreen(data: List<ReviewResponse>) {
 fun ReviewItem(item: ReviewResponse) {
     val expanded = remember { mutableStateOf(false) }
     Card(
-        border = BorderStroke(width = 1.dp, color = MaterialTheme.colors.primary),
+        border = BorderStroke(width = 1.dp, color = Gray150),
         backgroundColor = MaterialTheme.colors.background,
-        elevation = 3.dp,
-        modifier = Modifier
-            .padding(5.dp)
-            .fillMaxHeight(),
+        elevation = 0.dp,
+        modifier = Modifier.fillMaxHeight(),
     ) {
-        Column {
-            Row(Modifier.fillMaxWidth()) {
+        Column(modifier = Modifier.padding(all = 4.dp)) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
                 Text(
                     text = stringResource(R.string.author, item.author),
-                    style = MaterialTheme.typography.h1,
+                    style = MaterialTheme.typography.h5,
                     color = MaterialTheme.colors.onSurface,
-                    textAlign = TextAlign.Start,
-                    modifier = Modifier.padding(start = 2.dp)
+                    textAlign = TextAlign.Start
                 )
 
                 Box(
@@ -100,15 +104,13 @@ fun ReviewItem(item: ReviewResponse) {
                     }
                 }
             }
-
+            Spacer(modifier = Modifier.height(height = 7.dp))
             Text(
                 text = item.content,
                 style = MaterialTheme.typography.body1,
-                color = MaterialTheme.colors.onSurface,
-                modifier = Modifier
-                    .animateContentSize()
-                    .padding(2.dp),
-                maxLines = if (expanded.value) Int.MAX_VALUE else 5,
+                color = Gray300,
+                modifier = Modifier.animateContentSize(),
+                maxLines = if (expanded.value) Int.MAX_VALUE else 4,
             )
         }
     }

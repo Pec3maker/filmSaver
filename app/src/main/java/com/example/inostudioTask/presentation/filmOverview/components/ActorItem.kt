@@ -15,6 +15,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
 import com.example.inostudioTask.R
 import com.example.inostudioTask.data.remote.dto.CastResponse
+import com.example.inostudioTask.presentation.ui.theme.Gray300
 
 @Composable
 fun ActorItem(
@@ -52,8 +53,8 @@ fun ActorItem(
 
         Text(
             text = actor.name ?: "",
-            style = MaterialTheme.typography.body1,
-            color = MaterialTheme.colors.onSurface,
+            style = MaterialTheme.typography.subtitle1,
+            color = Gray300,
             textAlign = TextAlign.Center
         )
     }

@@ -6,20 +6,23 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import coil.compose.rememberImagePainter
+import com.example.inostudioTask.R
 import com.example.inostudioTask.data.remote.dto.Film
+import com.example.inostudioTask.presentation.ui.theme.Gray150
+import com.example.inostudioTask.presentation.ui.theme.Gray300
+import com.example.inostudioTask.presentation.ui.theme.Red500
 
 @Composable
 fun FilmListComponent(
@@ -29,7 +32,8 @@ fun FilmListComponent(
 ) {
     LazyColumn(
         modifier = Modifier
-            .fillMaxSize(),
+            .fillMaxSize()
+            .padding(horizontal = 13.dp),
     ) {
         items(filmList) { film ->
             FilmListItem(
@@ -48,79 +52,64 @@ fun FilmListItem(
     onFavoriteClick: (Film) -> Unit
 ) {
     Card(
-        border = BorderStroke(width = 1.dp, color = MaterialTheme.colors.primary),
+        border = BorderStroke(width = 1.dp, color = Gray150),
         backgroundColor = MaterialTheme.colors.background,
         elevation = 3.dp,
         modifier = Modifier
-            .padding(5.dp)
-            .height(130.dp),
+            .aspectRatio(ratio = 1.23f)
+            .clickable { onItemClick(film) },
+        shape = RoundedCornerShape(size = 8.dp)
     ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .clickable { onItemClick(film) },
-            horizontalArrangement = Arrangement.SpaceAround,
-            verticalAlignment = Alignment.CenterVertically
+        Column(
+            Modifier
+                .fillMaxSize()
+                .padding(all = 4.dp)
         ) {
-            Card(
-                elevation = 2.dp,
-                modifier = Modifier.padding(start = 2.dp)
+            Image(
+                painter = rememberImagePainter(film.posterPathUrl()),
+                contentDescription = null,
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .aspectRatio(ratio = 1.8f)
+                    .clip(shape = RoundedCornerShape(size = 8.dp))
+            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Image(
-                    painter = rememberImagePainter(film.posterPathUrl()),
-                    contentDescription = null,
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier
-                        .size(width = 110.dp, height = 125.dp)
-                )
-            }
-
-            Column(
-                Modifier
-                    .fillMaxHeight()
-                    .padding(start = 5.dp),
-                verticalArrangement = Arrangement.Top
-            ) {
-                Row(
-                    Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    Text(
-                        text = film.title,
-                        fontSize = 19.sp,
-                        style = MaterialTheme.typography.h1,
-                        overflow = TextOverflow.Ellipsis,
-                        maxLines = 2,
-                        textAlign = TextAlign.Left,
-                        modifier = Modifier
-                            .fillMaxWidth(0.7f)
-                    )
-
-                    IconButton(onClick = { onFavoriteClick(film) }) {
-                        Icon(
-                            imageVector =
-                            if (film.isInDatabase!!) {
-                                Icons.Filled.Favorite
-                            } else {
-                                Icons.Filled.FavoriteBorder
-                            },
-                            contentDescription = null,
-                            modifier = Modifier.size(30.dp)
-                        )
-                    }
-                }
-
                 Text(
-                    text = film.overview,
-                    style = MaterialTheme.typography.body2,
-                    color = MaterialTheme.colors.onSurface,
-                    maxLines = 2
+                    text = film.title,
+                    style = MaterialTheme.typography.h5,
+                    overflow = TextOverflow.Ellipsis,
+                    maxLines = 2,
+                    textAlign = TextAlign.Left,
+                    modifier = Modifier
+                        .fillMaxWidth(0.7f),
+                    color = MaterialTheme.colors.onSurface
                 )
 
-                Row(verticalAlignment = Alignment.Bottom) {
-                    ExtraInfo(film = film)
+                IconButton(onClick = { onFavoriteClick(film) }) {
+                    Icon(
+                        painter = rememberImagePainter(R.drawable.ic_like),
+                        contentDescription = null,
+                        modifier = Modifier.size(24.dp),
+                        tint = if (film.isInDatabase!!) {
+                            Red500
+                        } else {
+                            Gray150
+                        }
+                    )
                 }
             }
+
+            Text(
+                text = stringResource(R.string.avg_rating, String.format("%.1f", film.voteAverage)),
+                style = MaterialTheme.typography.subtitle1,
+                color = Gray300
+            )
         }
     }
+    Spacer(modifier = Modifier.height(16.dp))
 }

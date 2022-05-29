@@ -1,7 +1,7 @@
 package com.example.inostudioTask.presentation.filmList
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.LinearProgressIndicator
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -18,7 +18,6 @@ import com.example.inostudioTask.presentation.common.Screens
 import com.example.inostudioTask.presentation.common.components.ErrorScreen
 import com.example.inostudioTask.presentation.common.components.FilmListComponent
 import com.example.inostudioTask.presentation.filmList.components.SearchBar
-import kotlinx.coroutines.flow.collect
 
 @Composable
 fun FilmListScreen(
@@ -33,17 +32,19 @@ fun FilmListScreen(
             showSnackBar(it)
         }
     }
-
     Column {
         SearchBar(
             hint = stringResource(id = R.string.searchbar_hint),
             modifier = Modifier
-                .fillMaxWidth(),
+                .fillMaxWidth()
+                .padding(horizontal = 13.dp),
             text = searchText,
             onTextChange = {
                 viewModel.onSearchTextUpdate(it)
             }
         )
+
+        Spacer(modifier = Modifier.height(height = 9.dp))
 
         if (viewModel.progressBarState.value) {
             FilmListLoadingScreen()
@@ -91,10 +92,9 @@ fun FilmListEmptyScreen(
 
 @Composable
 fun FilmListLoadingScreen() {
-    LinearProgressIndicator(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 11.dp)
-    )
-    Spacer(modifier = Modifier.padding(5.dp))
+    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+        CircularProgressIndicator(
+            modifier = Modifier.size(44.dp)
+        )
+    }
 }

@@ -3,7 +3,7 @@ package com.example.inostudioTask.presentation.filmList.components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
@@ -28,11 +28,11 @@ fun SearchBar(
             },
             modifier = Modifier
                 .fillMaxWidth()
-                .background(MaterialTheme.colors.background)
-                .padding(4.dp),
+                .background(MaterialTheme.colors.background),
             textStyle = TextStyle(color = MaterialTheme.colors.onSurface),
             singleLine = true,
-            maxLines = 1
+            maxLines = 1,
+            shape = RoundedCornerShape(size = 8.dp)
         )
     }
 }
