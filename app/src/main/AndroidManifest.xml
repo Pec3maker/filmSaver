@@ -14,9 +14,7 @@
         android:theme="@style/Theme.MySplash">
         <activity
             android:name="com.example.inostudioTask.presentation.mainActivity.MainActivity"
-            android:exported="true"
-            android:label="@string/app_name"
-            android:theme="@style/Theme.MySplash">
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
