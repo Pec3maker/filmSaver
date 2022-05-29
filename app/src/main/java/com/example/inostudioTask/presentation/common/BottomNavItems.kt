@@ -1,13 +1,10 @@
 package com.example.inostudioTask.presentation.common
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Person
-import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.annotation.DrawableRes
+import com.example.inostudioTask.R
 
-enum class BottomNavItems(val icon: ImageVector, val route: String) {
-    FILMS(icon = Icons.Filled.Home, route = "films"),
-    CAST(icon = Icons.Filled.Person, route = "cast"),
-    FAVORITES(icon = Icons.Filled.Favorite, route = "favorites")
+enum class BottomNavItems(@DrawableRes val icon: Int, val route: String, val title: String) {
+    FILMS(icon = R.drawable.ic_search, route = "films", title = "Search"),
+    CAST(icon = R.drawable.ic_cast, route = "cast", title = "Actors"),
+    FAVORITES(icon = R.drawable.ic_like, route = "favorites", title = "Favorites")
 }

@@ -3,26 +3,29 @@ package com.example.inostudioTask.presentation.filmOverview.components
 import android.content.Intent
 import android.net.Uri
 import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.animation.animateContentSize
-import androidx.compose.foundation.*
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.ArrowCircleDown
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import coil.compose.rememberImagePainter
 import com.example.inostudioTask.R
 import com.example.inostudioTask.data.remote.dto.Film
-import com.example.inostudioTask.presentation.common.components.ExtraInfo
-import com.example.inostudioTask.presentation.common.components.LikeButton
+import com.example.inostudioTask.presentation.ui.theme.Gray150
+import com.example.inostudioTask.presentation.ui.theme.Gray300
+import com.example.inostudioTask.presentation.ui.theme.Red500
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 
@@ -40,55 +43,112 @@ fun FilmOverviewSuccessScreen(
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(scrollState)
-            .padding(2.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+            .padding(horizontal = 16.dp)
     ) {
+        Image(
+            painter = rememberImagePainter(film.posterPathUrl()),
+            contentDescription = null,
+            contentScale = ContentScale.Crop,
+            modifier = Modifier
+                .fillMaxWidth()
+                .aspectRatio(ratio = 0.8f)
+                .clip(shape = RoundedCornerShape(size = 8.dp))
+        )
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = film.title,
+                style = MaterialTheme.typography.h5,
+                overflow = TextOverflow.Ellipsis,
+                textAlign = TextAlign.Left,
+                modifier = Modifier
+                    .fillMaxWidth(0.7f),
+                color = MaterialTheme.colors.onSurface
+            )
 
-        FilmPoster(film)
+            IconButton(onClick = { onFavoriteClick(film) }) {
+                Icon(
+                    painter = rememberImagePainter(R.drawable.ic_like),
+                    contentDescription = null,
+                    modifier = Modifier.size(24.dp),
+                    tint = if (film.isInDatabase!!) {
+                        Red500
+                    } else {
+                        Gray150
+                    }
+                )
+            }
+        }
+        Text(
+            text = stringResource(R.string.avg_rating, String.format("%.1f", film.voteAverage)),
+            style = MaterialTheme.typography.subtitle1,
+            color = Gray300
+        )
+        Text(
+            text = stringResource(R.string.release_date, film.releaseDate ?: ""),
+            style = MaterialTheme.typography.subtitle1,
+            color = Gray300
+        )
 
-        Spacer(modifier = Modifier.height(2.dp))
+        Spacer(modifier = Modifier.height(32.dp))
 
-        FilmInfo(film)
+        Text(
+            text = film.overview,
+            style = MaterialTheme.typography.subtitle1,
+            color = MaterialTheme.colors.onSurface
+        )
 
-        Spacer(modifier = Modifier.height(2.dp))
+        Spacer(modifier = Modifier.height(32.dp))
 
-        FilmImages(film)
+        film.images?.toCombinedImages()?.let {
+            HorizontalPager(
+                count = it.count(),
+                itemSpacing = 4.dp
+            ) { page ->
+                Image(
+                    painter = rememberImagePainter(film.imageUrl(it[page].filePath)),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .aspectRatio(ratio = 1.8f)
+                        .clip(shape = RoundedCornerShape(size = 8.dp)),
+                    contentDescription = null,
+                    alignment = Alignment.Center,
+                    contentScale = ContentScale.Fit
+                )
+            }
+        }
+        Spacer(modifier = Modifier.height(32.dp))
+        LazyRow(
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            film.credits?.cast?.let { actorList ->
+                items(actorList.count()) { index ->
+                    ActorItem(actor = actorList[index]) { onActorClick(it) }
+                    Spacer(modifier = Modifier.padding(5.dp))
+                }
+            }
+        }
 
-        Spacer(modifier = Modifier.height(2.dp))
-
-        Actors(film) { onActorClick(it) }
-
-        Spacer(modifier = Modifier.height(2.dp))
-
-        Review(film)
-
-        Spacer(modifier = Modifier.height(2.dp))
+        Spacer(modifier = Modifier.height(32.dp))
 
         Buttons(
-            onFavoriteClick = { onFavoriteClick(film) },
             onReviewClick = { onReviewClick() },
             film = film
         )
-
         Spacer(modifier = Modifier.height(2.dp))
-
-        ExtraInfo(film)
     }
 }
 
 @Composable
 private fun Buttons(
-    onFavoriteClick: () -> Unit,
     film: Film,
     onReviewClick: () -> Unit
 ) {
     val context = LocalContext.current
-    Row(
-        Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceEvenly
-    ) {
-        LikeButton(isInDatabase = film.isInDatabase!!) { onFavoriteClick() }
-
+    Row(modifier = Modifier.fillMaxWidth()) {
         if (film.videos?.results?.isEmpty() == false) {
             Button(
                 onClick = {
@@ -99,221 +159,34 @@ private fun Buttons(
                     context.startActivity(webIntent)
                 },
                 colors = ButtonDefaults.buttonColors(
-                    backgroundColor = MaterialTheme.colors.background
-                )
+                    backgroundColor = MaterialTheme.colors.primary
+                ),
+                modifier = Modifier.height(height = 48.dp)
             ) {
                 Text(
                     text = stringResource(R.string.watch_video),
-                    color = MaterialTheme.colors.onSurface
+                    color = MaterialTheme.colors.background,
+                    style = MaterialTheme.typography.subtitle1
                 )
             }
         }
-
-        if (film.reviews?.results?.size ?: 0 > 1) {
+        Spacer(modifier = Modifier.width(width = 23.dp))
+        if ((film.reviews?.results?.size ?: 0) > 1) {
             Button(
                 onClick = {
                     onReviewClick()
                 },
                 colors = ButtonDefaults.buttonColors(
-                    backgroundColor = MaterialTheme.colors.background
-                )
+                    backgroundColor = MaterialTheme.colors.primary
+                ),
+                modifier = Modifier.height(height = 48.dp)
             ) {
                 Text(
                     text = stringResource(R.string.review_list),
-                    color = MaterialTheme.colors.onSurface
+                    color = MaterialTheme.colors.background,
+                    style = MaterialTheme.typography.subtitle1
                 )
             }
         }
-    }
-}
-
-@Composable
-private fun Review(
-    film: Film
-) {
-    var expanded by remember { mutableStateOf(false) }
-    Card(
-        modifier = Modifier.padding(2.dp),
-        elevation = 4.dp,
-        border = BorderStroke(width = 1.dp, color = MaterialTheme.colors.onSurface),
-        backgroundColor = MaterialTheme.colors.background
-    ) {
-        Column {
-            if (film.reviews?.results?.isEmpty() == false) {
-                Spacer(modifier = Modifier.padding(2.dp))
-                Row(
-                    Modifier.fillMaxSize()
-                ) {
-                    Text(
-                        stringResource(R.string.review),
-                        style = MaterialTheme.typography.h1,
-                        color = MaterialTheme.colors.primary,
-                        modifier = Modifier.padding(2.dp)
-                    )
-
-                    Icon(
-                        Icons.Rounded.ArrowCircleDown,
-                        contentDescription = null,
-                        Modifier
-                            .padding(7.dp)
-                            .fillMaxSize()
-                            .clickable {
-                                expanded = !expanded
-                            },
-                    )
-                }
-
-                Text(
-                    text = film.reviews.results[0].content,
-                    style = MaterialTheme.typography.body1,
-                    color = MaterialTheme.colors.onSurface,
-                    modifier = Modifier
-                        .animateContentSize()
-                        .padding(2.dp),
-                    maxLines = if (expanded) Int.MAX_VALUE else film.linesToShow
-                )
-            }
-        }
-    }
-}
-
-@Composable
-private fun Actors(
-    film: Film,
-    onActorClick: (Int) -> Unit
-) {
-    Card(
-        modifier = Modifier
-            .padding(2.dp)
-            .height(300.dp)
-            .fillMaxWidth(),
-        elevation = 4.dp,
-        border = BorderStroke(width = 1.dp, color = MaterialTheme.colors.onSurface),
-        backgroundColor = MaterialTheme.colors.background,
-        shape = MaterialTheme.shapes.medium
-    ) {
-        Column(Modifier.padding(2.dp)) {
-            Text(
-                text = stringResource(R.string.actors),
-                style = MaterialTheme.typography.h1,
-                color = MaterialTheme.colors.primary,
-                modifier = Modifier
-                    .align(Alignment.Start)
-                    .padding(2.dp)
-            )
-
-            LazyRow(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                contentPadding = PaddingValues(5.dp)
-            ) {
-                film.credits?.cast?.let { actorList ->
-                    items(actorList.count()) { index ->
-                        ActorItem(actor = actorList[index]) { onActorClick(it) }
-                        Spacer(modifier = Modifier.padding(5.dp))
-                    }
-                }
-            }
-        }
-    }
-}
-
-@ExperimentalPagerApi
-@Composable
-private fun FilmImages(film: Film) {
-    Card(
-        modifier = Modifier
-            .padding(2.dp)
-            .height(300.dp)
-            .fillMaxWidth(),
-        elevation = 4.dp,
-        border = BorderStroke(width = 1.dp, color = MaterialTheme.colors.onSurface),
-        backgroundColor = MaterialTheme.colors.background,
-        shape = MaterialTheme.shapes.medium
-    ) {
-        Column(Modifier.padding(2.dp)) {
-            Text(
-                text = stringResource(R.string.posters),
-                style = MaterialTheme.typography.h1,
-                color = MaterialTheme.colors.primary,
-                modifier = Modifier
-                    .align(Alignment.Start)
-                    .padding(2.dp)
-            )
-
-            film.images?.toCombinedImages()?.let {
-                HorizontalPager(
-                    count = it.count(),
-                    itemSpacing = 4.dp,
-                    contentPadding = PaddingValues(4.dp)
-                ) { page ->
-                    Card(
-                        modifier = Modifier
-                            .height(280.dp),
-                        backgroundColor = MaterialTheme.colors.background,
-                        elevation = 3.dp,
-                        shape = MaterialTheme.shapes.small
-                    ) {
-                        Image(
-                            modifier = Modifier.fillMaxWidth(),
-                            painter = rememberImagePainter(film.imageUrl(it[page].filePath)),
-                            contentDescription = null,
-                            alignment = Alignment.Center,
-                            contentScale = ContentScale.Fit
-                        )
-                    }
-                }
-            }
-        }
-    }
-}
-
-@Composable
-private fun FilmInfo(film: Film) {
-    Card(
-        modifier = Modifier.padding(2.dp),
-        elevation = 4.dp,
-        border = BorderStroke(width = 1.dp, color = MaterialTheme.colors.onSurface),
-        backgroundColor = MaterialTheme.colors.background
-    ) {
-        Column(Modifier.padding(3.dp)) {
-            Text(
-                text = film.originalTitle,
-                style = MaterialTheme.typography.h1,
-                fontSize = 27.sp,
-                color = MaterialTheme.colors.primary,
-                modifier = Modifier
-                    .align(Alignment.CenterHorizontally)
-            )
-
-            Spacer(modifier = Modifier.height(15.dp))
-
-            Text(
-                text = film.overview,
-                style = MaterialTheme.typography.body1,
-                color = MaterialTheme.colors.onSurface
-            )
-        }
-    }
-}
-
-@Composable
-private fun FilmPoster(film: Film) {
-    Card(
-        modifier = Modifier
-            .height(400.dp)
-            .width(300.dp),
-        backgroundColor = MaterialTheme.colors.background,
-        elevation = 3.dp,
-        shape = MaterialTheme.shapes.small,
-        border = BorderStroke(width = 1.dp, color = MaterialTheme.colors.onSurface)
-    ) {
-        Image(
-            painter = rememberImagePainter(film.posterPathUrl()),
-            contentDescription = null,
-            modifier = Modifier
-                .fillMaxSize(),
-            contentScale = ContentScale.FillWidth
-        )
     }
 }

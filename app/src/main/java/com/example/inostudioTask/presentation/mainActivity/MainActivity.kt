@@ -4,18 +4,16 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.ArrowBackIos
+import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination.Companion.hierarchy
@@ -26,6 +24,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navigation
+import coil.compose.rememberImagePainter
+import com.example.inostudioTask.R
 import com.example.inostudioTask.presentation.actorReview.ActorReviewScreen
 import com.example.inostudioTask.presentation.castList.CastListScreen
 import com.example.inostudioTask.presentation.common.BottomNavItems
@@ -34,6 +34,8 @@ import com.example.inostudioTask.presentation.favoriteList.FavoriteListScreen
 import com.example.inostudioTask.presentation.filmList.FilmListScreen
 import com.example.inostudioTask.presentation.filmOverview.FilmOverviewScreen
 import com.example.inostudioTask.presentation.filmReviewList.FilmReviewListScreen
+import com.example.inostudioTask.presentation.ui.theme.Gray200
+import com.example.inostudioTask.presentation.ui.theme.Gray300
 import com.example.inostudioTask.presentation.ui.theme.MainTheme
 import com.google.accompanist.pager.ExperimentalPagerApi
 import dagger.hilt.android.AndroidEntryPoint
@@ -65,46 +67,53 @@ fun MainScreen() {
     Scaffold(
         scaffoldState = scaffoldState,
         bottomBar = {
+            val isSelected: (String) -> Boolean = { route ->
+                currentDestination?.hierarchy?.any {
+                    it.route == route
+                } == true
+            }
             BottomNavigationBar(
                 navigate = { route ->
-                    navController.navigate(route) {
-                        popUpTo(navController.graph.findStartDestination().id)
-                        launchSingleTop = true
+                    if (!isSelected(route)) {
+                        navController.navigate(route) {
+                            popUpTo(navController.graph.findStartDestination().id)
+                            launchSingleTop = true
+                        }
                     }
                 },
-                isSelected = { route ->
-                    currentDestination?.hierarchy?.any {
-                        it.route == route
-                    } == true
-                }
+                isSelected = { isSelected(it) }
             )
         },
         topBar = {
-            TopBar(
-                navigationIcon =
-                if (
-                    BottomNavItems.values().none {
-                        currentDestination?.route == currentDestination?.parent?.startDestinationRoute
+            CenterAlignedTopAppBar(
+                navigationIcon = {
+                    if (
+                        BottomNavItems.values().none {
+                            currentDestination?.route == currentDestination?.parent?.startDestinationRoute
+                        }
+                    ) {
+                        IconButton(onClick = { navController.popBackStack() }) {
+                            Icon(
+                                painter = rememberImagePainter(R.drawable.ic_back_arrow),
+                                contentDescription = null,
+                                modifier = Modifier.size(size = 32.dp)
+                            )
+                        }
                     }
-                ) {
-                    {
-                        Icon(
-                            imageVector = Icons.Rounded.ArrowBackIos,
-                            contentDescription = null,
-                            modifier = Modifier
-                                .padding(5.dp)
-                                .fillMaxSize()
-                                .clickable {
-                                    navController.popBackStack()
-                                }
-                        )
-                    }
-                } else {
-                    null
                 },
-                title = Screens.fromRoute(currentDestination?.route).title
+                title = {
+                    Text(
+                        text = Screens.fromRoute(currentDestination?.route).title,
+                        style = MaterialTheme.typography.h6
+                    )
+                },
+                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                    containerColor = Color.White,
+                    navigationIconContentColor = MaterialTheme.colors.primary,
+                    titleContentColor = Gray300
+                )
             )
-        }
+        },
     ) { contentPadding ->
         Box(
             modifier = Modifier
@@ -192,25 +201,11 @@ fun NavGraphBuilder.favoritesGraph(navController: NavController) {
 }
 
 @Composable
-fun TopBar(
-    navigationIcon: @Composable (() -> Unit)?,
-    title: String
-) {
-    TopAppBar(
-        modifier = Modifier.fillMaxWidth(),
-        title = { Text(text = title) },
-        navigationIcon = navigationIcon,
-        backgroundColor = MaterialTheme.colors.onSecondary
-    )
-}
-
-@Composable
 fun BottomNavigationBar(
     navigate: (String) -> Unit,
     isSelected: (String) -> Boolean
 ) {
     val items = BottomNavItems.values()
-
     BottomNavigation(
         modifier = Modifier
             .fillMaxWidth(),
@@ -220,13 +215,21 @@ fun BottomNavigationBar(
             BottomNavigationItem(
                 icon = {
                     Icon(
-                        imageVector = item.icon,
+                        painter = rememberImagePainter(item.icon),
                         contentDescription = item.route
                     )
                 },
-                label = null,
+                label = {
+                    Text(
+                        text = item.title,
+                        style = MaterialTheme.typography.button,
+                        fontSize = 12.sp
+                    )
+                },
                 selected = isSelected(item.route),
-                onClick = { navigate(item.route) }
+                onClick = { navigate(item.route) },
+                selectedContentColor = MaterialTheme.colors.primary,
+                unselectedContentColor = Gray200
             )
         }
     }

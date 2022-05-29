@@ -6,7 +6,7 @@ import androidx.navigation.navArgument
 sealed class Screens(val route: String, val title: String) {
 
     object FilmsListScreen : Screens("film_list_screen", "Films")
-    object CastListScreen : Screens("cast_list_screen", "Cast")
+    object CastListScreen : Screens("cast_list_screen", "Actors")
     object FavoriteListScreen : Screens("favorites_list_screen", "Favorites")
 
     class FilmReviewListScreen() : Screens(
